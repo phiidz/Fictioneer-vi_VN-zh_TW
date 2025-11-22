@@ -496,7 +496,7 @@ function fictioneer_oauth2_make_user( $user_data, $cookie ) {
       wp_clear_auth_cookie();
       wp_set_current_user( $wp_user->ID );
 
-      // Allow login to last three days
+      // Allow login to last x days (default 3)
       add_filter( 'auth_cookie_expiration', function( $length ) {
         return FICTIONEER_OAUTH_COOKIE_EXPIRATION;
       });
