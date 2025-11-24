@@ -1017,11 +1017,17 @@ function fictioneer_random_spotlight_query( $post_type = 'fcn_story', $args = []
   $count = max( 1, (int) ( $args['count'] ?? 6 ) );
   $all_post_ids = [];
   $selected_ids = [];
-  $previous_ids = get_option( $option_key, [] ) ?: [];
-  $previous_ids = is_array( $previous_ids ) ? $previous_ids : [];
   $now = current_time( 'timestamp', 1 );
   $new_period = max( 1, (int) ( $args['new_days'] ?? 14 ) ) * DAY_IN_SECONDS;
   $return = $args['return'] ?? 'query';
+
+  $previous_ids = get_option( $option_key, [] ) ?: [];
+  $previous_ids = is_array( $previous_ids ) ? $previous_ids : [];
+
+  if ( $previous_ids ) {
+    $previous_ids = array_map( 'intval', $previous_ids );
+    $previous_ids = array_filter( $previous_ids, fn( $v ) => $v > 0 );
+  }
 
   // Fetch all published posts
   switch ( $post_type ) {
