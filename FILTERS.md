@@ -1034,6 +1034,15 @@ add_filter( 'fictioneer_filter_default_search_form_args', 'child_pre_select_sear
 
 ---
 
+### `apply_filters( 'fictioneer_filter_default_shortcode_args', $args, $def_count )`
+Filters the sanitized default shortcode arguments derived from the shortcode attributes. Overrides the arguments of all shortcodes, otherwise use `shortcode_atts()` to target individual shortcodes by name.
+
+**Parameters:**
+* $args (array) – Sanitized default shortcode arguments.
+* $def_count (int|null) – Optional. Default for the 'count' argument. Default -1. Unsafe.
+
+---
+
 ### `apply_filters( 'fictioneer_filter_discord_chapter_message', $message, $post, $story_id )`
 Filters the chapter message array passed to `fictioneer_discord_send_message()` in `_module-discord.php` before it is encoded as JSON. Allows you to customize the webhook message. If made falsy, the message will not be sent.
 

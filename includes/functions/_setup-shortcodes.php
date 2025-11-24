@@ -143,9 +143,10 @@ if ( FICTIONEER_RELATIONSHIP_PURGE_ASSIST ) {
  * Return sanitized arguments extracted from shortcode attributes.
  *
  * @since 5.7.3
+ * @since 5.33.0 - Added filter.
  *
- * @param array $attr       Attributes passed to the shortcode.
- * @param int   $def_count  Default for the 'count' argument.
+ * @param array  $attr       Attributes passed to the shortcode.
+ * @param int    $def_count  Optional. Default for the 'count' argument. Default -1.
  *
  * @return array The extracted arguments.
  */
@@ -239,9 +240,9 @@ function fictioneer_get_default_shortcode_args( $attr, $def_count = -1 ) {
     }
   }
 
-  //--- Finish -----------------------------------------------------------------
+  //--- Filter & Finish --------------------------------------------------------
 
-  return $args;
+  return apply_filters( 'fictioneer_filter_default_shortcode_args', $args, $def_count );
 }
 
 // =============================================================================
