@@ -278,6 +278,8 @@ function fictioneer_get_default_shortcode_args( $attr, $def_count = -1 ) {
     'spotlight' => filter_var( $attr['spotlight'] ?? 1, FILTER_VALIDATE_BOOLEAN )
   );
 
+  $args = array_merge( $attr, $args ); // Preserve anything extra
+
   //--- Fixes ------------------------------------------------------------------
 
   // Update count if limited to post IDs
