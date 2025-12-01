@@ -287,7 +287,7 @@ if ( $args['count'] < 2 || count( $args['post_ids'] ?? [] ) === 1 ) {
                           ?: get_permalink( $story_id );
 
                         printf(
-                          _x( 'in <a href="%1$s" class="bold-link">%2$s</a>', 'Small card: in {Link to Story}.', 'fictioneer' ),
+                          _x( '<span class="card__in-story">in</span> <a href="%1$s" class="bold-link">%2$s</a>', 'Small card: in {Link to Story}.', 'fictioneer' ),
                           $story_link,
                           fictioneer_truncate( fictioneer_get_safe_title( $story_id, 'shortcode-latest-chapters-compact' ), 24 )
                         );
