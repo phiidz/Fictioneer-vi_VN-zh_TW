@@ -898,6 +898,14 @@ Fires after opening the `.main-navigation__wrapper` container in the `_navigatio
 
 ---
 
+### `do_action( 'fictioneer_override_render_icon_menu', $args )`
+Short-circuits the `fictioneer_render_icon_menu()` helper, allowing you to render your own icon menu instead.
+
+**$args:**
+* $location (string) – Name of the render location, either `'in-navigation'` or `'in-mobile-menu'`.
+
+---
+
 ### `do_action( 'fictioneer_post_after_content', $post_id, $args )`
 Fires right after the article content in the `_post.php` partial and `single-post.php` template. Mind the render context, which can be `'loop'`, `'shortcode_fictioneer_blog'`, or `'single-post'`.
 

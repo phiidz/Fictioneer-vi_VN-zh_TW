@@ -2417,17 +2417,25 @@ function fictioneer_get_bullet_separator( $context = null, $blank = false ) {
 // ICON MENU
 // =============================================================================
 
+// if ( ! function_exists( 'fictioneer_render_icon_menu' ) ) {}
 /**
  * Render the icon menu.
  *
  * @since 5.25.0
  * @since 5.32.5 - Added optional class argument.
+ * @since 5.33.0 - Added fictioneer_override_render_icon_menu hook.
  *
  * @param string      $args['location']  Either 'in-navigation' or 'in-mobile-menu'.
  * @param string|null $args['class']     Optional. Main class of the icon menu. Default 'icon-menu'.
  */
 
 function fictioneer_render_icon_menu( $args = [] ) {
+  // Short-circuit
+  if ( has_action( 'fictioneer_override_render_icon_menu' ) ) {
+    do_action( 'fictioneer_override_render_icon_menu', $args );
+    return;
+  }
+
   // Setup
   $output = [];
   $class = $args['class'] ?? 'icon-menu';
