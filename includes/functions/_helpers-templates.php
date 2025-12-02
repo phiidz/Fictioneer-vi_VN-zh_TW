@@ -2417,7 +2417,6 @@ function fictioneer_get_bullet_separator( $context = null, $blank = false ) {
 // ICON MENU
 // =============================================================================
 
-// if ( ! function_exists( 'fictioneer_render_icon_menu' ) ) {}
 /**
  * Render the icon menu.
  *
