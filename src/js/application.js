@@ -2941,7 +2941,7 @@ document.body.addEventListener('click', event => {
 // =============================================================================
 
 /**
- * Mark currently active menu item
+ * Mark currently active menu item.
  *
  * @since 5.5.0
  */
@@ -2951,6 +2951,13 @@ function fcn_markCurrentMenuItem() {
     element.setAttribute('aria-current', 'page');
     element.closest('.menu-item').classList.add('current-menu-item');
   });
+
+  if (document.body.classList.contains('home')) {
+    _$$('.menu-item-home').forEach(element => {
+      element.setAttribute('aria-current', 'page');
+      element.closest('.menu-item').classList.add('current-menu-item');
+    });
+  }
 }
 
 // Initialize
