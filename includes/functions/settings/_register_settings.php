@@ -790,6 +790,11 @@ define( 'FICTIONEER_OPTIONS', array(
       'group' => 'fictioneer-settings-general-group',
       'sanitize_callback' => 'fictioneer_sanitize_checkbox'
     ),
+    'fictioneer_enable_extended_alert_queries' => array(
+      'name' => 'fictioneer_enable_extended_alert_queries',
+      'group' => 'fictioneer-settings-general-group',
+      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+    ),
   ),
   'integers' => array(
     'fictioneer_user_profile_page' => array(
@@ -1311,6 +1316,7 @@ function fictioneer_get_option_label( $option ) {
       'fictioneer_critical_font_css' => __( 'Critical font CSS', 'fictioneer' ),
       'fictioneer_seo_sitemap_excludes' => __( 'Post IDs excluded from sitemap', 'fictioneer' ),
       'fictioneer_oauth_cookie_expiration_days' => __( 'OAuth cookie expiration days', 'fictioneer' ),
+      'fictioneer_enable_extended_alert_queries' => __( 'Enable extended alert queries', 'fictioneer' ),
     );
   }
 

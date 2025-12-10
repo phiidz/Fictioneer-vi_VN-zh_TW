@@ -32,7 +32,7 @@ function ffcnr_load_options( $option_names = [], $blog_id_override = null ) {
 
   $_blog_id = $blog_id_override ?? $blog_id ?? 1;
   $site_prefix = $wpdb->get_blog_prefix( $_blog_id );
-  $default_options = ['siteurl', 'home', 'blogname', 'blogdescription', 'users_can_register', 'admin_email', 'timezone_string', 'date_format', 'time_format', 'posts_per_page', 'permalink_structure', 'upload_path', 'template', 'blog_charset', 'active_plugins', 'gmt_offset', 'stylesheet', 'default_role', 'avatar_rating', 'show_avatars', 'avatar_default', 'page_for_posts', 'page_on_front', 'site_icon', 'wp_user_roles', 'cron', 'nonce_key', 'nonce_salt', 'current_theme', 'show_on_front', 'blog_public', 'theme_switched', "{$site_prefix}user_roles", 'fictioneer_ffcnr_salt'];
+  $default_options = ['siteurl', 'home', 'blogname', 'blogdescription', 'users_can_register', 'admin_email', 'timezone_string', 'date_format', 'time_format', 'posts_per_page', 'permalink_structure', 'upload_path', 'template', 'blog_charset', 'active_plugins', 'gmt_offset', 'stylesheet', 'default_role', 'avatar_rating', 'show_avatars', 'avatar_default', 'page_for_posts', 'page_on_front', 'site_icon', 'wp_user_roles', 'cron', 'nonce_key', 'nonce_salt', 'current_theme', 'show_on_front', 'blog_public', 'theme_switched', "{$site_prefix}user_roles", 'fictioneer_ffcnr_salt', 'fictioneer_enable_extended_alert_queries'];
 
   $default_options = apply_filters( 'ffcnr_load_options_defaults', $default_options );
 

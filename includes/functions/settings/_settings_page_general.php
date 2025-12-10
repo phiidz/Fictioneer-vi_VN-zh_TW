@@ -1837,6 +1837,17 @@ $images = get_template_directory_uri() . '/img/documentation/';
                 ?>
               </div>
 
+              <div class="fictioneer-card__row">
+                <?php
+                  fictioneer_settings_label_checkbox(
+                    'fictioneer_enable_extended_alert_queries',
+                    __( 'Enable extended alert queries', 'fictioneer' ),
+                    __( 'Allows to limit custom alerts to users and roles.', 'fictioneer' ),
+                    __( 'This option is intended purely for developers. The theme does not include a built-in interface for creating alerts restricted to specific user IDs or roles. It also makes the queries slower.', 'fictioneer' )
+                  );
+                ?>
+              </div>
+
             </div>
           </div>
         </div>

@@ -410,7 +410,7 @@ function fictioneer_get_alerts( $args = [] ) {
     $params = array_merge( $global_types, [ gmdate( 'Y-m-d H:i:s' ) ] );
   }
 
-  if ( FICTIONEER_ENABLE_EXTENDED_ALERT_QUERIES && ! empty( $args['for_user_id'] ) ) {
+  if ( ffcnr_get_option( 'fictioneer_enable_extended_alert_queries' ) && ! empty( $args['for_user_id'] ) ) {
     $user_id = sanitize_key( $args['for_user_id'] );
 
     if ( (int) $user_id > 0 ) {
@@ -419,7 +419,7 @@ function fictioneer_get_alerts( $args = [] ) {
     }
   }
 
-  if ( FICTIONEER_ENABLE_EXTENDED_ALERT_QUERIES && ! empty( $args['for_roles'] ) ) {
+  if ( ffcnr_get_option( 'fictioneer_enable_extended_alert_queries' ) && ! empty( $args['for_roles'] ) ) {
     $roles = array_filter( array_map( 'sanitize_key', $args['for_roles'] ) );
 
     if ( ! empty( $roles ) ) {
