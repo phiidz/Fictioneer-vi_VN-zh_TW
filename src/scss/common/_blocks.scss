@@ -611,6 +611,7 @@ p.has-background {
 // =============================================================================
 
 hr {
+  color: transparent;
   overflow: hidden;
 
   &:not(.wp-block-separator) {
@@ -622,6 +623,7 @@ hr {
 
 .wp-block-separator {
   background: var(--hr-color);
+  color: transparent;
   margin-top: var(--hr-spacing);
   margin-bottom: var(--hr-spacing);
   border-width: 0;
