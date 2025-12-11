@@ -681,9 +681,9 @@ Filters the array of support links returned for the current post (or post ID if 
 * 'donation' (string|null) – Generic donation link. Unsafe.
 
 **Parameters:**
-* 'post_id' (int|null) – Post ID. Unsafe.
-* 'parent_id' (int|null) – Parent (story) post ID. Unsafe.
-* 'author_id' (int|null) – Author ID. Unsafe.
+* $post_id (int|null) – Post ID. Unsafe.
+* $parent_id (int|null) – Parent (story) post ID. Unsafe.
+* $author_id (int|null) – Author ID. Unsafe.
 
 ---
 
@@ -748,9 +748,10 @@ Filters the arguments passed to `get_template_part()` in the `fictioneer_get_tem
 **Note:** You may need to purge the theme caches after a applying or removing filters.
 
 **$data:**
-* $slug (string) – The slug name for the generic template.
-* $name (string|null) – The name of the specialized template.
-* $args (array) – Additional arguments passed to the template.
+* 'slug' (string) – The slug name for the generic template.
+* 'name' (string|null) – Optional. The name of the specialized template.
+* 'path' (string|null) – Optional. Override path.
+* 'args' (array) – Additional arguments passed to the template.
 
 **Example:**
 ```php
