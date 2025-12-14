@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Sanitizer;
+
 // =============================================================================
 // AJAX: SAVE SKINS FOR USERS
 // =============================================================================
@@ -69,7 +71,7 @@ function fictioneer_ajax_save_skins() {
           wp_send_json_error( array( 'error' => 'Invalid JSON (SKIN-006).' ) );
         }
 
-        if ( $sub_key === 'css' && fictioneer_sanitize_css( $value ) === '' ) {
+        if ( $sub_key === 'css' && Sanitizer::sanitize_css( $value ) === '' ) {
           wp_send_json_error( array( 'error' => 'Invalid CSS (SKIN-007).' ) );
         }
       }

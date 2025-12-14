@@ -1103,7 +1103,7 @@ define( 'FICTIONEER_OPTIONS', array(
     'fictioneer_critical_font_css' => array(
       'name' => 'fictioneer_critical_font_css',
       'group' => 'fictioneer-settings-fonts-group',
-      'sanitize_callback' => 'fictioneer_sanitize_css'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_css' ]
     ),
     'fictioneer_seo_sitemap_excludes' => array(
       'name' => 'fictioneer_seo_sitemap_excludes',

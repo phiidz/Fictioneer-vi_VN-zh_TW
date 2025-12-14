@@ -1811,35 +1811,6 @@ if ( ! function_exists( 'fictioneer_get_consent' ) && get_option( 'fictioneer_co
 }
 
 // =============================================================================
-// SANITIZE CSS
-// =============================================================================
-
-/**
- * Sanitize a CSS string.
- *
- * @since 5.7.4
- * @since 5.27.4 - Unslash string.
- *
- * @param string $css  The CSS string to be sanitized. Expects slashed string.
- *
- * @return string The sanitized string.
- */
-
-function fictioneer_sanitize_css( $css ) {
-  $css = sanitize_textarea_field( wp_unslash( $css ?? '' ) );
-  $css = preg_match( '/<\/?\w+/', $css ) ? '' : $css;
-
-  $opening_braces = substr_count( $css, '{' );
-  $closing_braces = substr_count( $css, '}' );
-
-  if ( $opening_braces < 1 || $opening_braces !== $closing_braces ) {
-    $css = '';
-  }
-
-  return $css;
-}
-
-// =============================================================================
 // SANITIZE QUERY VARIABLE
 // =============================================================================
 

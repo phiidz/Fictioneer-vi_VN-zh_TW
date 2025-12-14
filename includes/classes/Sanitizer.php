@@ -335,4 +335,52 @@ class Sanitizer {
 
     return in_array( $value, $allowed, true ) ? $value : $default;
   }
+
+  /**
+   * Sanitize a CSS string.
+   *
+   * @since 5.7.4
+   * @since 5.27.4 - Unslash string.
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param string $css  CSS to be sanitized. Expects slashed string.
+   *
+   * @return string The sanitized string.
+   */
+
+  public static function sanitize_css( string $css ) : string {
+    $css = (string) ( $css ?? '' );
+    $css = wp_unslash( $css );
+    $css = wp_kses_no_null( $css );
+    $css = preg_replace( '/[\x00-\x1F\x7F]/u', '', $css );
+    $css = trim( $css );
+
+    if ( $css === '' ) {
+      return '';
+    }
+
+    $check = preg_replace( '#/\*.*?\*/#s', '', $css );
+    $check = preg_replace( '/"(?:\\\\.|[^"\\\\])*"|\'(?:\\\\.|[^\'\\\\])*\'/s', '', $check );
+
+    if ( strpos( $check, '<' ) !== false ) {
+      return '';
+    }
+
+    if ( preg_match( '/(?:expression\s*\(|-moz-binding\s*:|behavior\s*:|@import\b|javascript\s*:)/i', $check ) ) {
+      return '';
+    }
+
+    if ( preg_match( '/url\s*\(\s*[^)]*javascript\s*:/i', $check ) ) {
+      return '';
+    }
+
+    $open  = substr_count( $css, '{' );
+    $close = substr_count( $css, '}' );
+
+    if ( $open < 1 || $open !== $close ) {
+      return '';
+    }
+
+    return $css;
+  }
 }

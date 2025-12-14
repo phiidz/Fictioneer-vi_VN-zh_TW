@@ -225,3 +225,19 @@ function fictioneer_sanitize_patreon_url( $url ) {
 function fictioneer_sanitize_selection( $value, $allowed_options, $default = null ) {
   return Sanitizer::sanitize_selection( $value, $allowed_options, $default );
 }
+
+/**
+ * [Deprecated] Sanitize a CSS string.
+ *
+ * @since 5.7.4
+ * @since 5.27.4 - Unslash string.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_css() instead.
+ *
+ * @param string $css  The CSS string to be sanitized. Expects slashed string.
+ *
+ * @return string The sanitized string.
+ */
+
+function fictioneer_sanitize_css( $css ) {
+  return Sanitizer::sanitize_css( $css );
+}
