@@ -1359,21 +1359,6 @@ function fictioneer_register_settings() {
 // =============================================================================
 
 /**
- * [Deprecated] Sanitize integer to be 1 or more.
- *
- * @since 4.6.0
- * @since 5.34.0 - Deprecated.
- *
- * @param mixed $input  The input value to sanitize.
- *
- * @return int The sanitized integer.
- */
-
-function fictioneer_sanitize_integer_one_up( $input ) {
-  return Sanitizer::sanitize_integer_one_up( $input );
-}
-
-/**
  * Sanitize a page ID and checks whether it is valid.
  *
  * @since 4.6.0
