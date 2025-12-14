@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Sanitizer;
+
 // =============================================================================
 // UTILITY
 // =============================================================================
@@ -84,43 +86,43 @@ function fictioneer_update_frontend_profile() {
 
   // Hide custom badge?
   if ( isset( $_POST['fictioneer_hide_badge'] ) ) {
-    $checkbox_value = fictioneer_sanitize_checkbox( $_POST['fictioneer_hide_badge'] ?? 0 );
+    $checkbox_value = Sanitizer::sanitize_bool( $_POST['fictioneer_hide_badge'] );
     fictioneer_update_user_meta( $user_id, 'fictioneer_hide_badge', $checkbox_value );
   }
 
   // Always use gravatar?
   if ( isset( $_POST['fictioneer_enforce_gravatar'] ) ) {
-    $checkbox_value = fictioneer_sanitize_checkbox( $_POST['fictioneer_enforce_gravatar'] ?? 0 );
+    $checkbox_value = Sanitizer::sanitize_bool( $_POST['fictioneer_enforce_gravatar'] );
     fictioneer_update_user_meta( $user_id, 'fictioneer_enforce_gravatar', $checkbox_value );
   }
 
   // Disable avatar?
   if ( isset( $_POST['fictioneer_disable_avatar'] ) ) {
-    $checkbox_value = fictioneer_sanitize_checkbox( $_POST['fictioneer_disable_avatar'] ?? 0 );
+    $checkbox_value = Sanitizer::sanitize_bool( $_POST['fictioneer_disable_avatar'] );
     fictioneer_update_user_meta( $user_id, 'fictioneer_disable_avatar', $checkbox_value );
   }
 
   // Lock avatar?
   if ( isset( $_POST['fictioneer_lock_avatar'] ) ) {
-    $checkbox_value = fictioneer_sanitize_checkbox( $_POST['fictioneer_lock_avatar'] ?? 0 );
+    $checkbox_value = Sanitizer::sanitize_bool( $_POST['fictioneer_lock_avatar'] );
     fictioneer_update_user_meta( $user_id, 'fictioneer_lock_avatar', $checkbox_value );
   }
 
   // Override assigned badge?
   if ( isset( $_POST['fictioneer_disable_badge_override'] ) ) {
-    $checkbox_value = fictioneer_sanitize_checkbox( $_POST['fictioneer_disable_badge_override'] ?? 0 );
+    $checkbox_value = Sanitizer::sanitize_bool( $_POST['fictioneer_disable_badge_override'] );
     fictioneer_update_user_meta( $user_id, 'fictioneer_disable_badge_override', $checkbox_value );
   }
 
   // Always subscribe to comments?
   if ( isset( $_POST['fictioneer_comment_reply_notifications'] ) ) {
-    $checkbox_value = fictioneer_sanitize_checkbox( $_POST['fictioneer_comment_reply_notifications'] ?? 0 );
+    $checkbox_value = Sanitizer::sanitize_bool( $_POST['fictioneer_comment_reply_notifications'] );
     fictioneer_update_user_meta( $user_id, 'fictioneer_comment_reply_notifications', $checkbox_value );
   }
 
   // Keep read alerts?
   if ( isset( $_POST['fictioneer_show_read_alerts'] ) ) {
-    $checkbox_value = fictioneer_sanitize_checkbox( $_POST['fictioneer_show_read_alerts'] ?? 0 );
+    $checkbox_value = Sanitizer::sanitize_bool( $_POST['fictioneer_show_read_alerts'] );
     fictioneer_update_user_meta( $user_id, 'fictioneer_show_read_alerts', $checkbox_value );
   }
 
@@ -205,7 +207,7 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
       fictioneer_update_user_meta(
         $updated_user_id,
         'fictioneer_admin_disable_avatar',
-        fictioneer_sanitize_checkbox( $_POST['fictioneer_admin_disable_avatar'] ?? 0 )
+        Sanitizer::sanitize_bool( $_POST['fictioneer_admin_disable_avatar'] )
       );
     }
 
@@ -214,7 +216,7 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
       fictioneer_update_user_meta(
         $updated_user_id,
         'fictioneer_admin_disable_reporting',
-        fictioneer_sanitize_checkbox( $_POST['fictioneer_admin_disable_reporting'] ?? 0 )
+        Sanitizer::sanitize_bool( $_POST['fictioneer_admin_disable_reporting'] )
       );
     }
 
@@ -223,7 +225,7 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
       fictioneer_update_user_meta(
         $updated_user_id,
         'fictioneer_admin_disable_renaming',
-        fictioneer_sanitize_checkbox( $_POST['fictioneer_admin_disable_renaming'] ?? 0 )
+        Sanitizer::sanitize_bool( $_POST['fictioneer_admin_disable_renaming'] )
       );
     }
 
@@ -232,7 +234,7 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
       fictioneer_update_user_meta(
         $updated_user_id,
         'fictioneer_admin_disable_commenting',
-        fictioneer_sanitize_checkbox( $_POST['fictioneer_admin_disable_commenting'] ?? 0 )
+        Sanitizer::sanitize_bool( $_POST['fictioneer_admin_disable_commenting'] )
       );
     }
 
@@ -241,7 +243,7 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
       fictioneer_update_user_meta(
         $updated_user_id,
         'fictioneer_admin_disable_comment_editing',
-        fictioneer_sanitize_checkbox( $_POST['fictioneer_admin_disable_comment_editing'] ?? 0 )
+        Sanitizer::sanitize_bool( $_POST['fictioneer_admin_disable_comment_editing'] )
       );
     }
 
@@ -250,7 +252,7 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
       fictioneer_update_user_meta(
         $updated_user_id,
         'fictioneer_admin_disable_post_comment_moderation',
-        fictioneer_sanitize_checkbox( $_POST['fictioneer_admin_disable_post_comment_moderation'] ?? 0 )
+        Sanitizer::sanitize_bool( $_POST['fictioneer_admin_disable_post_comment_moderation'] )
       );
     }
 
@@ -259,7 +261,7 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
       fictioneer_update_user_meta(
         $updated_user_id,
         'fictioneer_admin_disable_comment_notifications',
-        fictioneer_sanitize_checkbox( $_POST['fictioneer_admin_disable_comment_notifications'] ?? 0 )
+        Sanitizer::sanitize_bool( $_POST['fictioneer_admin_disable_comment_notifications'] )
       );
     }
 
@@ -268,7 +270,7 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
       fictioneer_update_user_meta(
         $updated_user_id,
         'fictioneer_admin_always_moderate_comments',
-        fictioneer_sanitize_checkbox( $_POST['fictioneer_admin_always_moderate_comments'] ?? 0 )
+        Sanitizer::sanitize_bool( $_POST['fictioneer_admin_always_moderate_comments'] )
       );
     }
 
@@ -369,7 +371,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
       fictioneer_update_user_meta(
         $updated_user_id,
         'fictioneer_enforce_gravatar',
-        fictioneer_sanitize_checkbox( $_POST['fictioneer_enforce_gravatar'] ?? 0 )
+        Sanitizer::sanitize_bool( $_POST['fictioneer_enforce_gravatar'] )
       );
     }
 
@@ -378,7 +380,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
       fictioneer_update_user_meta(
         $updated_user_id,
         'fictioneer_disable_avatar',
-        fictioneer_sanitize_checkbox( $_POST['fictioneer_disable_avatar'] ?? 0 )
+        Sanitizer::sanitize_bool( $_POST['fictioneer_disable_avatar'] )
       );
     }
 
@@ -387,7 +389,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
       fictioneer_update_user_meta(
         $updated_user_id,
         'fictioneer_lock_avatar',
-        fictioneer_sanitize_checkbox( $_POST['fictioneer_lock_avatar'] ?? 0 )
+        Sanitizer::sanitize_bool( $_POST['fictioneer_lock_avatar'] )
       );
     }
 
@@ -396,7 +398,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
       fictioneer_update_user_meta(
         $updated_user_id,
         'fictioneer_hide_badge',
-        fictioneer_sanitize_checkbox( $_POST['fictioneer_hide_badge'] ?? 0 )
+        Sanitizer::sanitize_bool( $_POST['fictioneer_hide_badge'] )
       );
     }
 
@@ -405,7 +407,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
       fictioneer_update_user_meta(
         $updated_user_id,
         'fictioneer_disable_badge_override',
-        fictioneer_sanitize_checkbox( $_POST['fictioneer_disable_badge_override'] ?? 0 )
+        Sanitizer::sanitize_bool( $_POST['fictioneer_disable_badge_override'] )
       );
     }
 
@@ -414,7 +416,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
       fictioneer_update_user_meta(
         $updated_user_id,
         'fictioneer_comment_reply_notifications',
-        fictioneer_sanitize_checkbox( $_POST['fictioneer_comment_reply_notifications'] ?? 0 )
+        Sanitizer::sanitize_bool( $_POST['fictioneer_comment_reply_notifications'] )
       );
     }
 
@@ -423,7 +425,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
       fictioneer_update_user_meta(
         $updated_user_id,
         'fictioneer_show_read_alerts',
-        fictioneer_sanitize_checkbox( $_POST['fictioneer_show_read_alerts'] ?? 0 )
+        Sanitizer::sanitize_bool( $_POST['fictioneer_show_read_alerts'] )
       );
     }
 
@@ -432,7 +434,7 @@ function fictioneer_update_my_user_profile( $updated_user_id ) {
       fictioneer_update_user_meta(
         $updated_user_id,
         'fictioneer_enable_editor_dark_colors',
-        fictioneer_sanitize_checkbox( $_POST['fictioneer_enable_editor_dark_colors'] ?? 0 )
+        Sanitizer::sanitize_bool( $_POST['fictioneer_enable_editor_dark_colors'] )
       );
     }
 

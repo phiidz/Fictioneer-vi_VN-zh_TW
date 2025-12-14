@@ -11,791 +11,791 @@ define( 'FICTIONEER_OPTIONS', array(
     'fictioneer_enable_maintenance_mode' => array(
       'name' => 'fictioneer_enable_maintenance_mode',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_dark_mode_as_default' => array(
       'name' => 'fictioneer_dark_mode_as_default',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_show_authors' => array(
       'name' => 'fictioneer_show_authors',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_hide_chapter_icons' => array(
       'name' => 'fictioneer_hide_chapter_icons',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_hide_taxonomies_on_story_cards' => array(
       'name' => 'fictioneer_hide_taxonomies_on_story_cards',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_hide_taxonomies_on_chapter_cards' => array(
       'name' => 'fictioneer_hide_taxonomies_on_chapter_cards',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_hide_taxonomies_on_recommendation_cards' => array(
       'name' => 'fictioneer_hide_taxonomies_on_recommendation_cards',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_hide_taxonomies_on_collection_cards' => array(
       'name' => 'fictioneer_hide_taxonomies_on_collection_cards',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_show_tags_on_story_cards' => array(
       'name' => 'fictioneer_show_tags_on_story_cards',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_show_tags_on_chapter_cards' => array(
       'name' => 'fictioneer_show_tags_on_chapter_cards',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_show_tags_on_recommendation_cards' => array(
       'name' => 'fictioneer_show_tags_on_recommendation_cards',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_show_tags_on_collection_cards' => array(
       'name' => 'fictioneer_show_tags_on_collection_cards',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_hide_taxonomies_on_pages' => array(
       'name' => 'fictioneer_hide_taxonomies_on_pages',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_hide_tags_on_pages' => array(
       'name' => 'fictioneer_hide_tags_on_pages',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_hide_content_warnings_on_pages' => array(
       'name' => 'fictioneer_hide_content_warnings_on_pages',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_theme_rss' => array(
       'name' => 'fictioneer_enable_theme_rss',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_oauth' => array(
       'name' => 'fictioneer_enable_oauth',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_lightbox' => array(
       'name' => 'fictioneer_enable_lightbox',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_bookmarks' => array(
       'name' => 'fictioneer_enable_bookmarks',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_follows' => array(
       'name' => 'fictioneer_enable_follows',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_checkmarks' => array(
       'name' => 'fictioneer_enable_checkmarks',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_reminders' => array(
       'name' => 'fictioneer_enable_reminders',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_suggestions' => array(
       'name' => 'fictioneer_enable_suggestions',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_tts' => array(
       'name' => 'fictioneer_enable_tts',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_seo' => array(
       'name' => 'fictioneer_enable_seo',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_sitemap' => array(
       'name' => 'fictioneer_enable_sitemap',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_epubs' => array(
       'name' => 'fictioneer_enable_epubs',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_require_js_to_comment' => array(
       'name' => 'fictioneer_require_js_to_comment',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_ajax_comment_submit' => array(
       'name' => 'fictioneer_enable_ajax_comment_submit',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_comment_link_limit' => array(
       'name' => 'fictioneer_enable_comment_link_limit',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_comment_toolbar' => array(
       'name' => 'fictioneer_enable_comment_toolbar',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_comment_bbcodes' => array(
       'name' => 'fictioneer_disable_comment_bbcodes',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_ajax_comment_moderation' => array(
       'name' => 'fictioneer_enable_ajax_comment_moderation',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_custom_badges' => array(
       'name' => 'fictioneer_enable_custom_badges',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_patreon_badges' => array(
       'name' => 'fictioneer_enable_patreon_badges',
       'group' => 'fictioneer-settings-connections-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_private_commenting' => array(
       'name' => 'fictioneer_enable_private_commenting',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_comment_notifications' => array(
       'name' => 'fictioneer_enable_comment_notifications',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_comment_reporting' => array(
       'name' => 'fictioneer_enable_comment_reporting',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_heartbeat' => array(
       'name' => 'fictioneer_disable_heartbeat',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_remove_head_clutter' => array(
       'name' => 'fictioneer_remove_head_clutter',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_reduce_admin_bar' => array(
       'name' => 'fictioneer_reduce_admin_bar',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_bundle_stylesheets' => array(
       'name' => 'fictioneer_bundle_stylesheets',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_bundle_scripts' => array(
       'name' => 'fictioneer_bundle_scripts',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_do_not_save_comment_ip' => array(
       'name' => 'fictioneer_do_not_save_comment_ip',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_logout_redirects_home' => array(
       'name' => 'fictioneer_logout_redirects_home',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_theme_logout' => array(
       'name' => 'fictioneer_disable_theme_logout',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_consent_wrappers' => array(
       'name' => 'fictioneer_consent_wrappers',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_cookie_banner' => array(
       'name' => 'fictioneer_cookie_banner',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_cache_compatibility' => array(
       'name' => 'fictioneer_enable_cache_compatibility',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_private_cache_compatibility' => array(
       'name' => 'fictioneer_enable_private_cache_compatibility',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_ajax_comments' => array(
       'name' => 'fictioneer_enable_ajax_comments',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_comment_callback' => array(
       'name' => 'fictioneer_disable_comment_callback',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_comment_query' => array(
       'name' => 'fictioneer_disable_comment_query',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_comment_form' => array(
       'name' => 'fictioneer_disable_comment_form',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_comment_pagination' => array(
       'name' => 'fictioneer_disable_comment_pagination',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_facebook_share' => array(
       'name' => 'fictioneer_disable_facebook_share',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_twitter_share' => array(
       'name' => 'fictioneer_disable_twitter_share',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_tumblr_share' => array(
       'name' => 'fictioneer_disable_tumblr_share',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_reddit_share' => array(
       'name' => 'fictioneer_disable_reddit_share',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_mastodon_share' => array(
       'name' => 'fictioneer_disable_mastodon_share',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_bluesky_share' => array(
       'name' => 'fictioneer_disable_bluesky_share',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_delete_theme_options_on_deactivation' => array(
       'name' => 'fictioneer_delete_theme_options_on_deactivation',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_jquery_migrate' => array(
       'name' => 'fictioneer_enable_jquery_migrate',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_properties' => array(
       'name' => 'fictioneer_disable_properties',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_chapter_groups' => array(
       'name' => 'fictioneer_enable_chapter_groups',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_chapter_collapsing' => array(
       'name' => 'fictioneer_disable_chapter_collapsing',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_collapse_groups_by_default' => array(
       'name' => 'fictioneer_collapse_groups_by_default',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_public_cache_compatibility' => array(
       'name' => 'fictioneer_enable_public_cache_compatibility',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_show_full_post_content' => array(
       'name' => 'fictioneer_show_full_post_content',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_ajax_authentication' => array(
       'name' => 'fictioneer_enable_ajax_authentication',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_application_passwords' => array(
       'name' => 'fictioneer_disable_application_passwords',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_user_comment_editing' => array(
       'name' => 'fictioneer_enable_user_comment_editing',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_ajax_comment_form' => array(
       'name' => 'fictioneer_enable_ajax_comment_form',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_sticky_comments' => array(
       'name' => 'fictioneer_enable_sticky_comments',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_commenting' => array(
       'name' => 'fictioneer_disable_commenting',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_purge_all_caches' => array(
       'name' => 'fictioneer_purge_all_caches',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_theme_search' => array(
       'name' => 'fictioneer_disable_theme_search',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_contact_forms' => array(
       'name' => 'fictioneer_disable_contact_forms',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_dynamic_editor_styles' => array(
       'name' => 'fictioneer_disable_dynamic_editor_styles',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_storygraph_api' => array(
       'name' => 'fictioneer_enable_storygraph_api',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_restrict_rest_api' => array(
       'name' => 'fictioneer_restrict_rest_api',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_chapter_appending' => array(
       'name' => 'fictioneer_enable_chapter_appending',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 1
     ),
     'fictioneer_limit_chapter_stories_by_author' => array(
       'name' => 'fictioneer_limit_chapter_stories_by_author',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 1
     ),
     'fictioneer_see_some_evil' => array(
       'name' => 'fictioneer_see_some_evil',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_fast_ajax_comments' => array(
       'name' => 'fictioneer_enable_fast_ajax_comments',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_rate_limits' => array(
       'name' => 'fictioneer_enable_rate_limits',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_advanced_meta_fields' => array(
       'name' => 'fictioneer_enable_advanced_meta_fields',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_show_story_changelog' => array(
       'name' => 'fictioneer_show_story_changelog',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_font_awesome' => array(
       'name' => 'fictioneer_disable_font_awesome',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_site_age_confirmation' => array(
       'name' => 'fictioneer_enable_site_age_confirmation',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_post_age_confirmation' => array(
       'name' => 'fictioneer_enable_post_age_confirmation',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_extended_story_list_meta_queries' => array(
       'name' => 'fictioneer_disable_extended_story_list_meta_queries',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_extended_chapter_list_meta_queries' => array(
       'name' => 'fictioneer_disable_extended_chapter_list_meta_queries',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_count_characters_as_words' => array(
       'name' => 'fictioneer_count_characters_as_words',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_generate_footnotes_from_tooltips' => array(
       'name' => 'fictioneer_generate_footnotes_from_tooltips',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_show_protected_excerpt' => array(
       'name' => 'fictioneer_show_protected_excerpt',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_hide_large_card_chapter_list' => array(
       'name' => 'fictioneer_hide_large_card_chapter_list',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_show_story_cards_latest_chapters' => array(
       'name' => 'fictioneer_show_story_cards_latest_chapters',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_patreon_locks' => array(
       'name' => 'fictioneer_enable_patreon_locks',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_hide_password_form_with_patreon' => array(
       'name' => 'fictioneer_hide_password_form_with_patreon',
       'group' => 'fictioneer-settings-connections-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_show_wp_login_link' => array(
       'name' => 'fictioneer_show_wp_login_link',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_static_partials' => array(
       'name' => 'fictioneer_enable_static_partials',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_randomize_oauth_usernames' => array(
       'name' => 'fictioneer_randomize_oauth_usernames',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_rewrite_chapter_permalinks' => array(
       'name' => 'fictioneer_rewrite_chapter_permalinks',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_xmlrpc' => array(
       'name' => 'fictioneer_enable_xmlrpc',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_emojis' => array(
       'name' => 'fictioneer_disable_emojis',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_default_formatting_indent' => array(
       'name' => 'fictioneer_disable_default_formatting_indent',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_override_chapter_status_icons' => array(
       'name' => 'fictioneer_override_chapter_status_icons',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_custom_fields' => array(
       'name' => 'fictioneer_enable_custom_fields',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_anti_flicker' => array(
       'name' => 'fictioneer_enable_anti_flicker',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_hide_categories' => array(
       'name' => 'fictioneer_hide_categories',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_story_card_caching' => array(
       'name' => 'fictioneer_enable_story_card_caching',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_global_splide' => array(
       'name' => 'fictioneer_enable_global_splide',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_log_posts' => array(
       'name' => 'fictioneer_log_posts',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_menu_transients' => array(
       'name' => 'fictioneer_disable_menu_transients',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_line_break_fix' => array(
       'name' => 'fictioneer_enable_line_break_fix',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_show_story_modified_date' => array(
       'name' => 'fictioneer_show_story_modified_date',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_chapter_list_transients' => array(
       'name' => 'fictioneer_disable_chapter_list_transients',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_disable_shortcode_transients' => array(
       'name' => 'fictioneer_disable_shortcode_transients',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_css_skins' => array(
       'name' => 'fictioneer_enable_css_skins',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_exclude_non_stories_from_cloud_counts' => array(
       'name' => 'fictioneer_exclude_non_stories_from_cloud_counts',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_enable_ffcnr_auth' => array(
       'name' => 'fictioneer_enable_ffcnr_auth',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_redirect_scheduled_chapter_404' => array(
       'name' => 'fictioneer_redirect_scheduled_chapter_404',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_exclude_protected_from_rss' => array(
       'name' => 'fictioneer_exclude_protected_from_rss',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
     'fictioneer_exclude_protected_from_discord' => array(
       'name' => 'fictioneer_exclude_protected_from_discord',
       'group' => 'fictioneer-settings-connections-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     ),
     'fictioneer_disable_header_image_preload' => array(
       'name' => 'fictioneer_disable_header_image_preload',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     ),
     'fictioneer_enable_lastpostmodified_caching' => array(
       'name' => 'fictioneer_enable_lastpostmodified_caching',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     ),
     'fictioneer_show_scheduled_chapters' => array(
       'name' => 'fictioneer_show_scheduled_chapters',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     ),
     'fictioneer_enable_scheduled_chapter_commenting' => array(
       'name' => 'fictioneer_enable_scheduled_chapter_commenting',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     ),
     'fictioneer_enable_story_filter_reel' => array(
       'name' => 'fictioneer_enable_story_filter_reel',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     ),
     'fictioneer_disable_rest_save_actions' => array(
       'name' => 'fictioneer_disable_rest_save_actions',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     ),
     'fictioneer_enable_alerts' => array(
       'name' => 'fictioneer_enable_alerts',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     ),
     'fictioneer_enable_extended_alert_queries' => array(
       'name' => 'fictioneer_enable_extended_alert_queries',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     ),
   ),
   'integers' => array(

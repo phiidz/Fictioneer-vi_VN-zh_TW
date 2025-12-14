@@ -55,7 +55,8 @@ class Sanitizer {
   /**
    * Sanitize an integer with options for default, minimum, and maximum.
    *
-   * @since 5.34.0
+   * @since 4.0.0
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param mixed    $value    The value to be sanitized.
    * @param mixed    $default  Optional. Fallback value. Default 0.
@@ -102,7 +103,8 @@ class Sanitizer {
   /**
    * Sanitize an integer to be 1+ with options for default and maximum.
    *
-   * @since 5.34.0
+   * @since 4.6.0
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param mixed    $value    The value to be sanitized.
    * @param int      $default  Optional. Fallback value. Default 1.
@@ -119,6 +121,7 @@ class Sanitizer {
    * Sanitize words per minute setting (min 200).
    *
    * @since 5.34.0
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param mixed $value  The value to be sanitized.
    *
@@ -127,5 +130,45 @@ class Sanitizer {
 
   public static function sanitize_integer_words_per_minute( mixed $value ) : int {
     return self::sanitize_integer( $value, 200, 200 );
+  }
+
+  /**
+   * Sanitize a boolean value.
+   *
+   * Note: Accepts common truthy/falsy representations and normalizes them.
+   *
+   * @since 4.7.0
+   * @since 5.34.0 - Moved into Sanitizer class.
+   * @link https://www.php.net/manual/en/function.filter-var.php
+   *
+   * @param mixed $value    Raw value.
+   * @param bool  $numeric  Optional. Whether to return 1/0 instead of true/false. Default false.
+   *
+   * @return bool|int Sanitized boolean value.
+   */
+
+  public static function sanitize_bool( mixed $value, bool $numeric = false ) : int|bool {
+    if ( is_string( $value ) ) {
+      $value = trim( strtolower( $value ) );
+    }
+
+    $bool = filter_var( $value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE );
+    $bool = ( $bool === true );
+
+    return $numeric ? (int) $bool : $bool;
+  }
+
+  /**
+   * Sanitize a boolean value to 0/1.
+   *
+   * @since 5.34.0
+   *
+   * @param mixed $value  Raw value.
+   *
+   * @return int Sanitized boolean value as 0/1.
+   */
+
+  public static function sanitize_bool_num( mixed $value ) : int {
+    return self::sanitize_bool( $value, true );
   }
 }

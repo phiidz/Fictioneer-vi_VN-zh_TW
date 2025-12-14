@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Sanitizer;
+
 // =============================================================================
 // CHECK USER COMMENT MODERATION PERMISSION
 // =============================================================================
@@ -269,7 +271,7 @@ function fictioneer_comment_meta_box( $comment ) {
 // =============================================================================
 
 /**
- * Save data in the wp-admin comment edit screen
+ * Save data in the wp-admin comment edit screen.
  *
  * @since 4.7.0
  *
@@ -291,17 +293,17 @@ function fictioneer_edit_comment( $comment_id ) {
   $comment = get_comment( $comment_id );
 
   // Always evaluate because checkboxes can be deselected (and thus be empty)
-  $is_sticky = fictioneer_sanitize_checkbox( $_POST['fictioneer_sticky'] ?? 0 );
-  $is_closed = fictioneer_sanitize_checkbox( $_POST['fictioneer_thread_closed'] ?? 0 );
-  $is_offensive = fictioneer_sanitize_checkbox( $_POST['fictioneer_marked_offensive'] ?? 0 );
-  $ignores_reports = fictioneer_sanitize_checkbox( $_POST['fictioneer_ignore_reports'] ?? 0 );
-  $disable_avatar = fictioneer_sanitize_checkbox( $_POST['fictioneer_admin_disable_avatar'] ?? 0 );
-  $disable_reports = fictioneer_sanitize_checkbox( $_POST['fictioneer_admin_disable_reporting'] ?? 0 );
-  $disable_renaming = fictioneer_sanitize_checkbox( $_POST['fictioneer_admin_disable_renaming'] ?? 0 );
-  $disable_commenting = fictioneer_sanitize_checkbox( $_POST['fictioneer_admin_disable_commenting'] ?? 0 );
-  $disable_editing = fictioneer_sanitize_checkbox( $_POST['fictioneer_admin_disable_comment_editing'] ?? 0 );
-  $disable_notifications = fictioneer_sanitize_checkbox( $_POST['fictioneer_admin_disable_comment_notifications'] ?? 0 );
-  $hold_comments = fictioneer_sanitize_checkbox( $_POST['fictioneer_admin_always_moderate_comments'] ?? 0 );
+  $is_sticky = Sanitizer::sanitize_bool_num( $_POST['fictioneer_sticky'] ?? 0 );
+  $is_closed = Sanitizer::sanitize_bool_num( $_POST['fictioneer_thread_closed'] ?? 0 );
+  $is_offensive = Sanitizer::sanitize_bool_num( $_POST['fictioneer_marked_offensive'] ?? 0 );
+  $ignores_reports = Sanitizer::sanitize_bool_num( $_POST['fictioneer_ignore_reports'] ?? 0 );
+  $disable_avatar = Sanitizer::sanitize_bool_num( $_POST['fictioneer_admin_disable_avatar'] ?? 0 );
+  $disable_reports = Sanitizer::sanitize_bool_num( $_POST['fictioneer_admin_disable_reporting'] ?? 0 );
+  $disable_renaming = Sanitizer::sanitize_bool_num( $_POST['fictioneer_admin_disable_renaming'] ?? 0 );
+  $disable_commenting = Sanitizer::sanitize_bool_num( $_POST['fictioneer_admin_disable_commenting'] ?? 0 );
+  $disable_editing = Sanitizer::sanitize_bool_num( $_POST['fictioneer_admin_disable_comment_editing'] ?? 0 );
+  $disable_notifications = Sanitizer::sanitize_bool_num( $_POST['fictioneer_admin_disable_comment_notifications'] ?? 0 );
+  $hold_comments = Sanitizer::sanitize_bool_num( $_POST['fictioneer_admin_always_moderate_comments'] ?? 0 );
 
   // Save to database
   fictioneer_update_comment_meta( $comment_id, 'fictioneer_sticky', $is_sticky );
@@ -324,7 +326,7 @@ if ( ! get_option( 'fictioneer_disable_comment_form' ) ) {
 }
 
 /**
- * Tracks comment edits and stores a history of changes
+ * Track comment edits and stores a history of changes.
  *
  * @since 5.5.3
  *

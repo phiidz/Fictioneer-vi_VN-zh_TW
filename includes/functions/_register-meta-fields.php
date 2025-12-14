@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Sanitizer;
+
 // =============================================================================
 // AUTH CALLBACKS
 // =============================================================================
@@ -259,7 +261,7 @@ function fictioneer_register_general_meta_fields() {
             ( user_can( $user_id, 'fcn_seo_meta' ) || user_can( $user_id, 'manage_options' ) )
           );
         },
-        'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+        'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
       )
     );
 
@@ -341,7 +343,7 @@ function fictioneer_register_general_meta_fields() {
           'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
             return user_can( $user_id, 'manage_options' );
           },
-          'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+          'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
         )
       );
     }
@@ -360,7 +362,7 @@ function fictioneer_register_general_meta_fields() {
         'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
           return user_can( $user_id, 'manage_options' );
         },
-        'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+        'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
       )
     );
 
@@ -378,7 +380,7 @@ function fictioneer_register_general_meta_fields() {
         'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
           return user_can( $user_id, 'manage_options' );
         },
-        'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+        'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
       )
     );
 
@@ -441,7 +443,7 @@ function fictioneer_register_general_meta_fields() {
         'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) use ( $type ) {
           return fictioneer_rest_auth_callback( $object_id, $user_id, $type );
         },
-        'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+        'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
       )
     );
   }
@@ -936,7 +938,7 @@ function fictioneer_register_story_meta_fields() {
           ( user_can( $user_id, 'manage_options' ) || user_can( $user_id, 'fcn_make_sticky' ) )
         );
       },
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     )
   );
 
@@ -954,7 +956,7 @@ function fictioneer_register_story_meta_fields() {
       'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
         return fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_story' );
       },
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     )
   );
 
@@ -972,7 +974,7 @@ function fictioneer_register_story_meta_fields() {
       'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
         return fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_story' );
       },
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     )
   );
 
@@ -990,7 +992,7 @@ function fictioneer_register_story_meta_fields() {
       'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
         return fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_story' );
       },
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     )
   );
 
@@ -1008,7 +1010,7 @@ function fictioneer_register_story_meta_fields() {
       'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
         return fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_story' );
       },
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     )
   );
 
@@ -1026,7 +1028,7 @@ function fictioneer_register_story_meta_fields() {
       'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
         return fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_story' );
       },
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     )
   );
 
@@ -1044,7 +1046,7 @@ function fictioneer_register_story_meta_fields() {
       'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
         return fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_story' );
       },
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     )
   );
 
@@ -1062,7 +1064,7 @@ function fictioneer_register_story_meta_fields() {
       'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
         return fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_story' );
       },
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     )
   );
 
@@ -1505,7 +1507,7 @@ function fictioneer_register_chapter_meta_fields() {
       'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
         return fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_chapter' );
       },
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     )
   );
 
@@ -1523,7 +1525,7 @@ function fictioneer_register_chapter_meta_fields() {
       'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
         return fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_chapter' );
       },
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     )
   );
 
@@ -1541,7 +1543,7 @@ function fictioneer_register_chapter_meta_fields() {
       'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
         return fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_chapter' );
       },
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     )
   );
 
@@ -1559,7 +1561,7 @@ function fictioneer_register_chapter_meta_fields() {
       'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
         return fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_chapter' );
       },
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     )
   );
 }
@@ -1942,7 +1944,7 @@ function fictioneer_register_page_meta_fields() {
       'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
         return user_can( $user_id, 'manage_options' );
       },
-      'sanitize_callback' => 'fictioneer_sanitize_checkbox'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     )
   );
 }

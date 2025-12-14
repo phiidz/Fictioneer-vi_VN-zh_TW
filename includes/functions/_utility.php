@@ -1905,9 +1905,10 @@ function fictioneer_sanitize_float( $value ) {
 // =============================================================================
 
 /**
- * Sanitize a checkbox value into true or false.
+ * [Deprecated] Sanitize a checkbox value into true or false.
  *
  * @since 4.7.0
+ * @since 5.34.0 - Deprecated.
  * @link https://www.php.net/manual/en/function.filter-var.php
  *
  * @param string|boolean $value  The checkbox value to be sanitized.
@@ -1916,9 +1917,7 @@ function fictioneer_sanitize_float( $value ) {
  */
 
 function fictioneer_sanitize_checkbox( $value ) {
-  $value = filter_var( $value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE );
-
-  return empty( $value ) ? 0 : 1;
+  return Sanitizer::sanitize_bool( $value, true );
 }
 
 // =============================================================================
