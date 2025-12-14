@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Sanitizer;
+
 // =============================================================================
 // CHECK FOR LOCAL DEV ENVIRONMENT
 // =============================================================================
@@ -1813,9 +1815,10 @@ if ( ! function_exists( 'fictioneer_get_consent' ) && get_option( 'fictioneer_co
 // =============================================================================
 
 /**
- * Sanitizes an integer with options for default, minimum, and maximum
+ * [Deprecated] Sanitize an integer with options for default, minimum, and maximum.
  *
  * @since 4.0.0
+ * @since 5.34.0 - Deprecated.
  *
  * @param mixed $value    The value to be sanitized.
  * @param int   $default  Default value if an invalid integer is provided. Default 0.
@@ -1826,25 +1829,7 @@ if ( ! function_exists( 'fictioneer_get_consent' ) && get_option( 'fictioneer_co
  */
 
 function fictioneer_sanitize_integer( $value, $default = 0, $min = null, $max = null ) {
-  // Ensure $value is numeric in the first place
-  if ( ! is_numeric( $value ) ) {
-    return $default;
-  }
-
-  // Cast to integer
-  $value = (int) $value;
-
-  // Apply minimum limit if specified
-  if ( $min !== null && $value < $min ) {
-    return $min;
-  }
-
-  // Apply maximum limit if specified
-  if ( $max !== null && $value > $max ) {
-    return $max;
-  }
-
-  return $value;
+  return Sanitizer::sanitize_integer( $value, $default, $min, $max );
 }
 
 // =============================================================================
@@ -2993,10 +2978,10 @@ if ( ! function_exists( 'fictioneer_get_font_colors' ) ) {
 // =============================================================================
 
 /**
- * [Legacy] Explode string into an array.
+ * [Deprecated] Explode string into an array.
  *
  * @since 5.1.3
- * @since 5.34.0 - Delegate to wp_parse_list().
+ * @since 5.34.0 - Deprecated.
  *
  * @param string $string  The string to explode.
  *

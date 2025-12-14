@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Sanitizer;
+
 // =============================================================================
 // HEX TO RGB
 // =============================================================================
@@ -607,7 +609,7 @@ function fictioneer_build_customize_css( $context = null ) {
 
   // --- Fading header image ---------------------------------------------------
 
-  $header_image_fading_start = fictioneer_sanitize_integer( get_theme_mod( 'header_image_fading_start', 0 ), 0, 0, 99 );
+  $header_image_fading_start = Sanitizer::sanitize_integer( get_theme_mod( 'header_image_fading_start', 0 ), 0, 0, 99 );
   $header_image_fading_breakpoint = (int) get_theme_mod( 'header_image_fading_breakpoint', 0 );
 
   if ( $header_image_fading_start > 0 ) {

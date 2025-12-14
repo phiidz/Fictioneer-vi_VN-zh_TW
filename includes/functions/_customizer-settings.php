@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Sanitizer;
+
 // =============================================================================
 // WATCH FOR CUSTOMIZER UPDATES
 // =============================================================================
@@ -189,7 +191,7 @@ function fictioneer_add_light_mode_customizer_settings( $manager ) {
     'saturation_offset_light',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_integer',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_integer' ],
       'default' => 0
     )
   );
@@ -219,7 +221,7 @@ function fictioneer_add_light_mode_customizer_settings( $manager ) {
     'lightness_offset_light',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_integer',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_integer' ],
       'default' => 0
     )
   );
@@ -249,7 +251,7 @@ function fictioneer_add_light_mode_customizer_settings( $manager ) {
     'font_saturation_offset_light',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_integer',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_integer' ],
       'default' => 0
     )
   );
@@ -279,7 +281,7 @@ function fictioneer_add_light_mode_customizer_settings( $manager ) {
     'font_lightness_offset_light',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_integer',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_integer' ],
       'default' => 0
     )
   );
@@ -615,7 +617,7 @@ function fictioneer_add_dark_mode_customizer_settings( $manager ) {
     'saturation_offset',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_integer',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_integer' ],
       'default' => 0
     )
   );
@@ -645,7 +647,7 @@ function fictioneer_add_dark_mode_customizer_settings( $manager ) {
     'lightness_offset',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_integer',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_integer' ],
       'default' => 0
     )
   );
@@ -675,7 +677,7 @@ function fictioneer_add_dark_mode_customizer_settings( $manager ) {
     'font_saturation_offset',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_integer',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_integer' ],
       'default' => 0
     )
   );
@@ -705,7 +707,7 @@ function fictioneer_add_dark_mode_customizer_settings( $manager ) {
     'font_lightness_offset',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_integer',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_integer' ],
       'default' => 0
     )
   );
@@ -1525,7 +1527,7 @@ function fictioneer_add_layout_customizer_settings( $manager ) {
     'main_offset',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_integer',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_integer' ],
       'default' => 0
     )
   );

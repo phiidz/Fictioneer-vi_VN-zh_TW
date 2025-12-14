@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Sanitizer;
+
 // =============================================================================
 // SETUP
 // =============================================================================
@@ -854,31 +856,31 @@ define( 'FICTIONEER_OPTIONS', array(
     'fictioneer_comment_report_threshold' => array(
       'name' => 'fictioneer_comment_report_threshold',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_integer_one_up',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_integer_one_up' ],
       'default' => 10
     ),
     'fictioneer_comment_link_limit_threshold' => array(
       'name' => 'fictioneer_comment_link_limit_threshold',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_integer_one_up',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_integer_one_up' ],
       'default' => 3
     ),
     'fictioneer_words_per_minute' => array(
       'name' => 'fictioneer_words_per_minute',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_words_per_minute',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_integer_words_per_minute' ],
       'default' => 200
     ),
     'fictioneer_user_comment_edit_time' => array(
       'name' => 'fictioneer_user_comment_edit_time',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_integer',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_integer' ],
       'default' => 15
     ),
     'fictioneer_upload_size_limit' => array(
       'name' => 'fictioneer_upload_size_limit',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_integer',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_integer' ],
       'default' => 5
     ),
     'fictioneer_patreon_global_lock_amount' => array(
@@ -899,7 +901,7 @@ define( 'FICTIONEER_OPTIONS', array(
     'fictioneer_oauth_cookie_expiration_days' => array(
       'name' => 'fictioneer_oauth_cookie_expiration_days',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_integer_one_up',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_integer_one_up' ],
       'default' => 3
     ),
   ),
@@ -1357,23 +1359,10 @@ function fictioneer_register_settings() {
 // =============================================================================
 
 /**
- * Sanitize the 'words per minute' setting with fallback.
- *
- * @since 4.0.0
- *
- * @param mixed $input  The input value to sanitize.
- *
- * @return int The sanitized integer.
- */
-
-function fictioneer_sanitize_words_per_minute( $input ) {
-  return fictioneer_sanitize_integer( $input, 200 );
-}
-
-/**
- * Sanitize integer to be 1 or more.
+ * [Deprecated] Sanitize integer to be 1 or more.
  *
  * @since 4.6.0
+ * @since 5.34.0 - Deprecated.
  *
  * @param mixed $input  The input value to sanitize.
  *
@@ -1381,7 +1370,7 @@ function fictioneer_sanitize_words_per_minute( $input ) {
  */
 
 function fictioneer_sanitize_integer_one_up( $input ) {
-  return fictioneer_sanitize_integer( $input, 1, 1 );
+  return Sanitizer::sanitize_integer_one_up( $input );
 }
 
 /**

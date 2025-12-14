@@ -51,4 +51,69 @@ class Sanitizer {
 
     return $output;
   }
+
+  /**
+   * Sanitize an integer with options for default, minimum, and maximum.
+   *
+   * @since 5.34.0
+   *
+   * @param mixed    $value    The value to be sanitized.
+   * @param int      $default  Optional. Fallback value. Default 0.
+   * @param int|null $min      Optional. Minimum value. Default is no minimum.
+   * @param int|null $max      Optional. Maximum value. Default is no maximum.
+   *
+   * @return int The sanitized integer.
+   */
+
+  public static function sanitize_integer( mixed $value, int $default = 0, ?int $min = null, ?int $max = null ) : int {
+    // Validate as integer-like value
+    if ( filter_var( $value, FILTER_VALIDATE_INT ) === false ) {
+      return $default;
+    }
+
+    // Cast to integer
+    $value = (int) $value;
+
+    // Apply minimum limit if specified
+    if ( $min !== null && $value < $min ) {
+      return $min;
+    }
+
+    // Apply maximum limit if specified
+    if ( $max !== null && $value > $max ) {
+      return $max;
+    }
+
+    return $value;
+  }
+
+  /**
+   * Sanitize an integer to be 1+ with options for default and maximum.
+   *
+   * @since 5.34.0
+   *
+   * @param mixed    $value    The value to be sanitized.
+   * @param int      $default  Optional. Fallback value. Default 1.
+   * @param int|null $max      Optional. Maximum value. Default is no maximum.
+   *
+   * @return int The sanitized integer.
+   */
+
+  public static function sanitize_integer_one_up( mixed $value, int $default = 1, ?int $max = null ) : int {
+    return self::sanitize_integer( $value, max( 1, $default ), 1, $max  );
+  }
+
+  /**
+   * Sanitize words per minute setting (min 200).
+   *
+   * @since 5.34.0
+   *
+   * @param mixed $value  The value to be sanitized.
+   *
+   * @return int The sanitized integer.
+   */
+
+  public static function sanitize_integer_words_per_minute( mixed $value ) : int {
+    return self::sanitize_integer( $value, 200, 200 );
+  }
 }
