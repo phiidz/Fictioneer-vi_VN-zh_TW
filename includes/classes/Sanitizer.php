@@ -549,4 +549,23 @@ class Sanitizer {
 
     return ( get_post_type( $id ) === 'page' ) ? $id : -1;
   }
+
+  /**
+   * Sanitize with absint() unless it is an empty string.
+   *
+   * @since 5.15.0
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param mixed $input  Value to be sanitized.
+   *
+   * @return int|string Sanitized integer or an empty string.
+   */
+
+  public static function sanitize_absint_or_empty_string( mixed $input ) : int|string {
+    if ( $input === '' ) {
+      return '';
+    }
+
+    return absint( $input );
+  }
 }

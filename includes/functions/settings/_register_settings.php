@@ -886,17 +886,17 @@ define( 'FICTIONEER_OPTIONS', array(
     'fictioneer_patreon_global_lock_amount' => array(
       'name' => 'fictioneer_patreon_global_lock_amount',
       'group' => 'fictioneer-settings-connections-group',
-      'sanitize_callback' => 'fictioneer_sanitize_absint_or_empty_string'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_absint_or_empty_string' ]
     ),
     'fictioneer_patreon_global_lock_lifetime_amount' => array(
       'name' => 'fictioneer_patreon_global_lock_lifetime_amount',
       'group' => 'fictioneer-settings-connections-group',
-      'sanitize_callback' => 'fictioneer_sanitize_absint_or_empty_string'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_absint_or_empty_string' ]
     ),
     'fictioneer_patreon_global_lock_unlock_amount' => array(
       'name' => 'fictioneer_patreon_global_lock_unlock_amount',
       'group' => 'fictioneer-settings-connections-group',
-      'sanitize_callback' => 'fictioneer_sanitize_absint_or_empty_string'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_absint_or_empty_string' ]
     ),
     'fictioneer_oauth_cookie_expiration_days' => array(
       'name' => 'fictioneer_oauth_cookie_expiration_days',
@@ -1357,24 +1357,6 @@ function fictioneer_register_settings() {
 // =============================================================================
 // SPECIAL SANITIZATION CALLBACKS
 // =============================================================================
-
-/**
- * Sanitize with absint() unless it is an empty string.
- *
- * @since 5.15.0
- *
- * @param mixed $input  The input value to sanitize.
- *
- * @return mixed The sanitized integer or an empty string.
- */
-
-function fictioneer_sanitize_absint_or_empty_string( $input ) {
-  if ( $input === '' ) {
-    return '';
-  } else {
-    return absint( $input );
-  }
-}
 
 /**
  * Sanitize the phrase for the cookie consent banner.

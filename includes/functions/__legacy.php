@@ -363,6 +363,21 @@ function fictioneer_sanitize_page_id( $input ) {
   return Sanitizer::sanitize_page_id( $input );
 }
 
+/**
+ * [Deprecated] Sanitize with absint() unless it is an empty string.
+ *
+ * @since 5.15.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_absint_or_empty_string() instead.
+ *
+ * @param mixed $input  The input value to sanitize.
+ *
+ * @return mixed The sanitized integer or an empty string.
+ */
+
+function fictioneer_sanitize_absint_or_empty_string( $input ) {
+  return Sanitizer::sanitize_absint_or_empty_string( $input );
+}
+
 // =============================================================================
 // UTILITY DELEGATES
 // =============================================================================
