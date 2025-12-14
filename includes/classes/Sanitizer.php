@@ -524,4 +524,29 @@ class Sanitizer {
 
     return $title;
   }
+
+  /**
+   * Sanitize a page ID and check whether it is valid.
+   *
+   * @since 4.6.0
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param mixed $input  Page ID to be sanitized.
+   *
+   * @return int Valid page ID or -1 if invalid or not a page.
+   */
+
+  public static function sanitize_page_id( mixed $input ) : int {
+    if ( ! is_scalar( $input ) ) {
+      return -1;
+    }
+
+    $id = (int) $input;
+
+    if ( $id <= 0 ) {
+      return -1;
+    }
+
+    return ( get_post_type( $id ) === 'page' ) ? $id : -1;
+  }
 }

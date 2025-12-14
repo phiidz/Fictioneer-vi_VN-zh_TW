@@ -332,7 +332,7 @@ function fictioneer_sanitize_icon_html( $html ) {
 }
 
 /**
- * Return sanitized safe title.
+ * [Deprecated] Return sanitized safe title.
  *
  * @since 5.7.1
  * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_safe_title() instead.
@@ -346,6 +346,21 @@ function fictioneer_sanitize_icon_html( $html ) {
 
 function fictioneer_sanitize_safe_title( $title, $date, $time ) {
   return Sanitizer::sanitize_safe_title( $title, $date, $time );
+}
+
+/**
+ * [Deprecated] Sanitize a page ID and checks whether it is valid.
+ *
+ * @since 4.6.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_page_id() instead.
+ *
+ * @param mixed $input  The page ID to be sanitized.
+ *
+ * @return int The sanitized page ID or -1 if not a page.
+ */
+
+function fictioneer_sanitize_page_id( $input ) {
+  return Sanitizer::sanitize_page_id( $input );
 }
 
 // =============================================================================

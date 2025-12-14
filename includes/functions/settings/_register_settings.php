@@ -802,55 +802,55 @@ define( 'FICTIONEER_OPTIONS', array(
     'fictioneer_user_profile_page' => array(
       'name' => 'fictioneer_user_profile_page',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_page_id',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_page_id' ],
       'default' => -1
     ),
     'fictioneer_bookmarks_page' => array(
       'name' => 'fictioneer_bookmarks_page',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_page_id',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_page_id' ],
       'default' => -1
     ),
     'fictioneer_stories_page' => array(
       'name' => 'fictioneer_stories_page',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_page_id',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_page_id' ],
       'default' => -1
     ),
     'fictioneer_chapters_page' => array(
       'name' => 'fictioneer_chapters_page',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_page_id',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_page_id' ],
       'default' => -1
     ),
     'fictioneer_recommendations_page' => array(
       'name' => 'fictioneer_recommendations_page',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_page_id',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_page_id' ],
       'default' => -1
     ),
     'fictioneer_collections_page' => array(
       'name' => 'fictioneer_collections_page',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_page_id',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_page_id' ],
       'default' => -1
     ),
     'fictioneer_bookshelf_page' => array(
       'name' => 'fictioneer_bookshelf_page',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_page_id',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_page_id' ],
       'default' => -1
     ),
     'fictioneer_404_page' => array(
       'name' => 'fictioneer_404_page',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_page_id',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_page_id' ],
       'default' => -1
     ),
     'fictioneer_authors_page' => array(
       'name' => 'fictioneer_authors_page',
       'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => 'fictioneer_sanitize_page_id',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_page_id' ],
       'default' => -1
     ),
     'fictioneer_comment_report_threshold' => array(
@@ -1357,22 +1357,6 @@ function fictioneer_register_settings() {
 // =============================================================================
 // SPECIAL SANITIZATION CALLBACKS
 // =============================================================================
-
-/**
- * Sanitize a page ID and checks whether it is valid.
- *
- * @since 4.6.0
- *
- * @param mixed $input  The page ID to be sanitized.
- *
- * @return int The sanitized page ID or -1 if not a page.
- */
-
-function fictioneer_sanitize_page_id( $input ) {
-  $id = (int) $input;
-
-  return get_post_type( $id ) === 'page' ? $id : -1;
-}
 
 /**
  * Sanitize with absint() unless it is an empty string.
