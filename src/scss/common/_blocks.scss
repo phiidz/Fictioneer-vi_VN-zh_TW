@@ -7,10 +7,6 @@
 // BASICS
 // =============================================================================
 
-.content-section {
-  container-type: inline-size;
-}
-
 :where(article, .content-section) {
   overflow-wrap: break-word;
 }
