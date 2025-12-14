@@ -2479,7 +2479,7 @@ function fictioneer_save_story_metaboxes( $post_id ) {
   // Status
   if ( isset( $_POST['fictioneer_story_status'] ) ) {
     $allowed_statuses = ['Ongoing', 'Completed', 'Oneshot', 'Hiatus', 'Canceled'];
-    $status = fictioneer_sanitize_selection( $_POST['fictioneer_story_status'], $allowed_statuses, $allowed_statuses[0] );
+    $status = Sanitizer::sanitize_selection( $_POST['fictioneer_story_status'], $allowed_statuses, $allowed_statuses[0] );
     $fields['fictioneer_story_status'] = $status;
   }
 
@@ -2491,7 +2491,7 @@ function fictioneer_save_story_metaboxes( $post_id ) {
   // Rating
   if ( isset( $_POST['fictioneer_story_rating'] ) ) {
     $allowed_ratings = ['Everyone', 'Teen', 'Mature', 'Adult'];
-    $rating = fictioneer_sanitize_selection( $_POST['fictioneer_story_rating'], $allowed_ratings, $allowed_ratings[0] );
+    $rating = Sanitizer::sanitize_selection( $_POST['fictioneer_story_rating'], $allowed_ratings, $allowed_ratings[0] );
     $fields['fictioneer_story_rating'] = $rating;
   }
 
@@ -3152,7 +3152,7 @@ function fictioneer_save_chapter_metaboxes( $post_id ) {
   // Rating
   if ( isset( $_POST['fictioneer_chapter_rating'] ) ) {
     $allowed_ratings = ['Everyone', 'Teen', 'Mature', 'Adult'];
-    $rating = fictioneer_sanitize_selection( $_POST['fictioneer_chapter_rating'], $allowed_ratings );
+    $rating = Sanitizer::sanitize_selection( $_POST['fictioneer_chapter_rating'], $allowed_ratings );
     $fields['fictioneer_chapter_rating'] = $rating;
   }
 
@@ -3822,7 +3822,7 @@ function fictioneer_save_extra_metabox( $post_id ) {
     isset( $_POST['fictioneer_add_alert'] ) &&
     Sanitizer::sanitize_bool( $_POST['fictioneer_add_alert'] )
   ) {
-    $alert_type = fictioneer_sanitize_selection(
+    $alert_type = Sanitizer::sanitize_selection(
       $_POST['fictioneer_alert_type'] ?? 'info',
       ['info', 'warning', 'alert'],
       'info'

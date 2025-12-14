@@ -1811,28 +1811,6 @@ if ( ! function_exists( 'fictioneer_get_consent' ) && get_option( 'fictioneer_co
 }
 
 // =============================================================================
-// SANITIZE SELECT OPTION
-// =============================================================================
-
-/**
- * Sanitize a selected option.
- *
- * @since 5.7.4
- *
- * @param mixed $value            The selected value to be sanitized.
- * @param array $allowed_options  The allowed values to be checked against.
- * @param mixed $default          Optional. The default value as fallback.
- *
- * @return mixed The sanitized value or default, null if not provided.
- */
-
-function fictioneer_sanitize_selection( $value, $allowed_options, $default = null ) {
-  $value = sanitize_text_field( $value ?? '' );
-
-  return in_array( $value, $allowed_options ) ? $value : $default;
-}
-
-// =============================================================================
 // SANITIZE CSS
 // =============================================================================
 

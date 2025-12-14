@@ -177,7 +177,7 @@ function fictioneer_sanitize_global_patreon_tiers( $input ) {
 }
 
 /**
- * Sanitize an URL.
+ * [Deprecated] Sanitize an URL.
  *
  * @since 5.19.1
  * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_url() instead.
@@ -194,7 +194,7 @@ function fictioneer_sanitize_url( $url, $match = null, $preg_match = null ) {
 }
 
 /**
- * Sanitize a Patreon URL.
+ * [Deprecated] Sanitize a Patreon URL.
  *
  * @since 5.15.0
  * @since 5.19.1 - Split up into two functions.
@@ -207,4 +207,21 @@ function fictioneer_sanitize_url( $url, $match = null, $preg_match = null ) {
 
 function fictioneer_sanitize_patreon_url( $url ) {
   return Sanitizer::sanitize_url( $url, null, '#^https://(www\.)?patreon\.com(?:/|$)#i' );
+}
+
+/**
+ * [Deprecated] Sanitize a selected option.
+ *
+ * @since 5.7.4
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_selection() instead.
+ *
+ * @param mixed $value            The selected value to be sanitized.
+ * @param array $allowed_options  The allowed values to be checked against.
+ * @param mixed $default          Optional. The default value as fallback.
+ *
+ * @return mixed The sanitized value or default, null if not provided.
+ */
+
+function fictioneer_sanitize_selection( $value, $allowed_options, $default = null ) {
+  return Sanitizer::sanitize_selection( $value, $allowed_options, $default );
 }

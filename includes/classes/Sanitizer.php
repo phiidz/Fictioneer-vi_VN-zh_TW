@@ -299,6 +299,7 @@ class Sanitizer {
    * Sanitize a Patreon URL.
    *
    * @since 5.34.0
+   * @since 5.34.0 - Moved into Sanitizer class.
    *
    * @param string|null $url  Raw URL value.
    *
@@ -307,5 +308,31 @@ class Sanitizer {
 
   public static function sanitize_url_patreon( ?string $url, ?string $pattern = null ) : string {
     return self::sanitize_url( $url, null, '#^https://(www\.)?patreon\.com(?:/|$)#i' );
+  }
+
+  /**
+   * Sanitize a selected option.
+   *
+   * @since 5.7.4
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param mixed $value            Value to be sanitized.
+   * @param array $allowed_options  Allowed values to be checked against.
+   * @param mixed $default          Optional. Default value as fallback.
+   *
+   * @return mixed The sanitized value or default, null if not provided.
+   */
+
+  public static function sanitize_selection( $value, $allowed_options, $default = null ) {
+    if ( is_string( $value ) ) {
+      $value = sanitize_text_field( $value );
+    }
+
+    $allowed = array_map(
+      static fn( $v ) => is_string( $v ) ? sanitize_text_field( $v ) : $v,
+      $allowed_options
+    );
+
+    return in_array( $value, $allowed, true ) ? $value : $default;
   }
 }
