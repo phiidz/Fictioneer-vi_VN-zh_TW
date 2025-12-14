@@ -311,8 +311,8 @@ if ( ! function_exists( 'fictioneer_get_safe_title' ) ) {
    *
    * @since 4.7.0
    * @since 5.12.0 - Added $context and $args parameters.
-   * @since 5.26.0 - Spit off fictioneer_sanitize_safe_title().
-   * @link https://developer.wordpress.org/reference/functions/wp_strip_all_tags/
+   * @since 5.26.0 - Split off fictioneer_sanitize_safe_title().
+   * @since 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_safe_title() instead.
    *
    * @param int|WP_Post $post     The post or post ID to get the title for.
    * @param string|null $context  Optional. Context regarding where and how the title is used.
