@@ -493,6 +493,12 @@ spl_autoload_register( function ( $class ) {
 // =============================================================================
 
 /**
+ * Legacy delegates for deprecated functions.
+ */
+
+require_once __DIR__ . '/includes/functions/__legacy.php';
+
+/**
  * Provides various utility functions.
  */
 

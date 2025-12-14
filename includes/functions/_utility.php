@@ -1811,28 +1811,6 @@ if ( ! function_exists( 'fictioneer_get_consent' ) && get_option( 'fictioneer_co
 }
 
 // =============================================================================
-// SANITIZE INTEGER
-// =============================================================================
-
-/**
- * [Deprecated] Sanitize an integer with options for default, minimum, and maximum.
- *
- * @since 4.0.0
- * @since 5.34.0 - Deprecated.
- *
- * @param mixed $value    The value to be sanitized.
- * @param int   $default  Default value if an invalid integer is provided. Default 0.
- * @param int   $min      Optional. Minimum value for the integer. Default is no minimum.
- * @param int   $max      Optional. Maximum value for the integer. Default is no maximum.
- *
- * @return int The sanitized integer.
- */
-
-function fictioneer_sanitize_integer( $value, $default = 0, $min = null, $max = null ) {
-  return Sanitizer::sanitize_integer( $value, $default, $min, $max );
-}
-
-// =============================================================================
 // SANITIZE POSITIVE FLOAT
 // =============================================================================
 
@@ -1898,26 +1876,6 @@ function fictioneer_sanitize_float( $value ) {
 
   // Cast to float
   return (float) $value;
-}
-
-// =============================================================================
-// SANITIZE CHECKBOX
-// =============================================================================
-
-/**
- * [Deprecated] Sanitize a checkbox value into true or false.
- *
- * @since 4.7.0
- * @since 5.34.0 - Deprecated.
- * @link https://www.php.net/manual/en/function.filter-var.php
- *
- * @param string|boolean $value  The checkbox value to be sanitized.
- *
- * @return boolean True or false.
- */
-
-function fictioneer_sanitize_checkbox( $value ) {
-  return Sanitizer::sanitize_bool( $value, true );
 }
 
 // =============================================================================
@@ -2936,25 +2894,6 @@ if ( ! function_exists( 'fictioneer_get_font_colors' ) ) {
     // Apply filters and return
     return apply_filters( 'fictioneer_filter_font_colors', $colors );
   }
-}
-
-// =============================================================================
-// ARRAY FROM COMMA SEPARATED STRING
-// =============================================================================
-
-/**
- * [Deprecated] Explode string into an array.
- *
- * @since 5.1.3
- * @since 5.34.0 - Deprecated.
- *
- * @param string $string  The string to explode.
- *
- * @return array The string content as array.
- */
-
-function fictioneer_explode_list( $string ) {
-  return wp_parse_list( $string );
 }
 
 // =============================================================================
