@@ -214,7 +214,7 @@ function fictioneer_comment_meta_box( $comment ) {
           <span><?php _e( 'Ignores reports', 'fictioneer' ); ?></span>
         </label>
       </div>
-      <?php if ( user_can( $comment->user_id, 'moderate_comments' ) ) : ?>
+      <?php if ( current_user_can( 'moderate_comments' ) ) : ?>
         <div style="margin-top: 12px;"><strong><?php _e( 'User Flags:', 'fictioneer' ); ?></strong></div>
         <div style="margin-top: 6px;">
           <label for="fictioneer_admin_disable_avatar" class="checkbox-group">
