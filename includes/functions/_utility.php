@@ -1973,40 +1973,6 @@ function fictioneer_sanitize_css( $css ) {
 }
 
 // =============================================================================
-// SANITIZE LIST INTO ARRAY
-// =============================================================================
-
-/**
- * Sanitize (and transforms) a comma-separated list into array.
- *
- * @since 5.15.0
- *
- * @param string $input  The comma-separated list.
- * @param array $args {
- *   Optional. An array of additional arguments.
- *
- *   @type bool $unique  Run array through array_unique(). Default false.
- *   @type bool $absint  Run all elements through absint(). Default false.
- * }
- *
- * @return array The comma-separated list turned array.
- */
-
-function fictioneer_sanitize_list_into_array( $input, $args = [] ) {
-  $input = wp_parse_list( sanitize_textarea_field( $input ?? '' ) );
-
-  if ( $args['absint'] ?? 0 ) {
-    $input = array_map( 'absint', $input );
-  }
-
-  if ( $args['unique'] ?? 0 ) {
-    $input = array_unique( $input );
-  }
-
-  return $input;
-}
-
-// =============================================================================
 // SANITIZE QUERY VARIABLE
 // =============================================================================
 

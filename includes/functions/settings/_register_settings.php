@@ -1027,7 +1027,7 @@ define( 'FICTIONEER_OPTIONS', array(
     'fictioneer_patreon_global_lock_tiers' => array(
       'name' => 'fictioneer_patreon_global_lock_tiers',
       'group' => 'fictioneer-settings-connections-group',
-      'sanitize_callback' => 'fictioneer_sanitize_global_patreon_tiers'
+      'sanitize_callback' => 'wp_parse_id_list'
     ),
     'fictioneer_subitem_date_format' => array(
       'name' => 'fictioneer_subitem_date_format',
@@ -1108,7 +1108,7 @@ define( 'FICTIONEER_OPTIONS', array(
     'fictioneer_seo_sitemap_excludes' => array(
       'name' => 'fictioneer_seo_sitemap_excludes',
       'group' => 'fictioneer-settings-seo-group',
-      'sanitize_callback' => 'fictioneer_sanitize_comma_separated_ids'
+      'sanitize_callback' => 'wp_parse_id_list'
     ),
   )
 ));
@@ -1537,21 +1537,6 @@ function fictioneer_sanitize_preload_font_links( $value ) {
 }
 
 /**
- * Sanitize a comma-separated Patreon ID list into a unique array.
- *
- * @since 5.15.0
- * @since 5.32.0 - Changed to alias for generic sanitizer.
- *
- * @param string $input  The comma-separated list.
- *
- * @return array The comma-separated list turned array (unique items).
- */
-
-function fictioneer_sanitize_global_patreon_tiers( $input ) {
-  return fictioneer_sanitize_comma_separated_ids( $input );
-}
-
-/**
  * Sanitize a Patreon URL.
  *
  * @since 5.15.0
@@ -1564,22 +1549,6 @@ function fictioneer_sanitize_global_patreon_tiers( $input ) {
 
 function fictioneer_sanitize_patreon_url( $url ) {
   return fictioneer_sanitize_url( $url, null, '#^https://(www\.)?patreon\.#' );
-}
-
-/**
- * Sanitize comma-separated list of IDs.
- *
- * @since 5.32.0
- *
- * @param string $input  List of IDs.
- *
- * @return string The sanitized list of IDs.
- */
-
-function fictioneer_sanitize_comma_separated_ids( $input ) {
-  $ids = fictioneer_sanitize_list_into_array( $input, array( 'absint' => 1, 'unique' => 1 ) );
-
-  return array_values( array_filter( $ids ) );
 }
 
 // =============================================================================
