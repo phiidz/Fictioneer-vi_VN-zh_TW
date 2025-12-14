@@ -464,7 +464,7 @@ function fictioneer_register_general_meta_fields() {
           return fictioneer_rest_auth_callback( $object_id, $user_id, $type );
         },
         'sanitize_callback' => function( $meta_value ) {
-          return fictioneer_sanitize_url( $meta_value, null, '#^https://(www\.)?patreon\.#' );
+          return Sanitizer::sanitize_url( $meta_value, null, '#^https://(www\.)?patreon\.com(?:/|$)#i' );
         }
       )
     );
@@ -484,7 +484,7 @@ function fictioneer_register_general_meta_fields() {
           return fictioneer_rest_auth_callback( $object_id, $user_id, $type );
         },
         'sanitize_callback' => function( $meta_value ) {
-          return fictioneer_sanitize_url( $meta_value, null, '#^https://(www\.)?ko-fi\.#' );
+          return Sanitizer::sanitize_url( $meta_value, null, '#^https://(www\.)?ko-fi\.com(?:/|$)#i' );
         }
       )
     );
@@ -504,7 +504,7 @@ function fictioneer_register_general_meta_fields() {
           return fictioneer_rest_auth_callback( $object_id, $user_id, $type );
         },
         'sanitize_callback' => function( $meta_value ) {
-          return fictioneer_sanitize_url( $meta_value, null, '#^https://(www\.)?subscribestar\.#' );
+          return Sanitizer::sanitize_url( $meta_value, null, '#^https://(www\.)?subscribestar\.com(?:/|$)#i' );
         }
       )
     );
@@ -524,7 +524,7 @@ function fictioneer_register_general_meta_fields() {
           return fictioneer_rest_auth_callback( $object_id, $user_id, $type );
         },
         'sanitize_callback' => function( $meta_value ) {
-          return fictioneer_sanitize_url( $meta_value, null, '#^https://(www\.)?paypal\.#' );
+          return Sanitizer::sanitize_url( $meta_value, null, '#^https://(www\.)?(paypal\.com|paypal\.me)(?:/|$)#i' );
         }
       )
     );
@@ -544,7 +544,7 @@ function fictioneer_register_general_meta_fields() {
           return fictioneer_rest_auth_callback( $object_id, $user_id, $type );
         },
         'sanitize_callback' => function( $meta_value ) {
-          return fictioneer_sanitize_url( $meta_value, 'https://' );
+          return Sanitizer::sanitize_url_https( $meta_value );
         }
       )
     );
@@ -916,7 +916,27 @@ function fictioneer_register_story_meta_fields() {
         return fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_story' );
       },
       'sanitize_callback' => function( $meta_value ) {
-        return fictioneer_sanitize_url( $meta_value, 'https://topwebfiction.com/' );
+        return Sanitizer::sanitize_url( $meta_value, 'https://topwebfiction.com/' );
+      }
+    )
+  );
+
+  register_post_meta(
+    'fcn_story',
+    'fictioneer_story_redirect_link',
+    array(
+      'type' => 'string',
+      'single' => true,
+      'show_in_rest' => array(
+        'schema' => array(
+          'type' => 'string'
+        )
+      ),
+      'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
+        return fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_story' );
+      },
+      'sanitize_callback' => function( $meta_value ) {
+        return Sanitizer::sanitize_url_https( $meta_value );
       }
     )
   );
@@ -1722,7 +1742,9 @@ function fictioneer_register_recommendation_meta_fields() {
       'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
         return fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_recommendation' );
       },
-      'sanitize_callback' => 'fictioneer_sanitize_url'
+      'sanitize_callback' => function( $meta_value ) {
+        return Sanitizer::sanitize_url_https( $meta_value ) ?: home_url();
+      }
     )
   );
 

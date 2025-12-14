@@ -129,3 +129,36 @@ function fictioneer_sanitize_comma_separated_ids( $input ) {
 function fictioneer_sanitize_global_patreon_tiers( $input ) {
   return wp_parse_id_list( $input );
 }
+
+/**
+ * Sanitize an URL.
+ *
+ * @since 5.19.1
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_url() instead.
+ *
+ * @param string      $url         The URL entered.
+ * @param string|null $match       Optional. URL must start with this string.
+ * @param string|null $preg_match  Optional. String for a preg_match() test.
+ *
+ * @return string The sanitized URL or an empty string if invalid.
+ */
+
+function fictioneer_sanitize_url( $url, $match = null, $preg_match = null ) {
+  return Sanitizer::sanitize_url( $url, $match, $preg_match );
+}
+
+/**
+ * Sanitize a Patreon URL.
+ *
+ * @since 5.15.0
+ * @since 5.19.1 - Split up into two functions.
+ * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_url() instead.
+ *
+ * @param string $url  The URL entered.
+ *
+ * @return string The sanitized URL or an empty string if invalid.
+ */
+
+function fictioneer_sanitize_patreon_url( $url ) {
+  return Sanitizer::sanitize_url( $url, null, '#^https://(www\.)?patreon\.com(?:/|$)#i' );
+}

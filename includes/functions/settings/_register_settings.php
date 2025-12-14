@@ -1017,7 +1017,7 @@ define( 'FICTIONEER_OPTIONS', array(
     'fictioneer_patreon_campaign_link' => array(
       'name' => 'fictioneer_patreon_campaign_link',
       'group' => 'fictioneer-settings-connections-group',
-      'sanitize_callback' => 'fictioneer_sanitize_patreon_url'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_url_patreon' ]
     ),
     'fictioneer_patreon_unlock_message' => array(
       'name' => 'fictioneer_patreon_unlock_message',
@@ -1093,12 +1093,12 @@ define( 'FICTIONEER_OPTIONS', array(
     'fictioneer_age_confirmation_redirect_site' => array(
       'name' => 'fictioneer_age_confirmation_redirect_site',
       'group' => 'fictioneer-settings-phrases-group',
-      'sanitize_callback' => 'fictioneer_sanitize_url'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_url_https' ]
     ),
     'fictioneer_age_confirmation_redirect_post' => array(
       'name' => 'fictioneer_age_confirmation_redirect_post',
       'group' => 'fictioneer-settings-phrases-group',
-      'sanitize_callback' => 'fictioneer_sanitize_url'
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_url_https' ]
     ),
     'fictioneer_critical_font_css' => array(
       'name' => 'fictioneer_critical_font_css',
@@ -1519,21 +1519,6 @@ function fictioneer_sanitize_preload_font_links( $value ) {
 
   // Continue saving process
   return implode( "\n", array_unique( $valid_links ) );
-}
-
-/**
- * Sanitize a Patreon URL.
- *
- * @since 5.15.0
- * @since 5.19.1 - Split up into two functions.
- *
- * @param string $url  The URL entered.
- *
- * @return string The sanitized URL or an empty string if invalid.
- */
-
-function fictioneer_sanitize_patreon_url( $url ) {
-  return fictioneer_sanitize_url( $url, null, '#^https://(www\.)?patreon\.#' );
 }
 
 // =============================================================================

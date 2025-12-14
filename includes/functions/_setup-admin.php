@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Sanitizer;
+
 // =============================================================================
 // ADMIN INCLUDES
 // =============================================================================
@@ -366,7 +368,10 @@ function fictioneer_check_for_updates() {
   $theme_info['last_update_nag'] = ''; // Reset
 
   if ( $release['assets'] ?? 0 ) {
-    $theme_info['last_version_download_url'] = fictioneer_sanitize_url( $release['assets'][0]['browser_download_url'] ?? '' );
+    $theme_info['last_version_download_url'] = Sanitizer::sanitize_url(
+      $release['assets'][0]['browser_download_url'] ?? '',
+      'https://github.com/Tetrakern/'
+    ) ?: 'https://github.com/Tetrakern/fictioneer/releases/';
   } else {
     $theme_info['last_version_download_url'] = '';
   }

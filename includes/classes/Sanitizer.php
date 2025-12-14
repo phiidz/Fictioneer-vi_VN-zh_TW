@@ -171,4 +171,69 @@ class Sanitizer {
   public static function sanitize_bool_num( mixed $value ) : int {
     return self::sanitize_bool( $value, true );
   }
+
+  /**
+   * Sanitize an URL.
+   *
+   * @since 5.19.1
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param string|null $url      Raw URL value.
+   * @param string|null $prefix   Optional. URL must start with this string.
+   * @param string|null $pattern  Optional. Pattern the URL must match.
+   *
+   * @return string The sanitized URL or an empty string if invalid.
+   */
+
+  public static function sanitize_url( ?string $url, ?string $prefix = null, ?string $pattern = null ) : string {
+    if ( $url === null || $url === '' ) {
+      return '';
+    }
+
+    $url = esc_url_raw( $url );
+
+    if ( ! $url || filter_var( $url, FILTER_VALIDATE_URL ) === false ) {
+      return '';
+    }
+
+    if ( $prefix !== null && strncmp( $url, $prefix, strlen( $prefix ) ) !== 0 ) {
+      return '';
+    }
+
+    if ( $pattern !== null && @preg_match( $pattern, $url ) !== 1 ) {
+      return '';
+    }
+
+    return $url;
+  }
+
+  /**
+   * Sanitize an URL starting with `https://`.
+   *
+   * @since 5.19.1
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param string|null $url      Raw URL value.
+   * @param string|null $pattern  Optional. Pattern the URL must match.
+   *
+   * @return string The sanitized URL or an empty string if invalid.
+   */
+
+  public static function sanitize_url_https( ?string $url, ?string $pattern = null ) : string {
+    return self::sanitize_url( $url, 'https://', $pattern );
+  }
+
+  /**
+   * Sanitize a Patreon URL.
+   *
+   * @since 5.34.0
+   *
+   * @param string|null $url  Raw URL value.
+   *
+   * @return string The sanitized URL or an empty string if invalid.
+   */
+
+  public static function sanitize_url_patreon( ?string $url, ?string $pattern = null ) : string {
+    return self::sanitize_url( $url, null, '#^https://(www\.)?patreon\.com(?:/|$)#i' );
+  }
 }

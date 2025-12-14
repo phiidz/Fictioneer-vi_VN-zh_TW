@@ -787,7 +787,7 @@ add_filter( 'fictioneer_filter_metabox_support_links', 'child_add_custom_support
 
 function child_save_custom_support_link( $fields ) {
   if ( isset( $_POST['your_custom_link_meta_field'] ) ) {
-    $link = fictioneer_sanitize_url( $_POST['your_custom_link_meta_field'], 'https://' );
+    $link = \Fictioneer\Sanitizer::sanitize_url_https( $_POST['your_custom_link_meta_field'] );
     $fields['your_custom_link_meta_field'] = $link;
   }
 

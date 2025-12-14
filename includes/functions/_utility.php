@@ -1962,41 +1962,6 @@ function fictioneer_sanitize_query_var( $var, $allowed, $default = null, $args =
 }
 
 // =============================================================================
-// SANITIZE URL
-// =============================================================================
-
-/**
- * Sanitize an URL.
- *
- * @since 5.19.1
- *
- * @param string      $url         The URL entered.
- * @param string|null $match       Optional. URL must start with this string.
- * @param string|null $preg_match  Optional. String for a preg_match() test.
- *
- * @return string The sanitized URL or an empty string if invalid.
- */
-
-function fictioneer_sanitize_url( $url, $match = null, $preg_match = null ) {
-  if ( is_null( $url ) ) {
-    return '';
-  }
-
-  $url = sanitize_url( $url );
-  $url = filter_var( $url, FILTER_VALIDATE_URL ) ? $url : '';
-
-  if ( $match && is_string( $match ) ) {
-    $url = strpos( $url, $match ) === 0 ? $url : '';
-  }
-
-  if ( $preg_match && is_string( $preg_match ) ) {
-    $url = preg_match( $preg_match, $url ) ? $url : '';
-  }
-
-  return $url;
-}
-
-// =============================================================================
 // SANITIZE EDITOR
 // =============================================================================
 
@@ -3458,7 +3423,7 @@ function fictioneer_url_list_to_array( $list ) {
 
     $urls[] = array(
       'name' => wp_strip_all_tags( $tuple[0] ),
-      'url' => fictioneer_sanitize_url( $tuple[1] )
+      'url' => Sanitizer::sanitize_url_https( $tuple[1] )
     );
   }
 

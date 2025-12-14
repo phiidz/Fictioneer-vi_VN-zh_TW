@@ -2502,13 +2502,13 @@ function fictioneer_save_story_metaboxes( $post_id ) {
 
   // Top Web Fiction
   if ( isset( $_POST['fictioneer_story_topwebfiction_link'] ) ) {
-    $twf_url = fictioneer_sanitize_url( $_POST['fictioneer_story_topwebfiction_link'], 'https://topwebfiction.com/' );
+    $twf_url = Sanitizer::sanitize_url( $_POST['fictioneer_story_topwebfiction_link'], 'https://topwebfiction.com/' );
     $fields['fictioneer_story_topwebfiction_link'] = $twf_url;
   }
 
   // Redirect
   if ( isset( $_POST['fictioneer_story_redirect_link'] ) && current_user_can( 'manage_options' ) ) {
-    $redirect_url = fictioneer_sanitize_url( $_POST['fictioneer_story_redirect_link'] );
+    $redirect_url = Sanitizer::sanitize_url_https( $_POST['fictioneer_story_redirect_link'] );
     $fields['fictioneer_story_redirect_link'] = $redirect_url;
   }
 
@@ -3979,34 +3979,23 @@ function fictioneer_save_support_links_metabox( $post_id ) {
 
   $fields = [];
 
-  // Patreon link
-  if ( isset( $_POST['fictioneer_patreon_link'] ) ) {
-    $patreon = fictioneer_sanitize_url( $_POST['fictioneer_patreon_link'], null, '#^https://(www\.)?patreon\.#' );
-    $fields['fictioneer_patreon_link'] = $patreon;
+  $pattern_map = array(
+    'fictioneer_patreon_link' => '#^https://(www\.)?patreon\.com(?:/|$)#i',
+    'fictioneer_kofi_link' => '#^https://(www\.)?ko-fi\.com(?:/|$)#i',
+    'fictioneer_subscribestar_link' => '#^https://(www\.)?subscribestar\.com(?:/|$)#i',
+    'fictioneer_paypal_link' => '#^https://(www\.)?(paypal\.com|paypal\.me)(?:/|$)#i'
+  );
+
+  foreach ( $pattern_map as $key => $pattern ) {
+    if ( isset( $_POST[ $key ] ) ) {
+      $fields[ $key ] = Sanitizer::sanitize_url( fictioneer_maybe_unslash( $_POST[ $key ] ), null, $pattern );
+    }
   }
 
-  // Ko-fi link
-  if ( isset( $_POST['fictioneer_kofi_link'] ) ) {
-    $kofi = fictioneer_sanitize_url( $_POST['fictioneer_kofi_link'], null, '#^https://(www\.)?ko-fi\.#' );
-    $fields['fictioneer_kofi_link'] = $kofi;
-  }
-
-  // SubscribeStar link
-  if ( isset( $_POST['fictioneer_subscribestar_link'] ) ) {
-    $subscribe_star = fictioneer_sanitize_url( $_POST['fictioneer_subscribestar_link'], null, '#^https://(www\.)?subscribestar\.#' );
-    $fields['fictioneer_subscribestar_link'] = $subscribe_star;
-  }
-
-  // Paypal link
-  if ( isset( $_POST['fictioneer_paypal_link'] ) ) {
-    $paypal = fictioneer_sanitize_url( $_POST['fictioneer_paypal_link'], null, '#^https://(www\.)?paypal\.#' );
-    $fields['fictioneer_paypal_link'] = $paypal;
-  }
-
-  // Donation link
   if ( isset( $_POST['fictioneer_donation_link'] ) ) {
-    $donation = fictioneer_sanitize_url( $_POST['fictioneer_donation_link'], 'https://' );
-    $fields['fictioneer_donation_link'] = $donation;
+    $fields['fictioneer_donation_link'] = Sanitizer::sanitize_url_https(
+      fictioneer_maybe_unslash( $_POST['fictioneer_donation_link'] )
+    );
   }
 
   // --- Filters -----------------------------------------------------------------
@@ -4523,7 +4512,7 @@ function fictioneer_save_recommendation_metaboxes( $post_id ) {
 
   // Primary URL
   if ( isset( $_POST['fictioneer_recommendation_primary_url'] ) ) {
-    $url = fictioneer_sanitize_url( $_POST['fictioneer_recommendation_primary_url'] );
+    $url = Sanitizer::sanitize_url_https( $_POST['fictioneer_recommendation_primary_url'] );
     $fields['fictioneer_recommendation_primary_url'] = $url;
 
     if ( empty( $fields['fictioneer_recommendation_primary_url'] ) ) {
