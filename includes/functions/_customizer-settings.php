@@ -2055,7 +2055,7 @@ function fictioneer_add_layout_customizer_settings( $manager ) {
     'story_cover_width_offset',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_float',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_float' ],
       'default' => '0'
     )
   );
@@ -2724,7 +2724,7 @@ function fictioneer_add_card_customizer_settings( $manager ) {
     'card_font_size_min_mod',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_float',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_float' ],
       'default' => '0'
     )
   );
@@ -2754,7 +2754,7 @@ function fictioneer_add_card_customizer_settings( $manager ) {
     'card_font_size_grow_mod',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_float',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_float' ],
       'default' => '0'
     )
   );
@@ -2784,7 +2784,7 @@ function fictioneer_add_card_customizer_settings( $manager ) {
     'card_font_size_max_mod',
     array(
       'capability' => 'edit_theme_options',
-      'sanitize_callback' => 'fictioneer_sanitize_float',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_float' ],
       'default' => '0'
     )
   );

@@ -127,6 +127,45 @@ class Sanitizer {
   }
 
   /**
+   * Sanitize a float.
+   *
+   * @since 5.19.0
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param mixed $value    Value to be sanitized.
+   * @param mixed $default  Optional. Default if invalid. Default 0.0.
+   *
+   * @return float The sanitized float.
+   */
+
+  public static function sanitize_float( mixed $value, mixed $default = 0.0 ) : float {
+    if ( $default instanceof \WP_Customize_Setting ) {
+      $default = $default->default;
+    }
+
+    $default = filter_var( $default, FILTER_VALIDATE_FLOAT );
+    $default = ( $default === false ) ? 0.0 : (float) $default;
+
+    if ( is_string( $value ) ) {
+      $value = trim( $value );
+    }
+
+    $validated = filter_var( $value, FILTER_VALIDATE_FLOAT );
+
+    if ( $validated === false ) {
+      return $default;
+    }
+
+    $value = (float) $validated;
+
+    if ( ! is_finite( $value ) ) {
+      return $default;
+    }
+
+    return $value;
+  }
+
+  /**
    * Sanitize a float as positive or zero number.
    *
    * @since 5.9.4
@@ -139,28 +178,15 @@ class Sanitizer {
    */
 
   public static function sanitize_float_zero_positive( mixed $value, mixed $default = 0.0 ) : float {
-    if ( $default instanceof \WP_Customize_Setting ) {
-      $default = $default->default;
+    $default = self::sanitize_float( $default, 0.0 );
+
+    if ( $default < 0 ) {
+      $default = 0.0;
     }
 
-    $default = filter_var( $default, FILTER_VALIDATE_FLOAT );
-    $default = ( $default === false || $default < 0 ) ? 0.0 : (float) $default;
+    $value = self::sanitize_float( $value, $default );
 
-    if ( is_string( $value ) ) {
-      $value = trim( $value );
-    }
-
-    if ( $value === '' || filter_var( $value, FILTER_VALIDATE_FLOAT ) === false ) {
-      return $default;
-    }
-
-    $value = (float) $value;
-
-    if ( ! is_finite( $value ) || $value < 0 ) {
-      return $default;
-    }
-
-    return $value;
+    return ( $value < 0 ) ? $default : $value;
   }
 
   /**
