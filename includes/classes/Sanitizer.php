@@ -58,16 +58,28 @@ class Sanitizer {
    * @since 5.34.0
    *
    * @param mixed    $value    The value to be sanitized.
-   * @param int      $default  Optional. Fallback value. Default 0.
+   * @param mixed    $default  Optional. Fallback value. Default 0.
    * @param int|null $min      Optional. Minimum value. Default is no minimum.
    * @param int|null $max      Optional. Maximum value. Default is no maximum.
    *
    * @return int The sanitized integer.
    */
 
-  public static function sanitize_integer( mixed $value, int $default = 0, ?int $min = null, ?int $max = null ) : int {
+  public static function sanitize_integer( mixed $value, mixed $default = 0, ?int $min = null, ?int $max = null ) : int {
+    // Catch customizer sanitizer second parameter
+    if ( $default instanceof \WP_Customize_Setting ) {
+      $default = $default->default;
+    }
+
+    $default = ( filter_var( $default, FILTER_VALIDATE_INT ) === false ) ? 0 : (int) $default;
+
+    // Remove leading/trailing spaces
+    if ( is_string( $value ) ) {
+      $value = trim( $value );
+    }
+
     // Validate as integer-like value
-    if ( filter_var( $value, FILTER_VALIDATE_INT ) === false ) {
+    if ( $value === '' || filter_var( $value, FILTER_VALIDATE_INT ) === false ) {
       return $default;
     }
 
