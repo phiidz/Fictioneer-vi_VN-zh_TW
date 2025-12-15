@@ -255,12 +255,6 @@ define( 'FICTIONEER_OPTIONS', array(
       'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
-    'fictioneer_bundle_stylesheets' => array(
-      'name' => 'fictioneer_bundle_stylesheets',
-      'group' => 'fictioneer-settings-general-group',
-      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
-      'default' => 0
-    ),
     'fictioneer_bundle_scripts' => array(
       'name' => 'fictioneer_bundle_scripts',
       'group' => 'fictioneer-settings-general-group',
@@ -1174,7 +1168,6 @@ function fictioneer_get_option_label( $option ) {
       'fictioneer_disable_heartbeat' => __( 'Disable Heartbeat API', 'fictioneer' ),
       'fictioneer_remove_head_clutter' => __( 'Remove clutter from HTML head', 'fictioneer' ),
       'fictioneer_reduce_admin_bar' => __( 'Reduce admin bar items', 'fictioneer' ),
-      'fictioneer_bundle_stylesheets' => __( 'Bundle CSS files into one', 'fictioneer' ),
       'fictioneer_bundle_scripts' => __( 'Bundle JavaScript files into one', 'fictioneer' ),
       'fictioneer_do_not_save_comment_ip' => __( 'Do not save comment IP addresses', 'fictioneer' ),
       'fictioneer_logout_redirects_home' => __( 'Logout redirects Home', 'fictioneer' ),

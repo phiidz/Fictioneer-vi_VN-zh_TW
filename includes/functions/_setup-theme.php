@@ -16,10 +16,10 @@ use Fictioneer\Utils_Admin;
 function fictioneer_bring_out_legacy_trash() {
   // Setup
   $options = wp_cache_get( 'alloptions', 'options' );
-  $obsolete = ['fictioneer_disable_html_in_comments', 'fictioneer_block_subscribers_from_admin', 'fictioneer_admin_restrict_menus', 'fictioneer_admin_restrict_private_data', 'fictioneer_admin_reduce_subscriber_profile', 'fictioneer_enable_subscriber_self_delete', 'fictioneer_strip_shortcodes_for_non_administrators', 'fictioneer_restrict_media_access', 'fictioneer_subscription_enabled', 'fictioneer_patreon_badge_map', 'fictioneer_patreon_tier_as_badge', 'fictioneer_patreon_campaign_ids', 'fictioneer_patreon_campaign_id', 'fictioneer_mount_wpdiscuz_theme_styles', 'fictioneer_base_site_width', 'fictioneer_featherlight_enabled', 'fictioneer_tts_enabled', 'fictioneer_log', 'fictioneer_enable_ajax_nonce', 'fictioneer_flush_object_cache', 'fictioneer_enable_all_block_styles', 'fictioneer_light_mode_as_default', 'fictioneer_remove_wp_svg_filters', 'fictioneer_update_check_timestamp', 'fictioneer_latest_version', 'fictioneer_update_notice_timestamp', 'fictioneer_theme_status', 'fictioneer_disable_anti_flicker', 'fictioneer_query_cache_registry', 'fictioneer_disable_whatsapp_share', 'fictioneer_disable_telegram_share', 'fictioneer_enable_query_result_caching', 'fictioneer_disable_all_widgets', 'fictioneer_allow_rest_save_actions', 'fictioneer_enable_all_blocks', 'fictioneer_enable_global_splide'];
+  $obsolete = ['fictioneer_disable_html_in_comments', 'fictioneer_block_subscribers_from_admin', 'fictioneer_admin_restrict_menus', 'fictioneer_admin_restrict_private_data', 'fictioneer_admin_reduce_subscriber_profile', 'fictioneer_enable_subscriber_self_delete', 'fictioneer_strip_shortcodes_for_non_administrators', 'fictioneer_restrict_media_access', 'fictioneer_subscription_enabled', 'fictioneer_patreon_badge_map', 'fictioneer_patreon_tier_as_badge', 'fictioneer_patreon_campaign_ids', 'fictioneer_patreon_campaign_id', 'fictioneer_mount_wpdiscuz_theme_styles', 'fictioneer_base_site_width', 'fictioneer_featherlight_enabled', 'fictioneer_tts_enabled', 'fictioneer_log', 'fictioneer_enable_ajax_nonce', 'fictioneer_flush_object_cache', 'fictioneer_enable_all_block_styles', 'fictioneer_light_mode_as_default', 'fictioneer_remove_wp_svg_filters', 'fictioneer_update_check_timestamp', 'fictioneer_latest_version', 'fictioneer_update_notice_timestamp', 'fictioneer_theme_status', 'fictioneer_disable_anti_flicker', 'fictioneer_query_cache_registry', 'fictioneer_disable_whatsapp_share', 'fictioneer_disable_telegram_share', 'fictioneer_enable_query_result_caching', 'fictioneer_disable_all_widgets', 'fictioneer_allow_rest_save_actions', 'fictioneer_enable_all_blocks', 'fictioneer_enable_global_splide', 'fictioneer_bundle_stylesheets'];
 
   // Check for most recent obsolete option...
-  if ( isset( $options['fictioneer_enable_global_splide'] ) ) {
+  if ( isset( $options['fictioneer_bundle_stylesheets'] ) ) {
     // Looping everything is not great but it only happens once!
     foreach ( $obsolete as $trash ) {
       delete_option( $trash );
@@ -955,133 +955,32 @@ add_action( 'customize_save_after', 'fictioneer_regenerate_cache_bust' );
  */
 
 function fictioneer_style_queue() {
-  global $post;
-
   // Setup
   $cache_bust = fictioneer_get_cache_bust();
+  $main_file_name = 'application';
 
-  // Either load separate small style files on demand or the complete one
-  if ( ! get_option( 'fictioneer_bundle_stylesheets' ) ) {
-    // Setup
-    $post_type = get_post_type();
-    $template_slug = get_page_template_slug();
-    $application_dependencies = [];
-
-    // Properties
-    if ( ! get_option( 'fictioneer_disable_properties' ) ) {
-      wp_enqueue_style(
-        'fictioneer-properties',
-        get_template_directory_uri() . '/css/properties.css',
-        [],
-        $cache_bust
-      );
-      $application_dependencies[] = 'fictioneer-properties';
-    }
-
-    // Application
-    wp_enqueue_style(
-      'fictioneer-application',
-      get_template_directory_uri() . '/css/application.css',
-      $application_dependencies,
-      $cache_bust
-    );
-
-    // If NOT an archive or search page...
-    if ( ! is_search() && ! is_archive() ) {
-      // Collections
-      if ( is_page_template( 'stories.php' ) || $post_type == 'fcn_collection' ) {
-        wp_enqueue_style(
-          'fictioneer-collections',
-          get_template_directory_uri() . '/css/collections.css',
-          ['fictioneer-application'],
-          $cache_bust
-        );
-      }
-
-      // Chapter
-      if ( $post_type == 'fcn_chapter' ) {
-        wp_enqueue_style(
-          'fictioneer-chapter',
-          get_template_directory_uri() . '/css/chapter.css',
-          ['fictioneer-application'],
-          $cache_bust
-        );
-      }
-
-      // Story
-      if ( $post_type == 'fcn_story' || is_page_template( 'singular-story.php' ) ) {
-        wp_enqueue_style(
-          'fictioneer-story',
-          get_template_directory_uri() . '/css/story.css',
-          ['fictioneer-application'],
-          $cache_bust
-        );
-      }
-
-      // Recommendation
-      if ( $post_type == 'fcn_recommendation' ) {
-        wp_enqueue_style(
-          'fictioneer-recommendation',
-          get_template_directory_uri() . '/css/recommendation.css',
-          ['fictioneer-application'],
-          $cache_bust
-        );
-      }
-
-      // Comments
-      if (
-        $post_type == 'fcn_story' ||
-        $template_slug === 'user-profile.php' ||
-        comments_open() ||
-        is_page_template( 'singular-story.php' )
-      ) {
-        wp_enqueue_style(
-          'fictioneer-comments',
-          get_template_directory_uri() . '/css/comments.css',
-          ['fictioneer-application'],
-          $cache_bust
-        );
-      }
-
-      // Shortcodes
-      if (
-        ( $post && preg_match( '/\[fictioneer_latest_[^\]]*type="list"[^\]]*\]/', $post->post_content ) ) ||
-        strpos( $_SERVER['REQUEST_URI'], 'elementor' ) !== false // Accounts for page editors like Elementor
-      ) {
-        wp_enqueue_style(
-          'fictioneer-post-list',
-          get_template_directory_uri() . '/css/post-list.css',
-          ['fictioneer-application'],
-          $cache_bust
-        );
-      }
-    }
-
-    // Archive
-    if ( is_archive() ) {
-      wp_enqueue_style(
-        'fictioneer-archive',
-        get_template_directory_uri() . '/css/taxonomies.css',
-        ['fictioneer-application'],
-        $cache_bust
-      );
-    }
-  } else {
-    // Complete
-    wp_enqueue_style(
-      'fictioneer-complete',
-      get_template_directory_uri() . '/css/complete.css',
-      [],
-      $cache_bust
-    );
+  if ( ! get_option( 'fictioneer_disable_properties' ) ) {
+    $main_file_name .= '-properties';
   }
 
-  // Enqueue Splide CSS
   if ( ! get_option( 'fictioneer_disable_splide' ) ) {
+    $main_file_name .= '-splide';
+  }
+
+  // Application
+  wp_enqueue_style(
+    'fictioneer-application',
+    get_template_directory_uri() . '/css/' . $main_file_name . '.css',
+    [],
+    $cache_bust
+  );
+
+  // Comments
+  if ( comments_open() ) {
     wp_enqueue_style(
-      'fictioneer-splide',
-      get_template_directory_uri() . '/css/splide.css',
-      [],
+      'fictioneer-comments',
+      get_template_directory_uri() . '/css/comments.css',
+      ['fictioneer-application'],
       $cache_bust
     );
   }
@@ -1120,7 +1019,7 @@ function fictioneer_output_customize_css() {
     wp_enqueue_style(
       'fictioneer-customize',
       Utils::get_cache_uri( 'output_customize_css' ) . "/customize.css",
-      get_option( 'fictioneer_bundle_stylesheets' ) ? ['fictioneer-complete'] : ['fictioneer-application'],
+      ['fictioneer-application'],
       fictioneer_get_cache_bust()
     );
   }

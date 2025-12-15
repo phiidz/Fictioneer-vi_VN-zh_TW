@@ -4,6 +4,9 @@
 
 @use '_reset';
 
+@use 'common/_properties';
+@use 'common/_lightmode';
+
 @use 'common/_utility';
 @use 'common/_setup';
 @use 'common/_base';
@@ -37,6 +40,7 @@
 @use '_post-list';
 @use '_notifications';
 @use '_lightbox';
+@use '_splide';
 
 // Stories
 @use '_story';

@@ -4,6 +4,9 @@
 
 @use '_reset';
 
+@use 'common/_properties';
+@use 'common/_lightmode';
+
 @use 'common/_utility';
 @use 'common/_setup';
 @use 'common/_base';
