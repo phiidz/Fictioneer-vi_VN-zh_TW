@@ -79,4 +79,101 @@ class Utils {
 
     return preg_replace( $pattern, '', $url );
   }
+
+  /**
+   * Encrypt data.
+   *
+   * @since 5.19.0
+   * @since 5.34.0 - Moved into Utils class.
+   *
+   * @param mixed $data  Data to encrypt.
+   *
+   * @return string|false Encrypted data or false on failure.
+   */
+
+  public static function encrypt( mixed $data ) : string|false {
+    $plaintext = json_encode( $data );
+
+    if ( $plaintext === false ) {
+      return false;
+    }
+
+    $cipher = 'aes-256-gcm';
+
+    if ( ! in_array( $cipher, openssl_get_cipher_methods(), true ) ) {
+      return false;
+    }
+
+    $key = hash( 'sha256', wp_salt( 'auth' ), true );
+    $iv = random_bytes( 12 );
+    $tag = '';
+
+    $cipher_text = openssl_encrypt(
+      $plaintext,
+      $cipher,
+      $key,
+      OPENSSL_RAW_DATA,
+      $iv,
+      $tag,
+      '',
+      16
+    );
+
+    if ( $cipher_text === false || $tag === '' ) {
+      return false;
+    }
+
+    return base64_encode( $iv . $tag . $cipher_text );
+  }
+
+  /**
+   * Decrypt data.
+   *
+   * @since 5.19.0
+   * @since 5.34.0 - Moved into Utils class.
+   *
+   * @param string $payload  Data to decrypt.
+   *
+   * @return mixed Decrypted data.
+   */
+
+  public static function decrypt( string $payload ) : mixed {
+    $raw = base64_decode( $payload, true );
+
+    if ( $raw === false ) {
+      return false;
+    }
+
+    if ( strlen( $raw ) < 28 ) {
+      return false;
+    }
+
+    $iv = substr( $raw, 0, 12 );
+    $tag = substr( $raw, 12, 16 );
+    $cipher_text = substr( $raw, 28 );
+
+    $cipher = 'aes-256-gcm';
+
+    if ( ! in_array( $cipher, openssl_get_cipher_methods(), true ) ) {
+      return false;
+    }
+
+    $key = hash( 'sha256', wp_salt( 'auth' ), true );
+
+    $plaintext = openssl_decrypt(
+      $cipher_text,
+      $cipher,
+      $key,
+      OPENSSL_RAW_DATA,
+      $iv,
+      $tag,
+      ''
+    );
+
+    if ( $plaintext === false ) {
+      return false;
+    }
+
+    return json_decode( $plaintext, true );
+  }
 }

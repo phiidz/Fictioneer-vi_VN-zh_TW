@@ -600,7 +600,7 @@ function fictioneer_oauth_die( $message, $title = 'Error' ) {
 
 function fictioneer_oauth2_get_cookie() {
   if ( isset( $_COOKIE['fictioneer_oauth'] ) ) {
-    return fictioneer_decrypt( $_COOKIE['fictioneer_oauth'] ) ?: null;
+    return Utils::decrypt( $_COOKIE['fictioneer_oauth'] ) ?: null;
   }
 
   return null;
@@ -666,7 +666,7 @@ function fictioneer_oauth2_get_code( $args ) {
   );
 
   // Set cookie
-  $value = fictioneer_encrypt(
+  $value = Utils::encrypt(
     array(
       'state' => $params['state'],
       'channel' => $args['channel'],

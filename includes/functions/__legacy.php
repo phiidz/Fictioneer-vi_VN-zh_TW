@@ -426,7 +426,7 @@ function fictioneer_get_username_nouns() {
 }
 
 /**
- * Return randomized username.
+ * [Deprecated] Return randomized username.
  *
  * @since 5.19.0
  * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_random_username() instead.
@@ -442,10 +442,10 @@ function fictioneer_get_random_username( $unique = true ) {
 
 if ( ! function_exists( 'fictioneer_get_clean_url' ) ) {
   /**
-   * Return URL without query arguments or page number.
+   * [Deprecated] Return URL without query arguments or page number.
    *
    * @since 5.4.0
- * @deprecated 5.34.0 - Use \Fictioneer\Utils::get_clean_url() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Utils::get_clean_url() instead.
    *
    * @return string The clean URL.
    */
@@ -453,4 +453,34 @@ if ( ! function_exists( 'fictioneer_get_clean_url' ) ) {
   function fictioneer_get_clean_url() {
     return Utils::get_clean_url();
   }
+}
+
+/**
+ * [Deprecated] Encrypt data.
+ *
+ * @since 5.19.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::encrypt() instead.
+ *
+ * @param mixed $data  The data to encrypt.
+ *
+ * @return string|false The encrypted data or false on failure.
+ */
+
+function fictioneer_encrypt( $data ) {
+  return Utils::encrypt( $data );
+}
+
+/**
+ * [Deprecated] Decrypt data.
+ *
+ * @since 5.19.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::decrypt() instead.
+ *
+ * @param string $data  The data to decrypt.
+ *
+ * @return mixed The decrypted data.
+ */
+
+function fictioneer_decrypt( $data ) {
+  return Utils::decrypt( $data );
 }

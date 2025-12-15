@@ -1,5 +1,8 @@
 <?php
 
+use Fictioneer\Utils;
+use Fictioneer\Utils_Admin;
+
 // =============================================================================
 // UTILITY
 // =============================================================================
@@ -1603,7 +1606,7 @@ function fictioneer_connection_get_patreon_tiers() {
   );
 
   // Set cookie
-  $value = fictioneer_encrypt(
+  $value = Utils::encrypt(
     array(
       'state' => $params['state'],
       'action' => 'fictioneer_connection_get_patreon_tiers'
