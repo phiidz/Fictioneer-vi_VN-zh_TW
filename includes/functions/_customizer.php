@@ -493,20 +493,28 @@ function fictioneer_get_custom_font( $option, $font_default, $mod_default ) {
  */
 
 function fictioneer_get_customizer_css_snippet( $snippet, $filter = null ) {
-  // Setup
-  $snippets_file_path = WP_CONTENT_DIR . '/themes/fictioneer/css/customize/';
-  $filter = $filter ? $filter : strtolower( str_replace( '-', '_', $snippet ) );
-  $css = file_get_contents( $snippets_file_path . $snippet . '.css' );
+  $snippet = sanitize_key( $snippet );
 
-  // Get file contents
-  if ( $css !== false ) {
-    return apply_filters( "fictioneer_filter_css_snippet_{$filter}", $css );
-  } else {
-    error_log( '[Fictioneer] CSS snippet file not found: ' . $snippets_file_path . $snippet . '.css' );
+  if ( $snippet === '' ) {
+    return '';
   }
 
-  // Graceful error
-  return '';
+  $filter = "fictioneer_filter_css_snippet_{$snippet}";
+  $file = get_theme_file_path( 'css/customize/' . $snippet . '.css' );
+
+  if ( ! is_readable( $file ) ) {
+    error_log( '[Fictioneer] CSS snippet file not found or unreadable: ' . $file );
+
+    return apply_filters( $filter, '', false );
+  }
+
+  $css = file_get_contents( $file );
+
+  if ( $css === false ) {
+    return apply_filters( $filter, '', false );
+  }
+
+  return apply_filters( $filter, $css, true );
 }
 
 /**
