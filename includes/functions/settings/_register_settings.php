@@ -1074,7 +1074,7 @@ define( 'FICTIONEER_OPTIONS', array(
     'fictioneer_http_headers_link_fonts' => array(
       'name' => 'fictioneer_http_headers_link_fonts',
       'group' => 'fictioneer-settings-fonts-group',
-      'sanitize_callback' => 'fictioneer_sanitize_preload_font_links'
+      'sanitize_callback' => [ Sanitizer_Admin::class, 'sanitize_preload_font_links' ]
     ),
     'fictioneer_comment_form_selector' => array(
       'name' => 'fictioneer_comment_form_selector',
@@ -1353,68 +1353,6 @@ function fictioneer_register_settings() {
       }
     }
   }
-}
-
-// =============================================================================
-// SPECIAL SANITIZATION CALLBACKS
-// =============================================================================
-
-/**
- * Sanitize the textarea input for preload font links.
- *
- * @since 5.31.0
- *
- * @param string $value  The textarea string.
- *
- * @return string The sanitized textarea string.
- */
-
-function fictioneer_sanitize_preload_font_links( $value ) {
-  // Setup
-  $value = sanitize_textarea_field( $value );
-  $lines = preg_split( '/\r\n|\r|\n/', $value );
-  $valid_links = [];
-
-  $valid_extensions = ['woff', 'woff2', 'ttf', 'otf', 'eot', 'svg', 'fon'];
-
-  // Validate and sanitize each line
-  foreach ( $lines as $line ) {
-    $line = trim( $line );
-
-    if ( $line === '' ) {
-      continue;
-    }
-
-    $line = sanitize_text_field( $line );
-    $path = parse_url( $line, PHP_URL_PATH );
-
-    if ( ! $path ) {
-      continue;
-    }
-
-    $extension = strtolower( pathinfo( $path, PATHINFO_EXTENSION ) );
-
-    if ( ! in_array( $extension, $valid_extensions, true ) ) {
-      continue;
-    }
-
-    if ( str_starts_with( $line, 'https://' ) && filter_var( $line, FILTER_VALIDATE_URL ) ) {
-      $valid_links[] = esc_url_raw( $line );
-
-      continue;
-    }
-
-    if (
-      str_starts_with( $line, '/' ) &&
-      ! str_contains( $line, '://' ) &&
-      ! str_contains( $line, '../' )
-    ) {
-      $valid_links[] = esc_url_raw( $line );
-    }
-  }
-
-  // Continue saving process
-  return implode( "\n", array_unique( $valid_links ) );
 }
 
 // =============================================================================

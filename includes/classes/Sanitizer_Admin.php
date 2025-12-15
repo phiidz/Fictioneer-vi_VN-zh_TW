@@ -337,7 +337,7 @@ class Sanitizer_Admin {
    * @since 5.10.0
    * @since 5.34.0 - Moved into Sanitizer class.
    *
-   * @param mixed $value  The textarea string.
+   * @param mixed $value  Textarea string.
    *
    * @return string Sanitized textarea string.
    */
@@ -367,6 +367,79 @@ class Sanitizer_Admin {
 
       if ( $url !== '' ) {
         $valid[] = $url;
+      }
+    }
+
+    return implode( "\n", array_values( array_unique( $valid ) ) );
+  }
+
+  /**
+   * Sanitize the textarea input for preload font links.
+   *
+   * @since 5.31.0
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param mixed $value  Textarea string.
+   *
+   * @return string Sanitized textarea string.
+   */
+
+  public static function sanitize_preload_font_links( mixed $value ) : string {
+    $value = trim( wp_unslash( (string) ( $value ?? '' ) ) );
+
+    if ( $value === '' ) {
+      return '';
+    }
+
+    $lines = preg_split( "/\R/u", $value ) ?: [];
+    $valid_extensions = [ 'woff', 'woff2', 'ttf', 'otf', 'eot', 'fon' ];
+    $valid = [];
+
+    foreach ( $lines as $line ) {
+      $line = trim( $line );
+
+      if ( $line === '' ) {
+        continue;
+      }
+
+      if ( str_contains( $line, "\0" ) || str_contains( $line, '\\' ) ) {
+        continue;
+      }
+
+      $path = parse_url( $line, PHP_URL_PATH );
+
+      if ( ! is_string( $path ) || $path === '' ) {
+        continue;
+      }
+
+      $extension = strtolower( pathinfo( $path, PATHINFO_EXTENSION ) );
+
+      if ( $extension === '' || ! in_array( $extension, $valid_extensions, true ) ) {
+        continue;
+      }
+
+      if ( str_starts_with( $line, 'https://' ) ) {
+        $url = esc_url_raw( $line );
+
+        if ( $url !== '' && wp_http_validate_url( $url ) ) {
+          $valid[] = $url;
+        }
+
+        continue;
+      }
+
+      if ( str_starts_with( $line, '/' ) ) {
+        $decoded = rawurldecode( $line );
+
+        if ( str_contains( $decoded, '..' ) || str_contains( $decoded, '://' ) ) {
+          continue;
+        }
+
+        $rel = esc_url_raw( $line );
+
+        if ( $rel !== '' && str_starts_with( $rel, '/' ) ) {
+          $valid[] = $rel;
+        }
       }
     }
 
