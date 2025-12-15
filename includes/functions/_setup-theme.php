@@ -948,10 +948,11 @@ add_action( 'customize_save_after', 'fictioneer_regenerate_cache_bust' );
 // =============================================================================
 
 /**
- * Enqueues stylesheets
+ * Enqueue main stylesheets.
  *
  * @since 1.0.0
  * @since 4.7.0 - Split stylesheets into separate concerns.
+ * @since 5.33.3 - Merged most stylesheet back together.
  */
 
 function fictioneer_style_queue() {
@@ -1000,7 +1001,7 @@ add_action( 'wp_enqueue_scripts', 'fictioneer_style_queue' );
 // =============================================================================
 
 /**
- * Enqueues customize stylesheets <head> meta
+ * Enqueue the Customize stylesheets.
  *
  * @since 5.11.0
  */
@@ -1030,7 +1031,7 @@ if ( ! is_customize_preview() ) {
 }
 
 /**
- * Enqueues preview customize stylesheets <head> meta
+ * Enqueue preview customize stylesheets.
  *
  * @since 5.11.0
  */
