@@ -501,7 +501,7 @@ function fictioneer_get_customizer_css_snippet( $snippet, $filter = null ) {
   if ( $css !== false ) {
     return apply_filters( "fictioneer_filter_css_snippet_{$filter}", $css );
   } else {
-    error_log( 'File not found: ' . $snippets_file_path . $snippet . '.css' );
+    error_log( '[Fictioneer] CSS snippet file not found: ' . $snippets_file_path . $snippet . '.css' );
   }
 
   // Graceful error

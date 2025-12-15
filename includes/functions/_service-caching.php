@@ -974,7 +974,7 @@ function fictioneer_clear_all_cached_partials() {
 
     if ( file_exists( $path ) ) {
       if ( ! $todo( $path ) ) {
-        error_log( "Failed to delete {$path}." );
+        error_log( "[Fictioneer] Failed to delete cached partial: {$path}." );
       }
     }
   }
