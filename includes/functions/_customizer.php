@@ -199,24 +199,6 @@ if ( ! function_exists( 'fictioneer_hsl_font_code' ) ) {
 }
 
 // =============================================================================
-// VALIDATE GOOGLE FONTS LINK
-// =============================================================================
-
-/**
- * Validates Google Fonts link
- *
- * @since 5.10.0
- *
- * @param string $link  The Google Fonts link.
- *
- * @return boolean Whether the link is valid or not.
- */
-
-function fictioneer_validate_google_fonts_link( $link ) {
-  return preg_match( '/^https:\/\/fonts\.googleapis\.com\/css2/', $link ) === 1;
-}
-
-// =============================================================================
 // EXTRACT FONT DATA FROM GOOGLE FONTS LINK
 // =============================================================================
 
@@ -233,7 +215,7 @@ function fictioneer_validate_google_fonts_link( $link ) {
 
 function fictioneer_extract_font_from_google_link( $link ) {
   // Validate
-  if ( ! fictioneer_validate_google_fonts_link( $link ) ) {
+  if ( preg_match( '#^https://fonts\.googleapis\.com/css2(?:\?|$)#i', $link ) !== 1 ) {
     // Not Google Fonts link
     return null;
   }

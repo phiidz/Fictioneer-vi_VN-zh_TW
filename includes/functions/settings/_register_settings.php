@@ -1069,7 +1069,7 @@ define( 'FICTIONEER_OPTIONS', array(
     'fictioneer_google_fonts_links' => array(
       'name' => 'fictioneer_google_fonts_links',
       'group' => 'fictioneer-settings-fonts-group',
-      'sanitize_callback' => 'fictioneer_sanitize_google_fonts_links'
+      'sanitize_callback' => [ Sanitizer_Admin::class, 'sanitize_google_fonts_links' ]
     ),
     'fictioneer_http_headers_link_fonts' => array(
       'name' => 'fictioneer_http_headers_link_fonts',
@@ -1358,39 +1358,6 @@ function fictioneer_register_settings() {
 // =============================================================================
 // SPECIAL SANITIZATION CALLBACKS
 // =============================================================================
-
-/**
- * Sanitize the textarea input for Google Fonts links.
- *
- * @since 5.10.0
- *
- * @param string $value  The textarea string.
- *
- * @return string The sanitized textarea string.
- */
-
-function fictioneer_sanitize_google_fonts_links( $value ) {
-  // Setup
-  $value = sanitize_textarea_field( $value );
-  $lines = preg_split( '/\r\n|\r|\n/', $value );
-  $valid_links = [];
-
-  // Validate and sanitize each line
-  foreach ( $lines as $line ) {
-    $line = trim( $line );
-
-    if ( fictioneer_validate_google_fonts_link( $line ) ) {
-      $sanitized_link = filter_var( $line, FILTER_SANITIZE_URL );
-
-      if ( $sanitized_link !== false ) {
-        $valid_links[] = esc_url_raw( $sanitized_link );
-      }
-    }
-  }
-
-  // Continue saving process
-  return implode( "\n", array_unique( $valid_links ) );
-}
 
 /**
  * Sanitize the textarea input for preload font links.

@@ -330,4 +330,46 @@ class Sanitizer_Admin {
 
     return wp_kses( $raw, $allowed ) ?: $default;
   }
+
+  /**
+   * Sanitize the textarea input for Google Fonts links.
+   *
+   * @since 5.10.0
+   * @since 5.34.0 - Moved into Sanitizer class.
+   *
+   * @param mixed $value  The textarea string.
+   *
+   * @return string Sanitized textarea string.
+   */
+
+  public static function sanitize_google_fonts_links( mixed $value ) : string {
+    $value = trim( wp_unslash( (string) ( $value ?? '' ) ) );
+
+    if ( $value === '' ) {
+      return '';
+    }
+
+    $lines = preg_split( "/\R/u", $value ) ?: [];
+    $valid = [];
+
+    foreach ( $lines as $line ) {
+      $line = trim( $line );
+
+      if ( $line === '' ) {
+        continue;
+      }
+
+      if ( preg_match( '#^https://fonts\.googleapis\.com/css2(?:\?|$)#i', $line ) !== 1 ) {
+        continue;
+      }
+
+      $url = esc_url_raw( $line );
+
+      if ( $url !== '' ) {
+        $valid[] = $url;
+      }
+    }
+
+    return implode( "\n", array_values( array_unique( $valid ) ) );
+  }
 }
