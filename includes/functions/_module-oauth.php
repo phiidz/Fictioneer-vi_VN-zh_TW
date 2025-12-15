@@ -1,5 +1,8 @@
 <?php
 
+use Fictioneer\Utils;
+use Fictioneer\Utils_Admin;
+
 // =============================================================================
 // CONSTANTS
 // =============================================================================
@@ -392,7 +395,7 @@ function fictioneer_oauth2_make_user( $user_data, $cookie ) {
 
   // Randomize username?
   if ( get_option( 'fictioneer_randomize_oauth_usernames' ) ) {
-    $username = fictioneer_get_random_username();
+    $username = Utils_Admin::get_random_username();
     $nickname = $username;
   }
 
@@ -1001,7 +1004,7 @@ function fictioneer_oauth2_google( $token_response, $cookie ) {
   );
 
   // Generate random username (because Google uses real names)
-  $name = fictioneer_get_random_username();
+  $name = Utils_Admin::get_random_username();
 
   // Login or register user
   return fictioneer_oauth2_make_user(

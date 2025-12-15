@@ -3306,39 +3306,6 @@ function fictioneer_decrypt( $data ) {
 }
 
 // =============================================================================
-// RANDOM USERNAME
-// =============================================================================
-
-/**
- * Returns randomized username
- *
- * @since 5.19.0
- *
- * @param bool $unique  Optional. Whether the username must be unique. Default true.
- *
- * @return string Sanitized random username.
- */
-
-function fictioneer_get_random_username( $unique = true ) {
-  // Setup
-  $adjectives = Utils_Admin::get_username_adjectives();
-  $nouns = Utils_Admin::get_username_nouns();
-
-  // Shuffle the arrays to ensure more randomness
-  shuffle( $adjectives );
-  shuffle( $nouns );
-
-  // Build username
-  do {
-    $username = $adjectives[ array_rand( $adjectives ) ] . $nouns[ array_rand( $nouns ) ] . rand( 1000, 9999 );
-    $username = sanitize_user( $username, true );
-  } while ( username_exists( $username ) && $unique );
-
-  // Return username
-  return $username;
-}
-
-// =============================================================================
 // STRING LENGTH
 // =============================================================================
 

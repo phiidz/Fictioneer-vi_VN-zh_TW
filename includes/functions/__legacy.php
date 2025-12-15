@@ -424,3 +424,18 @@ function fictioneer_get_username_adjectives() {
 function fictioneer_get_username_nouns() {
   return Utils_Admin::get_username_nouns();
 }
+
+/**
+ * Return randomized username.
+ *
+ * @since 5.19.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_random_username() instead.
+ *
+ * @param bool $unique  Optional. Whether the username must be unique. Default true.
+ *
+ * @return string Sanitized random username.
+ */
+
+function fictioneer_get_random_username( $unique = true ) {
+  return Utils_Admin::get_random_username( $unique );
+}

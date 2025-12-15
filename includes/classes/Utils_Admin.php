@@ -75,4 +75,30 @@ class Utils_Admin {
 
     return apply_filters( 'fictioneer_random_username_nouns', $nouns );
   }
+
+  /**
+   * Return randomized username.
+   *
+   * @since 5.19.0
+   * @since 5.34.0 - Moved into Utils_Admin class.
+   *
+   * @param bool $unique  Optional. Whether the username must be unique. Default true.
+   *
+   * @return string Sanitized random username.
+   */
+
+  public static function get_random_username( bool $unique = true ) : string {
+    $adjectives = Utils_Admin::get_username_adjectives();
+    $nouns = Utils_Admin::get_username_nouns();
+
+    shuffle( $adjectives );
+    shuffle( $nouns );
+
+    do {
+      $username = $adjectives[ array_rand( $adjectives ) ] . $nouns[ array_rand( $nouns ) ] . rand( 1000, 9999 );
+      $username = sanitize_user( $username, true );
+    } while ( username_exists( $username ) && $unique );
+
+    return $username;
+  }
 }

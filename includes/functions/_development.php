@@ -1,5 +1,8 @@
 <?php
 
+use Fictioneer\Utils;
+use Fictioneer\Utils_Admin;
+
 // =============================================================================
 // PERFORMANCE MEASUREMENT
 // =============================================================================
@@ -114,7 +117,7 @@ function fictioneer_generate_test_content() {
   // For a number of times...
   for ( $i = 0; $i < $user_count; $i++ ) {
     // ... create a test user
-    $username = fictioneer_get_random_username();
+    $username = Utils_Admin::get_random_username();
     $password = wp_generate_password();
     $email = $username . '@fictioneer-example.com';
     $user_id = wp_create_user( $username, $password, $email );
