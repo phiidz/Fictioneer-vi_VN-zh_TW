@@ -3,6 +3,7 @@
 use Fictioneer\Sanitizer;
 use Fictioneer\Sanitizer_Admin;
 use Fictioneer\Utils;
+use Fictioneer\Utils_Admin;
 
 // =============================================================================
 // SANITIZER DELEGATES
@@ -396,4 +397,17 @@ function fictioneer_sanitize_absint_or_empty_string( $input ) {
 
 function fictioneer_get_split_aspect_ratio( $css ) {
   return Utils::split_aspect_ratio( $css );
+}
+
+/**
+ * [Deprecated] Return array of adjectives for randomized username generation.
+ *
+ * @since 5.19.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_username_adjectives() instead.
+ *
+ * @return array Array of nouns.
+ */
+
+function fictioneer_get_username_adjectives() {
+  return Utils_Admin::get_username_adjectives();
 }

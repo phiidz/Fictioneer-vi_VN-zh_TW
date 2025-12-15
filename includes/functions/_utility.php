@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Utils_Admin;
 
 // =============================================================================
 // CHECK FOR LOCAL DEV ENVIRONMENT
@@ -3309,38 +3310,6 @@ function fictioneer_decrypt( $data ) {
 // =============================================================================
 
 /**
- * Returns array of adjectives for randomized username generation
- *
- * @since 5.19.0
- *
- * @return array Array of nouns.
- */
-
-function fictioneer_get_username_adjectives() {
-  $adjectives = array(
-    'Radical', 'Tubular', 'Gnarly', 'Epic', 'Electric', 'Neon', 'Bodacious', 'Rad',
-    'Totally', 'Funky', 'Wicked', 'Fresh', 'Chill', 'Groovy', 'Vibrant', 'Flashy',
-    'Buff', 'Hella', 'Motor', 'Cyber', 'Pixel', 'Holo', 'Stealth', 'Synthetic',
-    'Enhanced', 'Synth', 'Bio', 'Laser', 'Virtual', 'Analog', 'Mega', 'Wave', 'Solo',
-    'Retro', 'Quantum', 'Robotic', 'Digital', 'Hyper', 'Punk', 'Giga', 'Electro',
-    'Chrome', 'Fusion', 'Vivid', 'Stellar', 'Galactic', 'Turbo', 'Atomic', 'Cosmic',
-    'Artificial', 'Kinetic', 'Binary', 'Hypersonic', 'Runic', 'Data', 'Knightly',
-    'Cryonic', 'Nebular', 'Golden', 'Silver', 'Red', 'Crimson', 'Augmented', 'Vorpal',
-    'Ascended', 'Serious', 'Solid', 'Master', 'Prism', 'Spinning', 'Masked', 'Hardcore',
-    'Somber', 'Celestial', 'Arcane', 'Luminous', 'Ionized', 'Lunar', 'Uncanny', 'Subatomic',
-    'Luminary', 'Radiant', 'Ultra', 'Starship', 'Space', 'Starlight', 'Interstellar', 'Metal',
-    'Bionic', 'Machine', 'Isekai', 'Warp', 'Neo', 'Alpha', 'Power', 'Unhinged', 'Ash',
-    'Savage', 'Silent', 'Screaming', 'Misty', 'Rending', 'Horny', 'Dreadful', 'Bizarre',
-    'Chaotic', 'Wacky', 'Twisted', 'Manic', 'Crystal', 'Infernal', 'Ruthless', 'Grim',
-    'Mortal', 'Forsaken', 'Heretical', 'Cursed', 'Blighted', 'Scarlet', 'Delightful',
-    'Nuclear', 'Azure', 'Emerald', 'Amber', 'Mystic', 'Ethereal', 'Enchanted', 'Valiant',
-    'Fierce', 'Obscure', 'Enigmatic'
-  );
-
-  return apply_filters( 'fictioneer_random_username_adjectives', $adjectives );
-}
-
-/**
  * Returns array of nouns for randomized username generation
  *
  * @since 5.19.0
@@ -3385,7 +3354,7 @@ function fictioneer_get_username_nouns() {
 
 function fictioneer_get_random_username( $unique = true ) {
   // Setup
-  $adjectives = fictioneer_get_username_adjectives();
+  $adjectives = Utils_Admin::get_username_adjectives();
   $nouns = fictioneer_get_username_nouns();
 
   // Shuffle the arrays to ensure more randomness
