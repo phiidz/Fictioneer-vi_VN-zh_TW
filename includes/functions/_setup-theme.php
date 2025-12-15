@@ -16,10 +16,10 @@ use Fictioneer\Utils_Admin;
 function fictioneer_bring_out_legacy_trash() {
   // Setup
   $options = wp_cache_get( 'alloptions', 'options' );
-  $obsolete = ['fictioneer_disable_html_in_comments', 'fictioneer_block_subscribers_from_admin', 'fictioneer_admin_restrict_menus', 'fictioneer_admin_restrict_private_data', 'fictioneer_admin_reduce_subscriber_profile', 'fictioneer_enable_subscriber_self_delete', 'fictioneer_strip_shortcodes_for_non_administrators', 'fictioneer_restrict_media_access', 'fictioneer_subscription_enabled', 'fictioneer_patreon_badge_map', 'fictioneer_patreon_tier_as_badge', 'fictioneer_patreon_campaign_ids', 'fictioneer_patreon_campaign_id', 'fictioneer_mount_wpdiscuz_theme_styles', 'fictioneer_base_site_width', 'fictioneer_featherlight_enabled', 'fictioneer_tts_enabled', 'fictioneer_log', 'fictioneer_enable_ajax_nonce', 'fictioneer_flush_object_cache', 'fictioneer_enable_all_block_styles', 'fictioneer_light_mode_as_default', 'fictioneer_remove_wp_svg_filters', 'fictioneer_update_check_timestamp', 'fictioneer_latest_version', 'fictioneer_update_notice_timestamp', 'fictioneer_theme_status', 'fictioneer_disable_anti_flicker', 'fictioneer_query_cache_registry', 'fictioneer_disable_whatsapp_share', 'fictioneer_disable_telegram_share', 'fictioneer_enable_query_result_caching', 'fictioneer_disable_all_widgets', 'fictioneer_allow_rest_save_actions', 'fictioneer_enable_all_blocks'];
+  $obsolete = ['fictioneer_disable_html_in_comments', 'fictioneer_block_subscribers_from_admin', 'fictioneer_admin_restrict_menus', 'fictioneer_admin_restrict_private_data', 'fictioneer_admin_reduce_subscriber_profile', 'fictioneer_enable_subscriber_self_delete', 'fictioneer_strip_shortcodes_for_non_administrators', 'fictioneer_restrict_media_access', 'fictioneer_subscription_enabled', 'fictioneer_patreon_badge_map', 'fictioneer_patreon_tier_as_badge', 'fictioneer_patreon_campaign_ids', 'fictioneer_patreon_campaign_id', 'fictioneer_mount_wpdiscuz_theme_styles', 'fictioneer_base_site_width', 'fictioneer_featherlight_enabled', 'fictioneer_tts_enabled', 'fictioneer_log', 'fictioneer_enable_ajax_nonce', 'fictioneer_flush_object_cache', 'fictioneer_enable_all_block_styles', 'fictioneer_light_mode_as_default', 'fictioneer_remove_wp_svg_filters', 'fictioneer_update_check_timestamp', 'fictioneer_latest_version', 'fictioneer_update_notice_timestamp', 'fictioneer_theme_status', 'fictioneer_disable_anti_flicker', 'fictioneer_query_cache_registry', 'fictioneer_disable_whatsapp_share', 'fictioneer_disable_telegram_share', 'fictioneer_enable_query_result_caching', 'fictioneer_disable_all_widgets', 'fictioneer_allow_rest_save_actions', 'fictioneer_enable_all_blocks', 'fictioneer_enable_global_splide'];
 
   // Check for most recent obsolete option...
-  if ( isset( $options['fictioneer_enable_all_blocks'] ) ) {
+  if ( isset( $options['fictioneer_enable_global_splide'] ) ) {
     // Looping everything is not great but it only happens once!
     foreach ( $obsolete as $trash ) {
       delete_option( $trash );
@@ -1077,12 +1077,7 @@ function fictioneer_style_queue() {
   }
 
   // Enqueue Splide CSS
-  if (
-    get_option( 'fictioneer_enable_global_splide' ) ||
-    ( get_option( 'fictioneer_enable_story_filter_reel' ) && $post_type === 'fcn_story' ) ||
-    ( $post && preg_match( '/\[fictioneer_[a-zA-Z0-9_]*[^\]]*splide=["\']([^"\']+)["\'][^\]]*\]/', $post->post_content ) ) ||
-    strpos( $_SERVER['REQUEST_URI'], 'elementor' ) !== false // Accounts for page editors like Elementor
-  ) {
+  if ( ! get_option( 'fictioneer_disable_splide' ) ) {
     wp_enqueue_style(
       'fictioneer-splide',
       get_template_directory_uri() . '/css/splide.css',
@@ -1421,15 +1416,7 @@ function fictioneer_add_custom_scripts() {
   }
 
   // Enqueue Splide
-  if (
-    get_option( 'fictioneer_enable_global_splide' ) ||
-    (
-      get_option( 'fictioneer_enable_story_filter_reel' ) &&
-      ( $post_type === 'fcn_story' || is_page_template( 'singular-story.php' ) )
-    ) ||
-    ( $post && preg_match( '/\[fictioneer_[a-zA-Z0-9_]*[^\]]*splide=["\']([^"\']+)["\'][^\]]*\]/', $post->post_content ) ) ||
-    strpos( $_SERVER['REQUEST_URI'], 'elementor' ) !== false // Accounts for page editors like Elementor
-  ) {
+  if ( ! get_option( 'fictioneer_disable_splide' ) ) {
     wp_enqueue_script( 'fictioneer-splide', get_template_directory_uri() . '/js/splide.min.js', [], $cache_bust, false );
   }
 

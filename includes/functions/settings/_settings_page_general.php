@@ -1714,13 +1714,10 @@ $images = get_template_directory_uri() . '/img/documentation/';
               <div class="fictioneer-card__row">
                 <?php
                   fictioneer_settings_label_checkbox(
-                    'fictioneer_enable_global_splide',
-                    __( 'Enable Splide slider globally', 'fictioneer' ),
-                    __( 'Instead of limiting it to shortcodes.', 'fictioneer' ),
-                    sprintf(
-                      __( 'Normally, the <a href="%s" target="_blank" rel="noopener noreferrer">Splide slider</a> script and style are only loaded when a shortcode with the required parameter is found in the post content. However, if you want to use Splide in other ways, you can enable the assets globally here.', 'fictioneer' ),
-                      'https://splidejs.com/guides/options/'
-                    )
+                    'fictioneer_disable_properties',
+                    __( 'Disable Fictioneer CSS properties', 'fictioneer' ),
+                    __( 'Only do this if you define everything yourself.', 'fictioneer' ),
+                    __( 'If you do not understand what this option does, you have no business enabling it. This is generally a poor life choice.', 'fictioneer' )
                   );
                 ?>
               </div>
@@ -1728,10 +1725,9 @@ $images = get_template_directory_uri() . '/img/documentation/';
               <div class="fictioneer-card__row">
                 <?php
                   fictioneer_settings_label_checkbox(
-                    'fictioneer_disable_properties',
-                    __( 'Disable Fictioneer CSS properties', 'fictioneer' ),
-                    __( 'Only do this if you define everything yourself.', 'fictioneer' ),
-                    __( 'If you do not understand what this option does, you have no business enabling it. This is generally a poor life choice.', 'fictioneer' )
+                    'fictioneer_disable_splide',
+                    __( 'Disable Splide slider integration', 'fictioneer' ),
+                    __( 'Removes both the script and style.', 'fictioneer' )
                   );
                 ?>
               </div>

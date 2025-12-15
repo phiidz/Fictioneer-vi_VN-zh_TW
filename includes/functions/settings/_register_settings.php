@@ -681,8 +681,8 @@ define( 'FICTIONEER_OPTIONS', array(
       'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
     ),
-    'fictioneer_enable_global_splide' => array(
-      'name' => 'fictioneer_enable_global_splide',
+    'fictioneer_disable_splide' => array(
+      'name' => 'fictioneer_disable_splide',
       'group' => 'fictioneer-settings-general-group',
       'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ],
       'default' => 0
@@ -1296,7 +1296,7 @@ function fictioneer_get_option_label( $option ) {
       'fictioneer_enable_anti_flicker' => __( 'Enable anti-flicker script', 'fictioneer' ),
       'fictioneer_hide_categories' => __( 'Hide categories on posts', 'fictioneer' ),
       'fictioneer_enable_story_card_caching' => __( 'Enable caching of story cards', 'fictioneer' ),
-      'fictioneer_enable_global_splide' => __( 'Enable Splide slider globally', 'fictioneer' ),
+      'fictioneer_disable_splide' => __( 'Disable Splide slider integration', 'fictioneer' ),
       'fictioneer_log_posts' => __( 'Log all post updates', 'fictioneer' ),
       'fictioneer_disable_menu_transients' => __( 'Disable menu Transient caching', 'fictioneer' ),
       'fictioneer_enable_line_break_fix' => __( 'Enable fixing of chapter paragraphs', 'fictioneer' ),
