@@ -13,7 +13,7 @@ class Sanitizer_Admin {
    * Sanitize a selected option.
    *
    * @since 5.7.4
-   * @since 5.34.0 - Moved into Sanitizer class.
+   * @since 5.33.2 - Moved into Sanitizer class.
    *
    * @param mixed $value            Value to be sanitized.
    * @param array $allowed_options  Allowed values to be checked against.
@@ -40,7 +40,7 @@ class Sanitizer_Admin {
    *
    * @since 5.7.4
    * @since 5.27.4 - Unslash string.
-   * @since 5.34.0 - Moved into Sanitizer class.
+   * @since 5.33.2 - Moved into Sanitizer class.
    *
    * @param string $css  CSS to be sanitized. Expects slashed string.
    *
@@ -89,7 +89,7 @@ class Sanitizer_Admin {
    * Removes malicious HTML, shortcodes, and blocks.
    *
    * @since 5.7.4
-   * @since 5.34.0 - Moved into Sanitizer class.
+   * @since 5.33.2 - Moved into Sanitizer class.
    *
    * @param string $content  Content to be sanitized.
    *
@@ -124,7 +124,7 @@ class Sanitizer_Admin {
    * Return sanitized icon HTML.
    *
    * @since 5.32.0
-   * @since 5.34.0 - Moved into Sanitizer class.
+   * @since 5.33.2 - Moved into Sanitizer class.
    *
    * @param string $html  Icon HTML.
    *
@@ -253,7 +253,7 @@ class Sanitizer_Admin {
    * Sanitize a page ID and check whether it is valid.
    *
    * @since 4.6.0
-   * @since 5.34.0 - Moved into Sanitizer class.
+   * @since 5.33.2 - Moved into Sanitizer class.
    *
    * @param mixed $input  Page ID to be sanitized.
    *
@@ -278,7 +278,7 @@ class Sanitizer_Admin {
    * Sanitize with absint() unless it is an empty string.
    *
    * @since 5.15.0
-   * @since 5.34.0 - Moved into Sanitizer class.
+   * @since 5.33.2 - Moved into Sanitizer class.
    *
    * @param mixed $input  Value to be sanitized.
    *
@@ -301,7 +301,7 @@ class Sanitizer_Admin {
    * problematic HTML.
    *
    * @since 4.6.0
-   * @since 5.34.0 - Moved into Sanitizer class.
+   * @since 5.33.2 - Moved into Sanitizer class.
    *
    * @param mixed $input  Content for the cookie consent banner.
    *
@@ -335,7 +335,7 @@ class Sanitizer_Admin {
    * Sanitize the textarea input for Google Fonts links.
    *
    * @since 5.10.0
-   * @since 5.34.0 - Moved into Sanitizer class.
+   * @since 5.33.2 - Moved into Sanitizer class.
    *
    * @param mixed $value  Textarea string.
    *
@@ -377,7 +377,7 @@ class Sanitizer_Admin {
    * Sanitize the textarea input for preload font links.
    *
    * @since 5.31.0
-   * @since 5.34.0 - Moved into Sanitizer class.
+   * @since 5.33.2 - Moved into Sanitizer class.
    *
    * @param mixed $value  Textarea string.
    *

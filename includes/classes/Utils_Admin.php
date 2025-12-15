@@ -13,7 +13,7 @@ class Utils_Admin {
    * Return array of adjectives for randomized username generation.
    *
    * @since 5.19.0
-   * @since 5.34.0 - Moved into Utils_Admin class.
+   * @since 5.33.2 - Moved into Utils_Admin class.
    *
    * @return string[] Array of adjectives.
    */
@@ -46,7 +46,7 @@ class Utils_Admin {
    * Return array of nouns for randomized username generation.
    *
    * @since 5.19.0
-   * @since 5.34.0 - Moved into Utils_Admin class.
+   * @since 5.33.2 - Moved into Utils_Admin class.
    *
    * @return string[] Array of nouns.
    */
@@ -80,7 +80,7 @@ class Utils_Admin {
    * Return randomized username.
    *
    * @since 5.19.0
-   * @since 5.34.0 - Moved into Utils_Admin class.
+   * @since 5.33.2 - Moved into Utils_Admin class.
    *
    * @param bool $unique  Optional. Whether the username must be unique. Default true.
    *

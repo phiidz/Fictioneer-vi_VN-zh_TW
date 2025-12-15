@@ -13,7 +13,7 @@ class Utils {
   /**
    * Wrapper for wp_parse_list() with optional sanitizer.
    *
-   * @since 5.34.0
+   * @since 5.33.2
    *
    * @param array|string $input_list  List of values.
    *
@@ -36,7 +36,7 @@ class Utils {
    * Extract aspect ratio values from string.
    *
    * @since 5.14.0
-   * @since 5.34.0 - Moved into Utils class.
+   * @since 5.33.2 - Moved into Utils class.
    *
    * @param mixed $value  Aspect-ratio value (e.g. '16/9, '1.5/1').
    *
@@ -64,7 +64,7 @@ class Utils {
    * Return URL without query arguments or page number.
    *
    * @since 5.4.0
-   * @since 5.34.0 - Moved into Utils class.
+   * @since 5.33.2 - Moved into Utils class.
    *
    * @return string Clean URL.
    */
@@ -84,7 +84,7 @@ class Utils {
    * Encrypt data.
    *
    * @since 5.19.0
-   * @since 5.34.0 - Moved into Utils class.
+   * @since 5.33.2 - Moved into Utils class.
    *
    * @param mixed $data  Data to encrypt.
    *
@@ -130,7 +130,7 @@ class Utils {
    * Decrypt data.
    *
    * @since 5.19.0
-   * @since 5.34.0 - Moved into Utils class.
+   * @since 5.33.2 - Moved into Utils class.
    *
    * @param string $payload  Data to decrypt.
    *

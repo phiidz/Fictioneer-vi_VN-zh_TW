@@ -13,7 +13,7 @@ use Fictioneer\Utils_Admin;
  * [Deprecated] Sanitize an integer with options for default, minimum, and maximum.
  *
  * @since 4.0.0
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_integer() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_integer() instead.
  *
  * @param mixed    $value    The value to be sanitized.
  * @param mixed    $default  Optional. Fallback value. Default 0.
@@ -31,7 +31,7 @@ function fictioneer_sanitize_integer( $value, $default = 0, $min = null, $max = 
  * [Deprecated] Sanitize integer to be 1 or more.
  *
  * @since 4.6.0
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_integer_one_up() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_integer_one_up() instead.
  *
  * @param mixed $input  The input value to sanitize.
  *
@@ -45,7 +45,7 @@ function fictioneer_sanitize_integer_one_up( $input ) {
  * [Deprecated] Sanitize the 'words per minute' setting with fallback.
  *
  * @since 4.0.0
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::fictioneer_sanitize_words_per_minute() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::fictioneer_sanitize_words_per_minute() instead.
  *
  * @param mixed $input  The input value to sanitize.
  *
@@ -60,7 +60,7 @@ function fictioneer_sanitize_words_per_minute( $input ) {
  * [Deprecated] Sanitize callback with float or default 0.
  *
  * @since 5.19.0
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_float() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_float() instead.
  *
  * @param mixed $value  The value to be sanitized.
  *
@@ -75,7 +75,7 @@ function fictioneer_sanitize_float( $value ) {
  * [Deprecated] Sanitizes a float as positive number.
  *
  * @since 5.9.4
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_float_zero_positive() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_float_zero_positive() instead.
  *
  * @param mixed $value    The value to be sanitized.
  * @param float $default  Default value if an invalid float is provided. Default 0.0.
@@ -91,7 +91,7 @@ function fictioneer_sanitize_positive_float( $value, $default = 0.0 ) {
  * [Deprecated] Sanitize callback with positive float or default 1.0.
  *
  * @since 5.10.1
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_float_zero_positive_def1() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_float_zero_positive_def1() instead.
  *
  * @param mixed $value  The value to be sanitized.
  *
@@ -106,7 +106,7 @@ function fictioneer_sanitize_positive_float_def1( $value ) {
  * [Deprecated] Sanitize a checkbox value into true or false.
  *
  * @since 4.7.0
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_bool() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_bool() instead.
  *
  * @param string|boolean $value  The checkbox value to be sanitized.
  *
@@ -121,7 +121,7 @@ function fictioneer_sanitize_checkbox( $value ) {
  * [Deprecated] Explode string into an array.
  *
  * @since 5.1.3
- * @deprecated 5.34.0 - Use wp_parse_list() instead.
+ * @deprecated 5.33.2 - Use wp_parse_list() instead.
  *
  * @param string $string  The string to explode.
  *
@@ -136,7 +136,7 @@ function fictioneer_explode_list( $string ) {
  * [Deprecated] Sanitize (and transform) a comma-separated list into an array.
  *
  * @since 5.15.0
- * @deprecated 5.34.0 - Use wp_parse_list() instead.
+ * @deprecated 5.33.2 - Use wp_parse_list() instead.
  *
  * @param string     $input  The comma-separated list.
  * @param array|null $args   Deprecated.
@@ -152,7 +152,7 @@ function fictioneer_sanitize_list_into_array( $input, $args = []  ) {
  * [Deprecated] Sanitize comma-separated list of IDs.
  *
  * @since 5.32.0
- * @deprecated 5.34.0 - Use wp_parse_id_list() instead.
+ * @deprecated 5.33.2 - Use wp_parse_id_list() instead.
  *
  * @param string $input  List of IDs.
  *
@@ -168,7 +168,7 @@ function fictioneer_sanitize_comma_separated_ids( $input ) {
  *
  * @since 5.15.0
  * @since 5.32.0 - Changed to alias for generic sanitizer.
- * @deprecated 5.34.0 - Use wp_parse_id_list() instead.
+ * @deprecated 5.33.2 - Use wp_parse_id_list() instead.
  *
  * @param string $input  The comma-separated list.
  *
@@ -183,7 +183,7 @@ function fictioneer_sanitize_global_patreon_tiers( $input ) {
  * [Deprecated] Sanitize an URL.
  *
  * @since 5.19.1
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_url() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_url() instead.
  *
  * @param string      $url         The URL entered.
  * @param string|null $match       Optional. URL must start with this string.
@@ -201,7 +201,7 @@ function fictioneer_sanitize_url( $url, $match = null, $preg_match = null ) {
  *
  * @since 5.15.0
  * @since 5.19.1 - Split up into two functions.
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_url() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_url() instead.
  *
  * @param string $url  The URL entered.
  *
@@ -216,7 +216,7 @@ function fictioneer_sanitize_patreon_url( $url ) {
  * [Deprecated] Sanitize a selected option.
  *
  * @since 5.7.4
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_selection() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_selection() instead.
  *
  * @param mixed $value            The selected value to be sanitized.
  * @param array $allowed_options  The allowed values to be checked against.
@@ -234,7 +234,7 @@ function fictioneer_sanitize_selection( $value, $allowed_options, $default = nul
  *
  * @since 5.7.4
  * @since 5.27.4 - Unslash string.
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_css() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_css() instead.
  *
  * @param string $css  The CSS string to be sanitized. Expects slashed string.
  *
@@ -249,7 +249,7 @@ function fictioneer_sanitize_css( $css ) {
  * [Deprecated] Sanitize a query variable.
  *
  * @since 5.14.0
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_query_var() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_query_var() instead.
  *
  * @param string      $var      Query variable to sanitize.
  * @param array       $allowed  Array of allowed string (lowercase).
@@ -275,7 +275,7 @@ function fictioneer_sanitize_query_var( $var, $allowed, $default = null, $args =
  * registered post type, such as 'fcn_story'.
  *
  * @since 5.33.5
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_post_type() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_post_type() instead.
  *
  * @param string $post_type  The string to be sanitized.
  *
@@ -292,7 +292,7 @@ function fictioneer_sanitize_post_type( $post_type ) {
  * Removes malicious HTML, magic quote slashes, shortcodes, and blocks.
  *
  * @since 5.7.4
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_meta_field_editor() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_meta_field_editor() instead.
  *
  * @param string $content  The content to be sanitized.
  *
@@ -307,7 +307,7 @@ function fictioneer_sanitize_editor( $content ) {
  * [Deprecated] Return sanitized image ID that must exist.
  *
  * @since 5.30.0
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_image_id() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_image_id() instead.
  *
  * @param int|string $id  Image ID.
  *
@@ -324,7 +324,7 @@ function fictioneer_sanitize_image_id( $id ) {
  * @since 5.32.0
  *
  * @param string $html  Icon HTML.
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_icon_html() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_icon_html() instead.
  *
  * @return string Sanitized icon HTML.
  */
@@ -337,7 +337,7 @@ function fictioneer_sanitize_icon_html( $html ) {
  * [Deprecated] Return sanitized safe title.
  *
  * @since 5.7.1
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_safe_title() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer::sanitize_safe_title() instead.
  *
  * @param string $title  Post title.
  * @param string $date   The date.
@@ -354,7 +354,7 @@ function fictioneer_sanitize_safe_title( $title, $date, $time ) {
  * [Deprecated] Sanitize a page ID and checks whether it is valid.
  *
  * @since 4.6.0
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::sanitize_page_id() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer_Admin::sanitize_page_id() instead.
  *
  * @param mixed $input  The page ID to be sanitized.
  *
@@ -369,7 +369,7 @@ function fictioneer_sanitize_page_id( $input ) {
  * [Deprecated] Sanitize with absint() unless it is an empty string.
  *
  * @since 5.15.0
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::sanitize_absint_or_empty_string() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer_Admin::sanitize_absint_or_empty_string() instead.
  *
  * @param mixed $input  The input value to sanitize.
  *
@@ -388,7 +388,7 @@ function fictioneer_sanitize_absint_or_empty_string( $input ) {
  * [Deprecated] Return aspect ratio values as tuple.
  *
  * @since 5.14.0
- * @deprecated 5.34.0 - Use \Fictioneer\Utils::split_aspect_ratio() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils::split_aspect_ratio() instead.
  *
  * @param string $css  Aspect-ratio CSS value.
  *
@@ -403,7 +403,7 @@ function fictioneer_get_split_aspect_ratio( $css ) {
  * [Deprecated] Return array of adjectives for randomized username generation.
  *
  * @since 5.19.0
- * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_username_adjectives() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::get_username_adjectives() instead.
  *
  * @return array Array of adjectives.
  */
@@ -416,7 +416,7 @@ function fictioneer_get_username_adjectives() {
  * [Deprecated] Return array of nouns for randomized username generation
  *
  * @since 5.19.0
- * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_username_nouns() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::get_username_nouns() instead.
  *
  * @return array Array of nouns.
  */
@@ -429,7 +429,7 @@ function fictioneer_get_username_nouns() {
  * [Deprecated] Return randomized username.
  *
  * @since 5.19.0
- * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_random_username() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::get_random_username() instead.
  *
  * @param bool $unique  Optional. Whether the username must be unique. Default true.
  *
@@ -445,7 +445,7 @@ if ( ! function_exists( 'fictioneer_get_clean_url' ) ) {
    * [Deprecated] Return URL without query arguments or page number.
    *
    * @since 5.4.0
-   * @deprecated 5.34.0 - Use \Fictioneer\Utils::get_clean_url() instead.
+   * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_clean_url() instead.
    *
    * @return string The clean URL.
    */
@@ -459,7 +459,7 @@ if ( ! function_exists( 'fictioneer_get_clean_url' ) ) {
  * [Deprecated] Encrypt data.
  *
  * @since 5.19.0
- * @deprecated 5.34.0 - Use \Fictioneer\Utils::encrypt() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils::encrypt() instead.
  *
  * @param mixed $data  The data to encrypt.
  *
@@ -474,7 +474,7 @@ function fictioneer_encrypt( $data ) {
  * [Deprecated] Decrypt data.
  *
  * @since 5.19.0
- * @deprecated 5.34.0 - Use \Fictioneer\Utils::decrypt() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils::decrypt() instead.
  *
  * @param string $data  The data to decrypt.
  *
