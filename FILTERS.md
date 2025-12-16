@@ -1656,7 +1656,6 @@ Filters the intermediate output array of the `fictioneer_root_attributes()` func
 * 'class' (string) – CSS classes. Depends on options, can be empty.
 * 'data-mode-default' (string) – Mode of the site, light or dark. Default 'dark'.
 * 'data-site-width-default' (string) – Site width in pixels (without unit). Default '960'.
-* 'data-theme' (string) – Active theme or child theme. Default 'default'.
 * 'data-mode' (string) – Active theme mode. Default empty (dark).
 * 'data-font-weight' (string) – Current font weight set (default, thinner, or normal). Default 'default'.
 * 'data-primary-font' (string) – CSS name of primary font. Default 'Open Sans'.
