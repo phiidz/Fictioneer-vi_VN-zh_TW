@@ -827,7 +827,7 @@ The button colors are based on the background `var(--bg-x)` and foreground `var(
 
 ```css
 /* Dark Mode */
-:root, :root[data-theme=base] {
+:root {
   --button-font-weight: 500;
   --button-box-shadow: none;
   --button-color-active: var(--fg-inverted);
@@ -1563,7 +1563,6 @@ define( 'CONSTANT_NAME', value );
 | FICTIONEER_CACHE_PURGE_ASSIST | boolean | Whether to call the cache purge assist function on post updates. Default `true`.
 | FICTIONEER_RELATIONSHIP_PURGE_ASSIST | boolean | Whether to purge related post caches. Default `true`.
 | FICTIONEER_SHOW_SEARCH_IN_MENUS | boolean | Whether to show search page links in menus. Default `true`.
-| FICTIONEER_THEME_SWITCH | boolean | Whether to show the theme switch in child themes (back to base). Default `true`.
 | FICTIONEER_ATTACHMENT_PAGES | boolean | Whether to enable pages for attachments (no theme templates). Default `false`.
 | FICTIONEER_SHOW_OAUTH_HASHES | boolean | Whether to show OAuth ID hashes in user profiles (admin only). Default `false`.
 | FICTIONEER_DISALLOWED_KEY_NOTICE | boolean | Whether to show feedback for rejected comment content. Default `true`.

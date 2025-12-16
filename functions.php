@@ -352,11 +352,6 @@ if ( ! defined( 'FICTIONEER_SHOW_SEARCH_IN_MENUS' ) ) {
   define( 'FICTIONEER_SHOW_SEARCH_IN_MENUS', true );
 }
 
-// Boolean: Base theme switch in site settings
-if ( ! defined( 'FICTIONEER_THEME_SWITCH' ) ) {
-  define( 'FICTIONEER_THEME_SWITCH', true );
-}
-
 // Boolean: Attachment pages
 if ( ! defined( 'FICTIONEER_ATTACHMENT_PAGES' ) ) {
   define( 'FICTIONEER_ATTACHMENT_PAGES', false );
