@@ -21,7 +21,7 @@ class Utils {
    */
 
   public static function get_cache_dir( $context = null ) {
-    static $is_dir = false;
+    static $checked = false;
 
     $dir = apply_filters(
       'fictioneer_filter_cache_dir',
@@ -29,11 +29,13 @@ class Utils {
       $context
     );
 
-    if ( ! $is_dir ) {
-      if ( ! is_dir( $dir ) ) {
-        $is_dir = mkdir( $dir, 0755, true );
+    $dir = trailingslashit( $dir );
 
-        if ( ! $is_dir ) {
+    if ( ! $checked ) {
+      $checked = true;
+
+      if ( ! is_dir( $dir ) ) {
+        if ( ! wp_mkdir_p( $dir ) ) {
           error_log(
             sprintf(
               '[Fictioneer] Failed to create cache directory: %s (context: %s)',
@@ -42,8 +44,6 @@ class Utils {
             )
           );
         }
-      } else {
-        $is_dir = true;
       }
     }
 
@@ -474,6 +474,26 @@ class Utils {
 
   public static function get_font_family( string $option, string $font_default, string $mod_default ) : string {
     return Utils_Admin::get_font_family( $option, $font_default, $mod_default );
+  }
+
+  /**
+   * Return array of disabled font keys.
+   *
+   * @since 5.33.3
+   *
+   * @return array Disabled font keys.
+   */
+
+  public static function get_disabled_fonts() : array {
+    $disabled_fonts = get_option( 'fictioneer_disabled_fonts', [] );
+
+    if ( ! is_array( $disabled_fonts ) ) {
+      update_option( 'fictioneer_disabled_fonts', [] );
+
+      return [];
+    }
+
+    return $disabled_fonts;
   }
 
   /**

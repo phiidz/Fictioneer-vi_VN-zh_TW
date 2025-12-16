@@ -1009,7 +1009,7 @@ add_action( 'wp_enqueue_scripts', 'fictioneer_style_queue' );
 
 function fictioneer_output_customize_css() {
   // Setup
-  $file_path = Utils::get_cache_dir( 'output_customize_css' ) . '/customize.css';
+  $file_path = Utils::get_cache_dir( 'output_customize_css' ) . 'customize.css';
 
   // Create file if it does not exist
   if ( ! file_exists( $file_path ) ) {
@@ -1039,7 +1039,7 @@ if ( ! is_customize_preview() ) {
 
 function fictioneer_output_customize_preview_css() {
   // Setup
-  $file_path = Utils::get_cache_dir( 'output_customize_preview_css' ) . '/customize-preview.css';
+  $file_path = Utils::get_cache_dir( 'output_customize_preview_css' ) . 'customize-preview.css';
 
   // Create file if it does not exist
   Customizer::build_customizer_css( 'preview' );
@@ -1082,7 +1082,7 @@ function fictioneer_get_ffcnr_url() {
 function fictioneer_build_dynamic_scripts() {
   // --- Setup -----------------------------------------------------------------
 
-  $file_path = Utils::get_cache_dir( 'build_dynamic_scripts' ) . '/dynamic-scripts.js';
+  $file_path = Utils::get_cache_dir( 'build_dynamic_scripts' ) . 'dynamic-scripts.js';
   $last_version = get_transient( 'fictioneer_dynamic_scripts_version' );
   $scripts = '';
 
@@ -1693,7 +1693,7 @@ if ( ! function_exists( 'fictioneer_output_head_fonts' ) ) {
     fictioneer_output_critical_fonts();
 
     // Setup
-    $bundled_fonts = Utils::get_cache_dir( 'output_head_fonts' ) . '/bundled-fonts.css';
+    $bundled_fonts = Utils::get_cache_dir( 'output_head_fonts' ) . 'bundled-fonts.css';
     $last_built_timestamp = get_option( 'fictioneer_bundled_fonts_timestamp', '123456789' );
     $cache_bust = "?timestamp={$last_built_timestamp}";
     $loading_pattern = fictioneer_get_async_css_loading_pattern();
