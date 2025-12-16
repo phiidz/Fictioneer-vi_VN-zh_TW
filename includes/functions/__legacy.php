@@ -780,3 +780,19 @@ function fictioneer_get_theme_icon( $name, $default = '', $args = [] ) {
 function fictioneer_get_global_page() {
   return Utils::get_global_page();
 }
+
+/**
+ * [Deprecated] Return a CSS font-family value, quoted if required.
+ *
+ * @since 5.10.0
+ * @deprecated 5.33.3 - Use \Fictioneer\Utils::get_font_family_value() instead.
+ *
+ * @param string $font_value  The font family value.
+ * @param string $quote       Optional. The wrapping character. Default '"'.
+ *
+ * @return string Ready to use font family value.
+ */
+
+function fictioneer_font_family_value( $font_value, $quote = '"' ) {
+  return Utils::get_font_family_value( $font_value, $quote );
+}

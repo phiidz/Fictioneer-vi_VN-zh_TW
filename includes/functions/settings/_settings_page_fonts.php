@@ -8,6 +8,8 @@
  */
 
 
+use Fictioneer\Utils;
+
 // Setup
 $fonts = fictioneer_get_font_data();
 $disabled_fonts = get_option( 'fictioneer_disabled_fonts', [] );
@@ -338,7 +340,7 @@ $disabled_fonts = is_array( $disabled_fonts ) ? $disabled_fonts : [];
                       _ex( 'Family', 'Settings font card.', 'fictioneer' );
                     ?></div>
                     <div class="fictioneer-card__box-content"><?php
-                      echo fictioneer_font_family_value( $family );
+                      echo Utils::get_font_family_value( $family );
 
                       if ( ! empty( $type ) ) {
                         echo ", {$type}";

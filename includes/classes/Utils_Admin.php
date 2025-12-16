@@ -380,7 +380,7 @@ class Utils_Admin {
 
       if ( ! empty( $font['chapter'] ) ) {
         $font_stack[ $font['key'] ?? $key ] = array(
-          'css' => fictioneer_font_family_value( $font['family'] ?? '' ),
+          'css' => Utils::get_font_family_value( $font['family'] ?? '' ),
           'name' => $font['name'] ?? '',
           'alt' => $font['alt'] ?? ''
         );

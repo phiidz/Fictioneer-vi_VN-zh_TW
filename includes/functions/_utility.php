@@ -2300,7 +2300,7 @@ if ( ! function_exists( 'fictioneer_get_fonts' ) ) {
     // Setup
     $primary_chapter_font = get_theme_mod( 'chapter_chapter_body_font_family_value', 'default' );
     $fonts = array(
-      array( 'css' => fictioneer_font_family_value( FICTIONEER_PRIMARY_FONT_CSS ), 'name' => FICTIONEER_PRIMARY_FONT_NAME ),
+      array( 'css' => Utils::get_font_family_value( FICTIONEER_PRIMARY_FONT_CSS ), 'name' => FICTIONEER_PRIMARY_FONT_NAME ),
       array( 'css' => '', 'name' => _x( 'System Font', 'Font name.', 'fictioneer' ) )
     );
 
@@ -2324,29 +2324,6 @@ if ( ! function_exists( 'fictioneer_get_fonts' ) ) {
 
     // Apply filters and return
     return apply_filters( 'fictioneer_filter_fonts', $fonts );
-  }
-}
-
-// =============================================================================
-// WRAP MULTI-WORD FONTS INTO QUOTES
-// =============================================================================
-
-/**
- * Returns font family value with quotes if required
- *
- * @since 5.10.0
- *
- * @param string $font_value  The font family value.
- * @param string $quote       Optional. The wrapping character. Default '"'.
- *
- * @return string Ready to use font family value.
- */
-
-function fictioneer_font_family_value( $font_value, $quote = '"' ) {
-  if ( preg_match( '/\s/', $font_value ) ) {
-    return $quote . $font_value . $quote;
-  } else {
-    return $font_value;
   }
 }
 

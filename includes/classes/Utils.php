@@ -479,6 +479,36 @@ class Utils {
   }
 
   /**
+   * Return a CSS font-family value, quoted if required.
+   *
+   * @since 5.10.0
+   * @since 5.33.3 - Moved into Utils class.
+   *
+   * @param string $font_value  Font family name (single family, no commas).
+   * @param string $quote       Optional. Wrapping character. Default '"'.
+   *
+   * @return string Ready to use font-family value.
+   */
+
+  public static function get_font_family_value( string $font_value, string $quote = '"' ) : string {
+    $font_value = trim( $font_value );
+
+    if ( $font_value === '' ) {
+      return '';
+    }
+
+    if ( str_contains( $font_value, ',' ) ) {
+      return $font_value;
+    }
+
+    if ( preg_match( '/\s/', $font_value ) ) {
+      return $quote . $font_value . $quote;
+    }
+
+    return $font_value;
+  }
+
+  /**
    * [Delegate] Build bundled font stylesheet.
    *
    * @since 5.10.0
