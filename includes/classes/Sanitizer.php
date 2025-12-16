@@ -264,15 +264,19 @@ class Sanitizer {
 
     $url = esc_url_raw( $url );
 
-    if ( ! $url || filter_var( $url, FILTER_VALIDATE_URL ) === false ) {
+    if ( ! $url || ! wp_http_validate_url( $url ) ) {
       return '';
     }
 
-    if ( $prefix !== null && strncmp( $url, $prefix, strlen( $prefix ) ) !== 0 ) {
-      return '';
+    if ( $prefix !== null ) {
+      $prefix = esc_url_raw( trim( $prefix ) );
+
+      if ( ! $prefix || strncmp( $url, $prefix, strlen( $prefix ) ) !== 0 ) {
+        return '';
+      }
     }
 
-    if ( $pattern !== null && @preg_match( $pattern, $url ) !== 1 ) {
+    if ( $pattern !== null && preg_match( $pattern, $url ) !== 1 ) {
       return '';
     }
 
