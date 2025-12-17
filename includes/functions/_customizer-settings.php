@@ -3189,7 +3189,7 @@ function fictioneer_add_icon_customizer_settings( $manager ) {
 
 function fictioneer_add_fonts_customizer_settings( $manager ) {
   // Setup
-  $fonts = fictioneer_get_font_data();
+  $fonts = Utils::get_font_data();
   $font_options = array( 'system' => __( 'System Font', 'fictioneer' ) );
   $disabled_fonts = get_option( 'fictioneer_disabled_fonts', [] );
   $disabled_fonts = is_array( $disabled_fonts ) ? $disabled_fonts : [];

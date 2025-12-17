@@ -1221,7 +1221,7 @@ Filters the return array of the `fictioneer_get_font_colors()` function, used to
 ---
 
 ### `apply_filters( 'fictioneer_filter_font_data', $fonts )`
-Filters the font array compiled from all valid font folders and Google Fonts links in both the parent and child theme. Note that the `fictioneer_get_font_data()` function reads the file system, which is potentially slow.
+Filters the font array compiled from all valid font folders and Google Fonts links in both the parent and child theme. Note that the `\Fictioneer\Utils_Admin::get_font_data()` function reads the file system, which is potentially slow.
 
 **Parameters:**
 * $fonts (array) – Array of font data.
@@ -1231,7 +1231,7 @@ Filters the font array compiled from all valid font folders and Google Fonts lin
 ### `apply_filters( 'fictioneer_filter_footnotes', $footnotes )`
 Filters the collection array of footnotes to be rendered.
 
-Filters the font array compiled from all valid font folders and Google Fonts links in both the parent and child theme. Note that the `fictioneer_get_font_data()` function reads the file system, which is potentially slow.
+Filters the font array compiled from all valid font folders and Google Fonts links in both the parent and child theme. Note that the `\Fictioneer\Utils_Admin::get_font_data()` function reads the file system, which is potentially slow.
 
 **Parameters:**
 * $footnotes (array) – Array of footnotes (ID => HTML).

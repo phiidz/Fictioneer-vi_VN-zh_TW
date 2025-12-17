@@ -2364,7 +2364,7 @@ add_filter( 'elementor/fonts/groups', 'fictioneer_elementor_add_font_group' );
  */
 
 function fictioneer_elementor_add_additional_fonts( $fonts ) {
-  $theme_fonts = fictioneer_get_font_data();
+  $theme_fonts = Utils::get_font_data();
 
   foreach ( $theme_fonts as $font ) {
     if ( $font['family'] ?? 0 ) {

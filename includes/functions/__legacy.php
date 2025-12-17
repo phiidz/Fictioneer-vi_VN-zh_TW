@@ -612,6 +612,24 @@ function fictioneer_extract_font_from_google_link( $link ) {
   return Utils_Admin::extract_font_from_google_link( $link );
 }
 
+/**
+ * [Deprecated] Return fonts included by the theme.
+ *
+ * Note: If a font.json contains a { "remove": true } node, the font will not
+ * be added to the result array and therefore removed from the site.
+ *
+ * @since 5.10.0
+ * @deprecated 5.33.3 - Use \Fictioneer\Utils_Admin::get_font_data() instead.
+ *
+ * @return array Array of font data. Keys: skip, chapter, version, key, name,
+ *               family, type, styles, weights, charsets, formats, about, note,
+ *               sources, css_path, css_file, and in_child_theme.
+ */
+
+function fictioneer_get_font_data() : array {
+  return Utils::get_font_data();
+}
+
 // =============================================================================
 // UTILITY DELEGATES
 // =============================================================================

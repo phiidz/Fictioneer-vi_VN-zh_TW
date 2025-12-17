@@ -450,6 +450,107 @@ class Utils_Admin {
   }
 
   /**
+   * Return fonts included by the theme.
+   *
+   * Note: If a font.json contains a { "remove": true } node, the font will not
+   * be added to the result array and therefore removed from the site.
+   *
+   * @since 5.10.0
+   * @since 5.33.3 - Moved into Utils_Admin class.
+   *
+   * @return array Array of font data. Keys: skip, chapter, version, key, name,
+   *               family, type, styles, weights, charsets, formats, about, note,
+   *               sources, css_path, css_file, and in_child_theme.
+   */
+
+  public static function get_font_data() : array {
+    $extract_font_data = static function( string $font_dir, bool $in_child_theme ) : array {
+      if ( ! is_dir( $font_dir ) ) {
+        return [];
+      }
+
+      $out = [];
+
+      foreach ( array_diff( scandir( $font_dir ), [ '.', '..' ] ) as $folder ) {
+        $full_path = $font_dir . '/' . $folder;
+
+        if ( ! is_dir( $full_path ) ) {
+          continue;
+        }
+
+        $json_file = $full_path . '/font.json';
+        $css_file = $full_path . '/font.css';
+
+        if ( ! is_readable( $json_file ) || ! is_readable( $css_file ) ) {
+          continue;
+        }
+
+        $raw = file_get_contents( $json_file );
+
+        if ( $raw === false || $raw === '' ) {
+          continue;
+        }
+
+        $data = json_decode( $raw, true );
+
+        if ( ! is_array( $data ) || ! empty( $data['remove'] ) ) {
+          continue;
+        }
+
+        if ( empty( $data['key'] ) || ! is_string( $data['key'] ) ) {
+          continue;
+        }
+
+        $key = sanitize_key( $data['key'] );
+
+        if ( $key === '' ) {
+          continue;
+        }
+
+        $folder_name = basename( (string) $folder );
+
+        $data['dir'] = "/fonts/{$folder_name}";
+        $data['css_path'] = "/fonts/{$folder_name}/font.css";
+        $data['css_file'] = $css_file;
+        $data['in_child_theme'] = $in_child_theme;
+
+        $out[ $key ] = $data;
+      }
+
+      return $out;
+    };
+
+    $parent_font_dir = trailingslashit( get_template_directory() ) . 'fonts';
+    $child_font_dir = trailingslashit( get_stylesheet_directory() ) . 'fonts';
+
+    $fonts = $extract_font_data( $parent_font_dir, false );
+
+    if ( $child_font_dir !== $parent_font_dir ) {
+      $fonts = array_merge( $fonts, $extract_font_data( $child_font_dir, true ) );
+    }
+
+    $google_fonts_links = get_option( 'fictioneer_google_fonts_links' );
+
+    if ( is_string( $google_fonts_links ) && trim( $google_fonts_links ) !== '' ) {
+      foreach ( preg_split( "/\R/u", trim( $google_fonts_links ) ) ?: [] as $link ) {
+        $link = trim( $link );
+
+        if ( $link === '' ) {
+          continue;
+        }
+
+        $font = Utils::extract_font_from_google_link( $link );
+
+        if ( is_array( $font ) && ! empty( $font['key'] ) ) {
+          $fonts[ $font['key'] ] = $font;
+        }
+      }
+    }
+
+    return apply_filters( 'fictioneer_filter_font_data', $fonts );
+  }
+
+  /**
    * Build bundled font stylesheet.
    *
    * @since 5.10.0
@@ -457,7 +558,7 @@ class Utils_Admin {
    */
 
   public static function bundle_fonts() : void {
-    $fonts = apply_filters( 'fictioneer_filter_pre_build_bundled_fonts', fictioneer_get_font_data() );
+    $fonts = apply_filters( 'fictioneer_filter_pre_build_bundled_fonts', self::get_font_data() );
 
     $disabled_fonts = Utils::get_disabled_fonts();
     $parent_uri = trailingslashit( get_template_directory_uri() );

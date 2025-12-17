@@ -525,6 +525,24 @@ class Utils {
   }
 
   /**
+   * [Delegate] Return fonts included by the theme.
+   *
+   * Note: If a font.json contains a { "remove": true } node, the font will not
+   * be added to the result array and therefore removed from the site.
+   *
+   * @since 5.10.0
+   * @since 5.33.3 - Moved into Utils_Admin class.
+   *
+   * @return array Array of font data. Keys: skip, chapter, version, key, name,
+   *               family, type, styles, weights, charsets, formats, about, note,
+   *               sources, css_path, css_file, and in_child_theme.
+   */
+
+  public static function get_font_data() : array {
+    return Utils_Admin::get_font_data();
+  }
+
+  /**
    * [Delegate] Build bundled font stylesheet.
    *
    * @since 5.10.0
