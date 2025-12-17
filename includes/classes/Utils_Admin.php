@@ -618,4 +618,31 @@ class Utils_Admin {
       error_log( '[Fictioneer] Failed to write bundled fonts CSS: ' . $save_path );
     }
   }
+
+  /**
+   * Check whether an URL exists.
+   *
+   * @since 4.0.0
+   * @since 5.33.3 - Moved into Utils_Admin class.
+   *
+   * @param string $url  The URL to check.
+   *
+   * @return bool True if the URL exists and false otherwise. Probably.
+   */
+
+  public static function url_exists( string $url ) : bool {
+    if ( empty( $url ) ) {
+      return false;
+    }
+
+    $response = wp_remote_head( $url, array( 'timeout' => 2, 'redirection' => 0 ) );
+
+    if ( is_wp_error( $response ) ) {
+      return false;
+    }
+
+    $statusCode = wp_remote_retrieve_response_code( $response );
+
+    return ( $statusCode >= 200 && $statusCode < 300 );
+  }
 }

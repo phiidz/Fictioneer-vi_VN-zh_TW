@@ -830,3 +830,20 @@ function fictioneer_get_global_page() {
 function fictioneer_font_family_value( $font_value, $quote = '"' ) {
   return Utils::get_font_family_value( $font_value, $quote );
 }
+
+if ( ! function_exists( 'fictioneer_url_exists' ) ) {
+  /**
+   * [Deprecated] Check whether an URL exists.
+   *
+   * @since 4.0.0
+   * @deprecated 5.33.3 - Use \Fictioneer\Utils_Admin::url_exists() instead.
+   *
+   * @param string $url  The URL to check.
+   *
+   * @return boolean True if the URL exists and false otherwise. Probably.
+   */
+
+  function fictioneer_url_exists( $url ) {
+    return Utils_Admin::url_exists( $url );
+  }
+}

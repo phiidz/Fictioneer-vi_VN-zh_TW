@@ -6,40 +6,6 @@ use Fictioneer\Utils;
 use Fictioneer\Utils_Admin;
 
 // =============================================================================
-// CHECK IF URL EXISTS
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_url_exists' ) ) {
-  /**
-   * Check whether an URL exists.
-   *
-   * @since 4.0.0
-   * @link https://www.geeksforgeeks.org/how-to-check-the-existence-of-url-in-php/
-   *
-   * @param string $url  The URL to check.
-   *
-   * @return boolean True if the URL exists and false otherwise. Probably.
-   */
-
-  function fictioneer_url_exists( $url ) {
-    if ( empty( $url ) ) {
-      return false;
-    }
-
-    $response = wp_remote_head( $url, array( 'timeout' => 2, 'redirection' => 0 ) );
-
-    if ( is_wp_error( $response ) ) {
-      return false;
-    }
-
-    $statusCode = wp_remote_retrieve_response_code( $response );
-
-    // Check for 2xx status codes which indicate success
-    return ( $statusCode >= 200 && $statusCode < 300 );
-  }
-}
-
-// =============================================================================
 // CHECK WHETHER VALID JSON
 // =============================================================================
 

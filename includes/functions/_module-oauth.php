@@ -388,7 +388,7 @@ function fictioneer_oauth2_make_user( $user_data, $cookie ) {
   $username = sanitize_user( $user_data['username'] );
   $nickname = sanitize_user( $user_data['nickname'] );
   $email = sanitize_email( $user_data['email'] );
-  $avatar = fictioneer_url_exists( $user_data['avatar'] ) ? $user_data['avatar'] : null;
+  $avatar = Utils_Admin::url_exists( $user_data['avatar'] ) ? $user_data['avatar'] : null;
   $merge_id = absint( $cookie['merge_id'] ?? 0 );
   $new = false;
   $merged = false;
