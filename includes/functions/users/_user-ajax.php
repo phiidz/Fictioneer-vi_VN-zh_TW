@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Utils;
+
 // =============================================================================
 // GET USER DATA - AJAX
 // =============================================================================
@@ -396,7 +398,7 @@ function fictioneer_ajax_save_bookmarks() {
   // Valid?
   $bookmarks = sanitize_text_field( $_POST['bookmarks'] );
 
-  if ( $bookmarks && fictioneer_is_valid_json( wp_unslash( $bookmarks ) ) ) {
+  if ( $bookmarks && Utils::json_validate( wp_unslash( $bookmarks ) ) ) {
     // Inspect
     $decoded = json_decode( wp_unslash( $bookmarks ), true );
 

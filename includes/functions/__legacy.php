@@ -840,10 +840,26 @@ if ( ! function_exists( 'fictioneer_url_exists' ) ) {
    *
    * @param string $url  The URL to check.
    *
-   * @return boolean True if the URL exists and false otherwise. Probably.
+   * @return bool True if the URL exists and false otherwise. Probably.
    */
 
   function fictioneer_url_exists( $url ) {
     return Utils_Admin::url_exists( $url );
   }
+}
+
+/**
+ * [Deprecated] Check whether a JSON is valid.
+ *
+ * @since 4.0.0
+ * @since 5.21.1 - Use json_validate() if on PHP 8.3 or higher.
+ * @deprecated 5.33.3 - Use \Fictioneer\Utils::json_validate() instead.
+ *
+ * @param string $data  JSON string hopeful.
+ *
+ * @return bool True if the JSON is valid, false if not.
+ */
+
+function fictioneer_is_valid_json( $data ) {
+  return Utils::json_validate( $data );
 }

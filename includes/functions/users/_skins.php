@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Utils;
 
 // =============================================================================
 // AJAX: SAVE SKINS FOR USERS
@@ -40,7 +41,7 @@ function fictioneer_ajax_save_skins() {
     wp_send_json_error( array( 'error' => 'Invalid encoding.' ) );
   }
 
-  if ( $skins && fictioneer_is_valid_json( wp_unslash( $skins ) ) ) {
+  if ( $skins && Utils::json_validate( wp_unslash( $skins ) ) ) {
     $decoded = json_decode( wp_unslash( $skins ), true );
     $fingerprint = fictioneer_get_user_fingerprint( $user->ID );
 

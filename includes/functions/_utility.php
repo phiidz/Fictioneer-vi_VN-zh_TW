@@ -6,36 +6,6 @@ use Fictioneer\Utils;
 use Fictioneer\Utils_Admin;
 
 // =============================================================================
-// CHECK WHETHER VALID JSON
-// =============================================================================
-
-/**
- * Check whether a JSON is valid.
- *
- * @since 4.0.0
- * @since 5.21.1 - Use json_validate() if on PHP 8.3 or higher.
- *
- * @param string $data  JSON string hopeful.
- *
- * @return boolean True if the JSON is valid, false if not.
- */
-
-function fictioneer_is_valid_json( $data = null ) {
-  if ( empty( $data ) ) {
-    return false;
-  }
-
-  // PHP 8.3 or higher
-  if ( function_exists( 'json_validate' ) ) {
-    return json_validate( $data );
-  }
-
-  $data = @json_decode( $data, true );
-
-  return ( json_last_error() === JSON_ERROR_NONE );
-}
-
-// =============================================================================
 // CHECK FOR ACTIVE PLUGINS
 // =============================================================================
 

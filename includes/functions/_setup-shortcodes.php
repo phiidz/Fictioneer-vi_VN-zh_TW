@@ -294,7 +294,7 @@ function fictioneer_get_default_shortcode_args( $attr, $def_count = -1 ) {
   if ( ! empty( $args['splide'] ) ) {
     $args['splide'] = str_replace( "'", '"', $args['splide'] );
 
-    if ( ! fictioneer_is_valid_json( $args['splide'] ) ) {
+    if ( ! Utils::json_validate( $args['splide'] ) ) {
       $args['splide'] = false;
     } else {
       $splide = json_decode( $args['splide'], true );

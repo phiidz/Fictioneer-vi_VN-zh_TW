@@ -635,4 +635,37 @@ class Utils {
 
     return preg_replace( $search_patterns, $replace_patterns, $css );
   }
+
+  /**
+   * Check whether a JSON is valid.
+   *
+   * @since 4.0.0
+   * @since 5.21.1 - Use json_validate() if on PHP 8.3 or higher.
+   * @since 5.33.3 - Moved into Utils class.
+   *
+   * @param string $data  JSON string hopeful.
+   *
+   * @return bool True if the JSON is valid, false if not.
+   */
+
+  public static function json_validate( mixed $data ) : string {
+    if ( ! is_string( $data ) ) {
+      return false;
+    }
+
+    $data = trim( $data );
+
+    if ( $data === '' ) {
+      return false;
+    }
+
+    // PHP 8.3 or higher
+    if ( function_exists( 'json_validate' ) ) {
+      return json_validate( $data );
+    }
+
+    json_decode( $data );
+
+    return json_last_error() === JSON_ERROR_NONE;
+  }
 }

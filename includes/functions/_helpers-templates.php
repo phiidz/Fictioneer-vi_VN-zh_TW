@@ -2580,7 +2580,7 @@ function fictioneer_extract_splide_breakpoints( $json_string, $uid = null ) {
   }
 
   // Valid JSON?
-  if ( ! fictioneer_is_valid_json( $json_string ) ) {
+  if ( ! Utils::json_validate( $json_string ) ) {
     return apply_filters( 'fictioneer_filter_splide_breakpoints', [], $json_string, $uid );
   }
 
