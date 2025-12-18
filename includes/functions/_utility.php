@@ -202,16 +202,36 @@ function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = fals
   }
 
   // Restore order
-  $chapter_positions = array_flip( $chapter_ids );
+  $by_id = [];
 
-  /** @var WP_Post[] $chapter_posts */
-  usort( $chapter_posts, function( $a, $b ) use ( $chapter_positions ) {
-    return $chapter_positions[ $a->ID ] <=> $chapter_positions[ $b->ID ];
-  });
+  foreach ( $chapter_posts as $p ) {
+    $by_id[ (int) $p->ID ] = $p;
+  }
+
+  $ordered_chapter_posts = [];
+
+  foreach ( $chapter_ids as $cid ) {
+    $cid = (int) $cid;
+
+    if ( isset( $by_id[ $cid ] ) ) {
+      $ordered_chapter_posts[] = $by_id[ $cid ];
+    }
+  }
+
+  // Cache for subsequent calls
+  $cached_results[ $cache_key ] = $ordered_chapter_posts;
 
   // Return chapters selected in story
-  return $chapter_posts;
+  return $ordered_chapter_posts;
 }
+
+
+
+
+
+
+
+
 
 // =============================================================================
 // GROUP CHAPTERS
