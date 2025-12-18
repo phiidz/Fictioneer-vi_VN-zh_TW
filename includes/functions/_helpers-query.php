@@ -383,7 +383,7 @@ function fictioneer_set_chapter_story_parent( $chapter_id, $story_id ) {
   global $wpdb;
 
   $chapter_id = (int) $chapter_id;
-  $story_id = (int) ($story_id ?: 0);
+  $story_id = (int) ( $story_id ?: 0 );
 
   $wpdb->query(
     $wpdb->prepare(

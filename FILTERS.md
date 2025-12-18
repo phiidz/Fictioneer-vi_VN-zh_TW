@@ -687,6 +687,15 @@ Filters the array of support links returned for the current post (or post ID if 
 
 ---
 
+### `apply_filters( 'fictioneer_filter_get_story_data_batch_limit', $limit, $story_id )`
+Filters the maximum number of chapter IDs processed per batch when querying chapter data. Larger values reduce the number of queries but increase SQL size; smaller values increase batching but can reduce query overhead on very large stories.
+
+**Parameters:**
+* $limit (int) – Maximum chapter IDs per batch. Default 800; minimum 100; maximum 2000.
+* $story_id (int) – Current story (post) ID.
+
+---
+
 ### `apply_filters( 'fictioneer_filter_get_story_data_indexed_chapter_statuses', $statuses, $story_id )`
 Filters the array of chapter statuses that can be appended to a story’s `indexed_chapter_ids` array in the `fictioneer_get_story_data()` function. These chapters are a subset of the queried chapters, which need to be filtered separately. By default, the statuses are `['publish']`.
 
@@ -739,6 +748,15 @@ Filters the prepared raw SQL used to query chapters in the `fictioneer_get_story
 * $story_id (int) – ID of the story.
 * $chapter_ids (array) – IDs of all associated chapters, in order.
 * $statuses (array) – Array of allowed post statuses to query (already filtered).
+
+---
+
+### `apply_filters( 'fictioneer_filter_get_story_data_switch_threshold', $threshold, $story_id )`
+Filters the chapter-count threshold up to which the multi-join query is used. Above this threshold, the query switches to the chunked `IN (...)` strategy (with meta scoped to the chapter IDs), which is typically faster for large chapter counts.
+
+**Parameters:**
+* $threshold (int) – Up to which chapter count the multi-join query is used. Default 225.
+* $story_id (int) – Current story (post) ID.
 
 ---
 

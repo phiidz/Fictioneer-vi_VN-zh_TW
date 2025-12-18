@@ -863,3 +863,28 @@ if ( ! function_exists( 'fictioneer_url_exists' ) ) {
 function fictioneer_is_valid_json( $data ) {
   return Utils::json_validate( $data );
 }
+
+// =============================================================================
+// GET STORY DATA
+// =============================================================================
+
+if ( ! function_exists( 'fictioneer_get_story_data' ) ) {
+  /**
+   * [Deprecated] Get collection of a story's data.
+   *
+   * @since 4.3.0
+   * @since 5.25.0 - Refactored with custom SQL query.
+   * @deprecated 5.33.3 - Use \Fictioneer\Story::get_data() instead.
+   *
+   * @param int     $story_id       ID of the story.
+   * @param boolean $show_comments  Optional. Whether the comment count is needed.
+   *                                Default true.
+   * @param array   $args           Optional array of arguments.
+   *
+   * @return array|bool Data of the story or false if invalid.
+   */
+
+  function fictioneer_get_story_data( $story_id, $show_comments = true, $args = [] ) {
+    return \Fictioneer\Story::get_data( $story_id, $show_comments, $args );
+  }
+}
