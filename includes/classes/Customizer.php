@@ -317,7 +317,7 @@ class Customizer {
   /**
    * Build and save customization stylesheet.
    *
-   * @since 5.33.3
+   * @since 5.33.2
    *
    * @param string|null $context  Optional. In which context the stylesheet created,
    *                              for example 'preview' for the Customizer.
@@ -343,7 +343,7 @@ class Customizer {
   /**
    * Return compiled customization styles.
    *
-   * @since 5.33.3
+   * @since 5.33.2
    *
    * @return string Compiled customization styles.
    */

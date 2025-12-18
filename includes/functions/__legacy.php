@@ -393,7 +393,7 @@ if ( ! function_exists( 'fictioneer_hex_to_rgb' ) ) {
    * @author Simon Waldherr https://github.com/SimonWaldherr
    *
    * @since 4.7.0
-   * @deprecated 5.33.3 - Use \Fictioneer\Utils::hex_to_rgb() instead.
+   * @deprecated 5.33.2 - Use \Fictioneer\Utils::hex_to_rgb() instead.
    * @link https://github.com/SimonWaldherr/ColorConverter.php
    *
    * @param string $input  The to be converted hex (six digits).
@@ -414,7 +414,7 @@ if ( ! function_exists( 'fictioneer_rgb_to_hsl' ) ) {
    * @author Simon Waldherr https://github.com/SimonWaldherr
    *
    * @since 4.7.0
-   * @deprecated 5.33.3 - Use \Fictioneer\Utils::rgb_to_hsl() instead.
+   * @deprecated 5.33.2 - Use \Fictioneer\Utils::rgb_to_hsl() instead.
    * @link https://github.com/SimonWaldherr/ColorConverter.php
    *
    * @param array $input      The to be converted RGB.
@@ -433,7 +433,7 @@ if ( ! function_exists( 'fictioneer_get_css_clamp' ) ) {
    * [Deprecated] Generate a high-precision CSS clamp.
    *
    * @since 4.7.0
-   * @deprecated 5.33.3 - Use \Fictioneer\Customizer::get_clamp() instead.
+   * @deprecated 5.33.2 - Use \Fictioneer\Customizer::get_clamp() instead.
    *
    * @param int    $min   The minimum value.
    * @param int    $max   The maximum value.
@@ -454,7 +454,7 @@ if ( ! function_exists( 'fictioneer_hsl_code' ) ) {
    * [Deprecated] Convert a hex color to a Fictioneer HSL code.
    *
    * @since 4.7.0
-   * @deprecated 5.33.3 - Use \Fictioneer\Utils::get_hsl_code() instead.
+   * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_hsl_code() instead.
    *
    * @param string $hex     The color as hex.
    * @param string $output  Switch output style. Default 'default'.
@@ -472,7 +472,7 @@ if ( ! function_exists( 'fictioneer_hsl_font_code' ) ) {
    * [Deprecated] Convert a hex color to a Fictioneer HSL font code.
    *
    * @since 4.7.0
-   * @deprecated 5.33.3 - Use \Fictioneer\Utils::get_hsl_font_code() instead.
+   * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_hsl_font_code() instead.
    * @see fictioneer_hsl_code( $hex, $output )
    *
    * @param string $hex  The color as hex.
@@ -489,7 +489,7 @@ if ( ! function_exists( 'fictioneer_hsl_font_code' ) ) {
  * [Deprecated] Helper that returns a font family value
  *
  * @since 5.10.0
- * @deprecated 5.33.3 - Use \Fictioneer\Utils::get_font_family() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_font_family() instead.
  *
  * @param string $option        Name of the theme mod.
  * @param string $font_default  Fallback font.
@@ -506,7 +506,7 @@ function fictioneer_get_custom_font( $option, $font_default, $mod_default ) {
  * [Deprecated] Return the CSS loaded from a snippet file.
  *
  * @since 5.11.1
- * @deprecated 5.33.3 - Use \Fictioneer\Customizer::get_css_snippet() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Customizer::get_css_snippet() instead.
  *
  * @param string $snippet      Name of the snippet file without file ending.
  * @param string|null $filter  Optional. Part of the generated filter, defaulting
@@ -538,7 +538,7 @@ function fictioneer_get_theme_colors_array() {
  *
  * @since 5.12.0
  * @since 5.21.2 - Refactored with theme colors helper function.
- * @deprecated 5.33.3 - Use \Fictioneer\Utils::get_theme_color() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_theme_color() instead.
  *
  * @param string $mod           The requested theme color.
  * @param string|null $default  Optional. Default color code.
@@ -554,7 +554,7 @@ function fictioneer_get_theme_color( $mod, $default = null ) {
  * [Deprecated] Build the customization stylesheet.
  *
  * @since 5.11.0
- * @deprecated 5.33.3 - Use \Fictioneer\Customizer::build_customizer_css() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Customizer::build_customizer_css() instead.
  *
  * @param string|null $context  Optional. In which context the stylesheet created,
  *                              for example 'preview' for the Customizer.
@@ -569,7 +569,7 @@ if ( ! function_exists( 'fictioneer_get_fading_gradient' ) ) {
    * [Deprecated] Return an eased fading linear-gradient CSS.
    *
    * @since 5.11.0
-   * @deprecated 5.33.3 - Use \Fictioneer\Customizer::get_fading_gradient() instead.
+   * @deprecated 5.33.2 - Use \Fictioneer\Customizer::get_fading_gradient() instead.
    *
    * @param float  $start_opacity  The starting opacity of the gradient in percentage.
    * @param int    $start          The starting point of the gradient in percentage.
@@ -589,7 +589,7 @@ if ( ! function_exists( 'fictioneer_get_fading_gradient' ) ) {
  * [Deprecated] Build bundled font stylesheet.
  *
  * @since 5.10.0
- * @deprecated 5.33.3 - Use \Fictioneer\Utils_Admin::bundle_fonts() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::bundle_fonts() instead.
  */
 
 function fictioneer_build_bundled_fonts() : void {
@@ -600,7 +600,7 @@ function fictioneer_build_bundled_fonts() : void {
  * [Deprecated] Return fonts data from a Google Fonts link.
  *
  * @since 5.10.0
- * @deprecated 5.33.3 - Use \Fictioneer\Utils_Admin::extract_font_from_google_link() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::extract_font_from_google_link() instead.
  *
  * @param string $link  Google Fonts link.
  *
@@ -619,7 +619,7 @@ function fictioneer_extract_font_from_google_link( $link ) {
  * be added to the result array and therefore removed from the site.
  *
  * @since 5.10.0
- * @deprecated 5.33.3 - Use \Fictioneer\Utils_Admin::get_font_data() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::get_font_data() instead.
  *
  * @return array Array of font data. Keys: skip, chapter, version, key, name,
  *               family, type, styles, weights, charsets, formats, about, note,
@@ -819,7 +819,7 @@ function fictioneer_get_global_page() {
  * [Deprecated] Return a CSS font-family value, quoted if required.
  *
  * @since 5.10.0
- * @deprecated 5.33.3 - Use \Fictioneer\Utils::get_font_family_value() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_font_family_value() instead.
  *
  * @param string $font_value  The font family value.
  * @param string $quote       Optional. The wrapping character. Default '"'.
@@ -836,7 +836,7 @@ if ( ! function_exists( 'fictioneer_url_exists' ) ) {
    * [Deprecated] Check whether an URL exists.
    *
    * @since 4.0.0
-   * @deprecated 5.33.3 - Use \Fictioneer\Utils_Admin::url_exists() instead.
+   * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::url_exists() instead.
    *
    * @param string $url  The URL to check.
    *
@@ -853,7 +853,7 @@ if ( ! function_exists( 'fictioneer_url_exists' ) ) {
  *
  * @since 4.0.0
  * @since 5.21.1 - Use json_validate() if on PHP 8.3 or higher.
- * @deprecated 5.33.3 - Use \Fictioneer\Utils::json_validate() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils::json_validate() instead.
  *
  * @param string $data  JSON string hopeful.
  *
@@ -874,7 +874,7 @@ if ( ! function_exists( 'fictioneer_get_story_data' ) ) {
    *
    * @since 4.3.0
    * @since 5.25.0 - Refactored with custom SQL query.
-   * @deprecated 5.33.3 - Use \Fictioneer\Story::get_data() instead.
+   * @deprecated 5.33.2 - Use \Fictioneer\Story::get_data() instead.
    *
    * @param int     $story_id       ID of the story.
    * @param boolean $show_comments  Optional. Whether the comment count is needed.

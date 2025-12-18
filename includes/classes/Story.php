@@ -12,7 +12,7 @@ class Story {
    *
    * @since 4.3.0
    * @since 5.25.0 - Refactored with custom SQL query.
-   * @since 5.33.3 - Refactored, split up, and moved into Story class.
+   * @since 5.33.2 - Refactored, split up, and moved into Story class.
    *
    * @param int|string $story_id       ID of the story.
    * @param bool       $show_comments  Optional. Whether the comment count is needed.
@@ -57,7 +57,7 @@ class Story {
   /**
    * Backfill parent ID for chapters that belong to a story.
    *
-   * @since 5.33.3
+   * @since 5.33.2
    *
    * @param int|string $story_id     ID of the story.
    * @param array|null $chapter_ids  Optional. Chapter IDs associated with the story.
@@ -121,7 +121,7 @@ class Story {
   /**
    * Get cached story data if fresh.
    *
-   * @since 5.33.3
+   * @since 5.33.2
    *
    * @param int $story_id  ID of the story.
    *
@@ -154,7 +154,7 @@ class Story {
   /**
    * Check whether comment count must be updated.
    *
-   * @since 5.33.3
+   * @since 5.33.2
    *
    * @param array $cache  Cached story data (if any).
    * @param int   $now    Unix timestamp in seconds.
@@ -171,7 +171,7 @@ class Story {
   /**
    * Refresh comment count.
    *
-   * @since 5.33.3
+   * @since 5.33.2
    *
    * @param int   $story_id  ID of the story.
    * @param array $cache     Cached story data (if any).
@@ -213,7 +213,7 @@ class Story {
   /**
    * Aggregate story data.
    *
-   * @since 5.33.3
+   * @since 5.33.2
    *
    * @param int $story_id  ID of the story.
    * @param int $now       Unix timestamp in seconds.
@@ -310,7 +310,7 @@ class Story {
   /**
    * Query aggregated data of chapters (delegate).
    *
-   * @since 5.33.3
+   * @since 5.33.2
    *
    * @param array $chapter_ids       Chapter IDs.
    * @param array $queried_statuses  Statuses to be queried.
@@ -336,7 +336,7 @@ class Story {
   /**
    * Query aggregated chapter data using multi-joins.
    *
-   * @since 5.33.3
+   * @since 5.33.2
    *
    * @param array $chapter_ids       Chapter IDs.
    * @param array $queried_statuses  Statuses to be queried.
@@ -382,7 +382,7 @@ class Story {
   /**
    * Query aggregated chapter data using a chunked, ID-scoped query.
    *
-   * @since 5.33.3
+   * @since 5.33.2
    *
    * @param array $chapter_ids       Chapter IDs.
    * @param array $queried_statuses  Statuses to be queried.
@@ -458,7 +458,7 @@ class Story {
   /**
    * Cache and save story data.
    *
-   * @since 5.33.3
+   * @since 5.33.2
    *
    * @param int   $story_id       ID of the story.
    * @param array $data           Story data.

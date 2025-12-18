@@ -13,7 +13,7 @@ class Utils {
    * Return directory path of the theme cache.
    *
    * @since 5.23.1
-   * @since 5.33.3 - Moved into Utils class.
+   * @since 5.33.2 - Moved into Utils class.
    *
    * @param string|null $context  Optional. Context of the call. Default null.
    *
@@ -54,7 +54,7 @@ class Utils {
    * Return theme cache URI.
    *
    * @since 5.23.1
-   * @since 5.33.3 - Moved into Utils class.
+   * @since 5.33.2 - Moved into Utils class.
    *
    * @param string|null $context  The context of the call. Default null.
    *
@@ -482,7 +482,7 @@ class Utils {
    * Return a CSS font-family value, quoted if required.
    *
    * @since 5.10.0
-   * @since 5.33.3 - Moved into Utils class.
+   * @since 5.33.2 - Moved into Utils class.
    *
    * @param string $font_value  Font family name (single family, no commas).
    * @param string $quote       Optional. Wrapping character. Default '"'.
@@ -531,7 +531,7 @@ class Utils {
    * be added to the result array and therefore removed from the site.
    *
    * @since 5.10.0
-   * @since 5.33.3 - Moved into Utils_Admin class.
+   * @since 5.33.2 - Moved into Utils_Admin class.
    *
    * @return array Array of font data. Keys: skip, chapter, version, key, name,
    *               family, type, styles, weights, charsets, formats, about, note,
@@ -546,7 +546,7 @@ class Utils {
    * [Delegate] Build bundled font stylesheet.
    *
    * @since 5.10.0
-   * @since 5.33.3 - Moved into Utils_Admin class.
+   * @since 5.33.2 - Moved into Utils_Admin class.
    */
 
   public static function bundle_fonts() : void {
@@ -556,7 +556,7 @@ class Utils {
   /**
    * Return array of disabled font keys.
    *
-   * @since 5.33.3
+   * @since 5.33.2
    *
    * @return array Disabled font keys.
    */
@@ -641,7 +641,7 @@ class Utils {
    *
    * @since 4.0.0
    * @since 5.21.1 - Use json_validate() if on PHP 8.3 or higher.
-   * @since 5.33.3 - Moved into Utils class.
+   * @since 5.33.2 - Moved into Utils class.
    *
    * @param string $data  JSON string hopeful.
    *
@@ -672,7 +672,7 @@ class Utils {
   /**
    * Get story status icon HTML.
    *
-   * @since 5.33.3
+   * @since 5.33.2
    *
    * @param string $status  Status of the story.
    *

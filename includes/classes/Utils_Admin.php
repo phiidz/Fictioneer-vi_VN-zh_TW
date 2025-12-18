@@ -456,7 +456,7 @@ class Utils_Admin {
    * be added to the result array and therefore removed from the site.
    *
    * @since 5.10.0
-   * @since 5.33.3 - Moved into Utils_Admin class.
+   * @since 5.33.2 - Moved into Utils_Admin class.
    *
    * @return array Array of font data. Keys: skip, chapter, version, key, name,
    *               family, type, styles, weights, charsets, formats, about, note,
@@ -623,7 +623,7 @@ class Utils_Admin {
    * Check whether an URL exists.
    *
    * @since 4.0.0
-   * @since 5.33.3 - Moved into Utils_Admin class.
+   * @since 5.33.2 - Moved into Utils_Admin class.
    *
    * @param string $url  The URL to check.
    *
