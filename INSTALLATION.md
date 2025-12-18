@@ -254,7 +254,7 @@ The [plugin ecosystem](https://wordpress.org/plugins/) of WordPress is vast and 
       </ul><br>
       <strong>[Fictioneer: General] Compatibility:</strong>
       <ul>
-        <li>- [x] Enable cache compatibility mode</li>
+        <li>- [x] Enable compatibility mode for caching</li>
         <li>- [x] Enable AJAX user authentication</li>
         <li>- [x] Enable AJAX comment form (best performance) ... or ... comment section (best compatibility)</li>
       </ul>
@@ -393,7 +393,7 @@ Technically just another plugin, but one that will make your site significantly 
       </ul><br>
       <strong>[General] Compatibility:</strong>
       <ul>
-        <li>- [x] Enable public cache compatibility mode</li>
+        <li>- [x] Enable compatibility mode for public caching</li>
         <li>- [x] Enable AJAX user authentication</li>
         <li>- [x] Enable AJAX comment form (best performance) ... or ... comment section (best compatibility)</li>
       </ul>

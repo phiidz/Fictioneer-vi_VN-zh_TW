@@ -424,10 +424,10 @@ Fictioneer is cache aware. This means the theme provides an interface to aid cac
 ### Functions
 
 #### `fictioneer_caching_active(): bool`
-Returns true or false depending on whether the site is currently cached. Either because a known cache plugin is active or the **Enable cache compatibility mode** option is checked.
+Returns true or false depending on whether the site is currently cached. Either because a known cache plugin is active or the **Enable compatibility mode for caching** option is checked.
 
 #### `fictioneer_private_caching_active(): bool`
-Returns true or false depending on whether *private* caching is active. Private caching creates individual cache files for each user, which can result in high disk usage. Always false if **Enable public cache compatibility mode** is checked.
+Returns true or false depending on whether *private* caching is active. Private caching creates individual cache files for each user, which can result in high disk usage. Always false if **Enable compatibility mode for public caching** is checked.
 
 #### `fictioneer_purge_all_caches()`
 Helper to trigger the "purge all" functions of known cache plugins. Can be extended with the `fictioneer_cache_purge_all` hook.
