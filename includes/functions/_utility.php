@@ -148,6 +148,13 @@ if ( ! function_exists( 'fictioneer_get_last_fiction_update' ) ) {
  */
 
 function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = false ) {
+  // Filters?
+  static $has_filters = null;
+
+  if ( $has_filters === null ) {
+    $has_filters = has_filter( 'fictioneer_filter_story_chapter_posts_query' );
+  }
+
   // Static variable cache
   static $cached_results = [];
 
@@ -172,10 +179,13 @@ function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = fals
 
   // Apply filters and custom arguments
   $query_args = array_merge( $query_args, $args );
-  $query_args = apply_filters( 'fictioneer_filter_story_chapter_posts_query', $query_args, $story_id, $chapter_ids );
+
+  if ( $has_filters ) {
+    $query_args = apply_filters( 'fictioneer_filter_story_chapter_posts_query', $query_args, $story_id, $chapter_ids );
+  }
 
   // Static cache key
-  $cache_key = $story_id . '_' . md5( serialize( $query_args ) );
+  $cache_key = $story_id . '_' . md5( serialize( [ $query_args, $full ] ) );
 
   // Static cache hit?
   if ( isset( $cached_results[ $cache_key ] ) ) {
@@ -224,14 +234,6 @@ function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = fals
   // Return chapters selected in story
   return $ordered_chapter_posts;
 }
-
-
-
-
-
-
-
-
 
 // =============================================================================
 // GROUP CHAPTERS
