@@ -1151,6 +1151,11 @@ if ( ! function_exists( 'fictioneer_get_icon_field' ) ) {
     $icon = $icon ?? get_post_meta( $post_id ?? get_the_ID(), $field, true );
     $icon_object = json_decode( $icon ); // Check for ACF Font Awesome plugin
 
+    // Empty?
+    if ( $icon === '' ) {
+      return FICTIONEER_DEFAULT_CHAPTER_ICON;
+    }
+
     // Valid?
     if ( ! $icon_object && ( empty( $icon ) || strpos( $icon, 'fa-' ) !== 0 ) ) {
       return FICTIONEER_DEFAULT_CHAPTER_ICON;
