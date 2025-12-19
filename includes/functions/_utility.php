@@ -297,6 +297,12 @@ function fictioneer_prepare_chapter_groups( $story_id, $chapters ) {
       );
     }
 
+    if ( get_option( 'fictioneer_enable_fast_chapter_posts' ) ) {
+      $title = $post->post_title ?: get_the_date( '', $post );
+    } else {
+      $title = fictioneer_get_safe_title( $chapter_id, 'story-chapter-list' );
+    }
+
     $chapter_groups[ $group_key ]['data'][] = array(
       'id' => $chapter_id,
       'story_id' => $story_id,
@@ -315,7 +321,7 @@ function fictioneer_prepare_chapter_groups( $story_id, $chapters ) {
       ),
       'text_icon' => Utils::get_meta( $post, 'fictioneer_chapter_text_icon' ),
       'prefix' => Utils::get_meta( $post, 'fictioneer_chapter_prefix' ),
-      'title' => $post->post_title ?: get_the_date( '', $post ),
+      'title' => $title,
       'list_title' => Utils::get_meta( $post, 'fictioneer_chapter_list_title' ),
       'words' => fictioneer_get_word_count( $chapter_id, Utils::get_meta( $post, '_word_count' ) ),
       'warning' => Utils::get_meta( $post, 'fictioneer_chapter_warning' )
