@@ -148,13 +148,6 @@ if ( ! function_exists( 'fictioneer_get_last_fiction_update' ) ) {
  */
 
 function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = false, $slow = false ) {
-  // Filters?
-  static $has_filters = null;
-
-  if ( $has_filters === null ) {
-    $has_filters = has_filter( 'fictioneer_filter_story_chapter_posts_query' );
-  }
-
   // Static variable cache
   static $cached_results = [];
 
@@ -179,10 +172,7 @@ function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = fals
 
   // Apply filters and custom arguments
   $query_args = array_merge( $query_args, $args );
-
-  if ( $has_filters ) {
-    $query_args = apply_filters( 'fictioneer_filter_story_chapter_posts_query', $query_args, $story_id, $chapter_ids );
-  }
+  $query_args = apply_filters( 'fictioneer_filter_story_chapter_posts_query', $query_args, $story_id, $chapter_ids );
 
   // Faster query?
   if ( ! $slow && get_option( 'fictioneer_enable_fast_chapter_posts' ) ) {
