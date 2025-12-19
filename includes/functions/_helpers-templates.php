@@ -317,6 +317,8 @@ if ( ! function_exists( 'fictioneer_get_safe_title' ) ) {
    * @param int|WP_Post $post     The post or post ID to get the title for.
    * @param string|null $context  Optional. Context regarding where and how the title is used.
    * @param array       $args     Optional. Additional parameters.
+   *   - 'title' (string) : Ready to use title to avoid query.
+   *   - 'no_filters' (bool) : Whether to apply filters. Default false.
    *
    * @return string The title, never empty.
    */
@@ -327,7 +329,7 @@ if ( ! function_exists( 'fictioneer_get_safe_title' ) ) {
 
     // Get title and sanitize
     $title = Sanitizer::sanitize_safe_title(
-      get_the_title( $post_id ),
+      ( $args['title'] ?? '' ) ?: get_the_title( $post_id ),
       get_the_date( '', $post_id ),
       get_the_time( '', $post_id )
     );
