@@ -793,6 +793,11 @@ define( 'FICTIONEER_OPTIONS', array(
       'group' => 'fictioneer-settings-general-group',
       'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
     ),
+    'fictioneer_enable_fast_chapter_posts' => array(
+      'name' => 'fictioneer_enable_fast_chapter_posts',
+      'group' => 'fictioneer-settings-general-group',
+      'sanitize_callback' => [ Sanitizer::class, 'sanitize_bool_num' ]
+    ),
   ),
   'integers' => array(
     'fictioneer_user_profile_page' => array(
@@ -1314,6 +1319,7 @@ function fictioneer_get_option_label( $option ) {
       'fictioneer_seo_sitemap_excludes' => __( 'Post IDs excluded from sitemap', 'fictioneer' ),
       'fictioneer_oauth_cookie_expiration_days' => __( 'OAuth cookie expiration days', 'fictioneer' ),
       'fictioneer_enable_extended_alert_queries' => __( 'Enable extended alert queries', 'fictioneer' ),
+      'fictioneer_enable_fast_chapter_posts' => __( 'Enable optimized chapter post queries', 'fictioneer' ),
     );
   }
 

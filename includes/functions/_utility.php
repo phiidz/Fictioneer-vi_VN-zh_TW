@@ -1,9 +1,8 @@
 <?php
 
 use Fictioneer\Sanitizer;
-use Fictioneer\Sanitizer_Admin;
 use Fictioneer\Utils;
-use Fictioneer\Utils_Admin;
+use Fictioneer\Story;
 
 // =============================================================================
 // CHECK FOR ACTIVE PLUGINS
@@ -184,6 +183,11 @@ function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = fals
     $query_args = apply_filters( 'fictioneer_filter_story_chapter_posts_query', $query_args, $story_id, $chapter_ids );
   }
 
+  // Faster query?
+  if ( get_option( 'fictioneer_enable_fast_chapter_posts' ) ) {
+    return \Fictioneer\Story::get_fast_chapter_posts( $story_id, $query_args, $full );
+  }
+
   // Static cache key
   $cache_key = $story_id . '_' . md5( serialize( [ $query_args, $full ] ) );
 
@@ -248,7 +252,7 @@ function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = fals
  * @since 5.25.0
  *
  * @param int   $story_id  ID of the story.
- * @param array $chapters  Array of (reduced) WP_Post objects.
+ * @param array $chapters  Array of WP_Post or post-like objects.
  *
  * @return array The grouped and prepared chapters.
  */
@@ -270,12 +274,12 @@ function fictioneer_prepare_chapter_groups( $story_id, $chapters ) {
     $chapter_id = $post->ID;
 
     // Skip missing or not visible chapters
-    if ( ! $post || get_post_meta( $chapter_id, 'fictioneer_chapter_hidden', true ) ) {
+    if ( ! $post || Utils::get_meta( $post, 'fictioneer_chapter_hidden' ) ) {
       continue;
     }
 
     // Data
-    $group = get_post_meta( $chapter_id, 'fictioneer_chapter_group', true );
+    $group = Utils::get_meta( $post, 'fictioneer_chapter_group' );
     $group = empty( $group ) ? fcntr( 'unassigned_group' ) : $group;
     $group = $enable_groups ? $group : 'all_chapters';
     $group_key = sanitize_title( $group );
@@ -297,18 +301,24 @@ function fictioneer_prepare_chapter_groups( $story_id, $chapters ) {
       'id' => $chapter_id,
       'story_id' => $story_id,
       'status' => $post->post_status,
-      'link' => in_array( $post->post_status, $allowed_permalinks ) ? get_permalink( $post->ID ) : '',
+      'link' => in_array( $post->post_status, $allowed_permalinks )
+        ? Utils::get_permalink( $post, $story_id )
+        : '',
       'timestamp' => get_the_time( 'U', $post ),
       'password' => ! empty( $post->post_password ),
       'list_date' => get_the_date( '', $post ),
       'grid_date' => get_the_time( get_option( 'fictioneer_subitem_date_format', "M j, 'y" ) ?: "M j, 'y", $post ),
-      'icon' => fictioneer_get_icon_field( 'fictioneer_chapter_icon', $chapter_id ),
-      'text_icon' => get_post_meta( $chapter_id, 'fictioneer_chapter_text_icon', true ),
-      'prefix' => get_post_meta( $chapter_id, 'fictioneer_chapter_prefix', true ),
-      'title' => fictioneer_get_safe_title( $chapter_id, 'story-chapter-list' ),
-      'list_title' => get_post_meta( $chapter_id, 'fictioneer_chapter_list_title', true ),
-      'words' => fictioneer_get_word_count( $chapter_id ),
-      'warning' => get_post_meta( $chapter_id, 'fictioneer_chapter_warning', true )
+      'icon' => fictioneer_get_icon_field(
+        'fictioneer_chapter_icon',
+        $chapter_id,
+        Utils::get_meta( $post, 'fictioneer_chapter_icon' )
+      ),
+      'text_icon' => Utils::get_meta( $post, 'fictioneer_chapter_text_icon' ),
+      'prefix' => Utils::get_meta( $post, 'fictioneer_chapter_prefix' ),
+      'title' => $post->post_title ?: get_the_date( '', $post ),
+      'list_title' => Utils::get_meta( $post, 'fictioneer_chapter_list_title' ),
+      'words' => fictioneer_get_word_count( $chapter_id, Utils::get_meta( $post, '_word_count' ) ),
+      'warning' => Utils::get_meta( $post, 'fictioneer_chapter_warning' )
     );
 
     $chapter_groups[ $group_key ]['count'] += 1;

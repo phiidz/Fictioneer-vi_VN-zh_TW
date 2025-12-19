@@ -119,6 +119,183 @@ class Story {
   }
 
   /**
+   * Return array of chapter post-like objects for a story using fast SQL.
+   *
+   * @since 5.33.2
+   *
+   * @param int|string $story_id  ID of the story.
+   * @param array      $args      Optional. Additional query arguments (WP_Query-like).
+   * @param bool       $full      Optional. Whether to include post_content. Default false.
+   *
+   * @return array Array of post-like objects in order (keyed by ID).
+   */
+
+  public static function get_fast_chapter_posts( int|string $story_id, array $args = [], bool $full = false ) : array {
+    global $wpdb;
+
+    $story_id = fictioneer_validate_id( $story_id, 'fcn_story' );
+
+    if ( ! $story_id ) {
+      return [];
+    }
+
+    $chapter_ids = fictioneer_get_story_chapter_ids( $story_id );
+
+    if ( ! $chapter_ids ) {
+      return [];
+    }
+
+    if ( ! empty( $args['post__in'] ) && is_array( $args['post__in'] ) ) {
+      $allowed = array_fill_keys( array_map( 'intval', $args['post__in'] ), true );
+
+      $chapter_ids = array_values(
+        array_filter(
+          array_map( 'intval', $chapter_ids ),
+          static function( $id ) use ( $allowed ) { return isset( $allowed[ $id ] ); }
+        )
+      );
+
+      if ( ! $chapter_ids ) {
+        return [];
+      }
+    } else {
+      $chapter_ids = array_values( array_unique( array_map( 'intval', $chapter_ids ) ) );
+    }
+
+    $statuses = $args['post_status'] ?? ['publish'];
+    $statuses = is_array( $statuses ) ? $statuses : [ (string) $statuses ];
+    $statuses = array_values( array_unique( array_filter( array_map( 'sanitize_key', $statuses ) ) ) );
+
+    if ( ! $statuses ) {
+      return [];
+    }
+
+    $posts_per_page = isset( $args['posts_per_page'] ) ? (int) $args['posts_per_page'] : -1;
+
+    if ( $posts_per_page > 0 && count( $chapter_ids ) > $posts_per_page ) {
+      $chapter_ids = array_slice( $chapter_ids, 0, $posts_per_page );
+    }
+
+    $batch_limit = (int) apply_filters( 'fictioneer_filter_story_data_batch_limit', 800, $story_id );
+    $batch_limit = max( 100, min( 2000, $batch_limit ) );
+
+    $fields = $full
+      ? 'p.ID, p.post_author, p.post_date, p.post_date_gmt, p.post_modified, p.post_modified_gmt,
+        p.post_title, p.post_content, p.post_excerpt, p.post_status, p.post_password, p.post_name,
+        p.post_parent, p.menu_order, p.post_type, p.comment_count'
+      : 'p.ID, p.post_author, p.post_date, p.post_date_gmt, p.post_modified, p.post_modified_gmt,
+        p.post_title, p.post_excerpt, p.post_status, p.post_password, p.post_name,
+        p.post_parent, p.menu_order, p.post_type, p.comment_count';
+
+    $meta_keys = array(
+      'fictioneer_chapter_hidden',
+      'fictioneer_chapter_group',
+      'fictioneer_chapter_icon',
+      'fictioneer_chapter_text_icon',
+      'fictioneer_chapter_prefix',
+      'fictioneer_chapter_list_title',
+      'fictioneer_chapter_warning',
+      '_word_count'
+    );
+
+    $meta_keys = apply_filters( 'fictioneer_filter_fast_chapter_posts_meta_keys', $meta_keys, $story_id, $args, $full );
+
+    $by_id = [];
+
+    foreach ( array_chunk( $chapter_ids, $batch_limit ) as $batch ) {
+      if ( ! $batch ) {
+        continue;
+      }
+
+      $id_placeholders = implode( ',', array_fill( 0, count( $batch ), '%d' ) );
+      $status_placeholders = implode( ',', array_fill( 0, count( $statuses ), '%s' ) );
+      $query_args = array_merge( $batch, $statuses );
+
+      $sql = $wpdb->prepare(
+        "SELECT {$fields}
+        FROM {$wpdb->posts} p
+        WHERE p.ID IN ({$id_placeholders})
+          AND p.post_type = 'fcn_chapter'
+          AND p.post_status IN ({$status_placeholders})",
+        ...$query_args
+      );
+
+      $rows = $wpdb->get_results( $sql ) ?: [];
+
+      if ( ! $rows ) {
+        continue;
+      }
+
+      $batch_map = [];
+
+      foreach ( $rows as $row ) {
+        $row->meta = array_fill_keys( $meta_keys, '' );
+        $id = (int) $row->ID;
+
+        $by_id[ $id ] = $row;
+        $batch_map[ $id ] = $row;
+      }
+
+      self::attach_meta_for_posts( $batch_map, $meta_keys );
+    }
+
+    if ( ! $by_id ) {
+      return [];
+    }
+
+    $ordered = [];
+
+    foreach ( $chapter_ids as $cid ) {
+      if ( isset( $by_id[ $cid ] ) ) {
+        $ordered[ $cid ] = $by_id[ $cid ];
+      }
+    }
+
+    return $ordered;
+  }
+
+  /**
+   * Attach selected post meta to post-like objects as `->meta[key]`.
+   *
+   * @since 5.33.2
+   *
+   * @param array $by_id      Chapter objects keyed by ID.
+   * @param array $meta_keys  Meta keys to load and attach.
+   */
+
+  protected static function attach_meta_for_posts( array $by_id, array $meta_keys ) : void {
+    global $wpdb;
+
+    $ids = array_values( array_map( 'intval', array_keys( $by_id ) ) );
+
+    if ( ! $ids || ! $meta_keys ) {
+      return;
+    }
+
+    $id_placeholders = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+    $meta_key_placeholders = implode( ',', array_fill( 0, count( $meta_keys ), '%s' ) );
+    $query_args = array_merge( $ids, $meta_keys );
+
+    $sql = $wpdb->prepare(
+      "SELECT post_id, meta_key, meta_value
+      FROM {$wpdb->postmeta}
+      WHERE post_id IN ({$id_placeholders})
+        AND meta_key IN ({$meta_key_placeholders})",
+      ...$query_args
+    );
+
+    $rows = $wpdb->get_results( $sql ) ?: [];
+
+    foreach ( $rows as $r ) {
+      $pid = (int) $r->post_id;
+
+      if ( isset( $by_id[ $pid ] ) ) {
+        $by_id[ $pid ]->meta[ $r->meta_key ] = $r->meta_value;
+      }
+    }
+  }
+
+  /**
    * Get cached story data if fresh.
    *
    * @since 5.33.2

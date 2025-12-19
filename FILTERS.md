@@ -1036,19 +1036,29 @@ Filters the array of story IDs co-authored by the specified author ID, as querie
 
 ---
 
-### `apply_filters( 'fictioneer_filter_customizer_{theme_option}', $choices )`
-Filters the choices arrays of select theme options. Combined with the `fictioneer_filter_pre_build_customize_css` filter, you can append own options and the requires styles. Available options: `header_image_style`, `header_style`, `page_style`, `story_cover_position`, `card_frame`, `card_image_style`, `card_style` (actually card footer), `card_shadow`, `content_list_style`, and `footer_style`.
-
-Refer to `/includes/functions/_customizer-settings.php` to see the default choices.
-
----
-
 ### `apply_filters( 'fictioneer_filter_css_snippet_{snippet}', $css, $success )`
 Filters the CSS snippet for certain theme options before they are appended to the customize.css building string.
 
 **$args:**
 * $css (string) - CSS snippet or empty if not found/readable.
 * $success (bool) - Whether the snippet file was successfully read.
+
+---
+
+### `apply_filters( 'fictioneer_filter_custom_permalink', $permalink, $chapter, $leavename )`
+Filters the custom permalinks derived from post-like objects. Only applied for chapter list links, only if the \[Enable optimized chapter post queries\] option is enabled, and only if `$chapter` is not a `WP_Post`. Note that the default `post_type_link` filter is not applied.
+
+**$args:**
+* $permalink (string) - Custom permalink.
+* $chapter (object) - Chapter data object.
+* $leavename (bool) - Optional. Whether to keep the %postname% placeholder. Default false.
+
+---
+
+### `apply_filters( 'fictioneer_filter_customizer_{theme_option}', $choices )`
+Filters the choices arrays of select theme options. Combined with the `fictioneer_filter_pre_build_customize_css` filter, you can append own options and the requires styles. Available options: `header_image_style`, `header_style`, `page_style`, `story_cover_position`, `card_frame`, `card_image_style`, `card_style` (actually card footer), `card_shadow`, `content_list_style`, and `footer_style`.
+
+Refer to `/includes/functions/_customizer-settings.php` to see the default choices.
 
 ---
 
