@@ -527,9 +527,31 @@ function fictioneer_expire_post_password( $required, $post ) {
     $current_date_utc = current_time( 'mysql', true );
 
     if ( strtotime( $current_date_utc ) > strtotime( $password_expiration_date_utc ) ) {
+      global $wpdb;
+
       delete_post_meta( $post->ID, 'fictioneer_post_password_expiration_date' );
       fictioneer_refresh_post_caches( $post->ID );
-      wp_update_post( array( 'ID' => $post->ID, 'post_password' => '' ) );
+
+      $wpdb->update(
+        $wpdb->posts,
+        [ 'post_password' => '' ],
+        [ 'ID' => $post->ID ],
+        [ '%s' ],
+        [ '%d' ]
+      );
+
+      clean_post_cache( $post->ID );
+
+      $post_after = get_post( $post->ID );
+
+      do_action( 'edit_post', $post->ID, $post_after );
+      do_action( "edit_post_{$post_after->post_type}", $post->ID, $post_after );
+      do_action( 'save_post', $post->ID, $post_after, true );
+      do_action( "save_post_{$post_after->post_type}", $post->ID, $post_after, true );
+      do_action( 'wp_insert_post', $post->ID, $post_after, true );
+      do_action( 'post_updated', $post->ID, $post, $post_after );
+
+      wp_after_insert_post( $post_after, true, $post );
 
       do_action( 'fictioneer_expired_post_password', $post, $password_expiration_date_utc );
 
