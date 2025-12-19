@@ -142,11 +142,12 @@ if ( ! function_exists( 'fictioneer_get_last_fiction_update' ) ) {
  * @param int   $story_id  ID of the story.
  * @param array $args      Optional. Additional query arguments.
  * @param bool  $full      Optional. Whether to not reduce the posts. Default false.
+ * @param bool  $slow      Optional. Whether to skip the fast query (if enabled). Default false.
  *
  * @return array Array of chapter posts or empty.
  */
 
-function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = false ) {
+function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = false, $slow = false ) {
   // Filters?
   static $has_filters = null;
 
@@ -184,7 +185,7 @@ function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = fals
   }
 
   // Faster query?
-  if ( get_option( 'fictioneer_enable_fast_chapter_posts' ) ) {
+  if ( ! $slow && get_option( 'fictioneer_enable_fast_chapter_posts' ) ) {
     return \Fictioneer\Story::get_fast_chapter_posts( $story_id, $query_args, $full );
   }
 
