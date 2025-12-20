@@ -1859,3 +1859,112 @@ function fictioneer_robots_txt_exclusions( $output, $public ) {
   return $output;
 }
 add_filter( 'robots_txt', 'fictioneer_robots_txt_exclusions', 10, 2 );
+
+// =============================================================================
+// THEME SAVE HOOKS
+// =============================================================================
+
+/**
+ * Snapshot pre-update post + meta in `$GLOBALS`.
+ *
+ * Note: Stores an associative array with 'post' (array),
+ * 'meta' (array), and 'timestamp' (int).
+ *
+ * @since 5.33.2
+ *
+ * @param int     $post_id  Post ID.
+ * @param WP_Post $post     Post object.
+ * @param bool    $update   Whether this is an existing post being updated.
+ */
+
+function fictioneer_snapshot_post( $post_id, $post_after, $post_before ) {
+  if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
+    return;
+  }
+
+  $old_post = array(
+    'ID' => $post_before->ID,
+    'post_type' => $post_before->post_type,
+    'post_status' => $post_before->post_status,
+    'post_title' => $post_before->post_title,
+    'post_excerpt' => $post_before->post_excerpt,
+    'post_content' => $post_before->post_content,
+    'post_parent' => $post_before->post_parent,
+    'menu_order' => $post_before->menu_order,
+    'post_author' => $post_before->post_author,
+    'post_password' => $post_before->post_password,
+    'post_name' => $post_before->post_name,
+    'post_date_gmt' => $post_before->post_date_gmt,
+    'post_modified_gmt' => $post_before->post_modified_gmt
+  );
+
+  $old_meta = get_post_meta( $post_id );
+
+  $GLOBALS['fictioneer_post_snapshot'][ $post_id ] = [
+    'post' => $old_post,
+    'meta' => is_array( $old_meta ) ? $old_meta : [],
+    'timestamp' => time()
+  ];
+}
+add_action( 'post_updated', 'fictioneer_snapshot_post', 1, 3 );
+
+/**
+ * Fire unified transition hook with old/new post + old/new meta.
+ *
+ * @since 5.33.2
+ *
+ * @param int     $post_id  Post ID.
+ * @param WP_Post $post     Post object.
+ * @param bool    $update   Whether this is an existing post being updated.
+ */
+
+function fictioneer_post_transition( $post_id, $post, $update ) {
+  if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
+    return;
+  }
+
+  if ( ! isset( $GLOBALS['fictioneer_post_snapshot'][ $post_id ] ) ) {
+    return;
+  }
+
+  $snapshot = $GLOBALS['fictioneer_post_snapshot'][ $post_id ];
+
+  $old_post = $snapshot['post'] ?? [];
+  $old_meta = $snapshot['meta'] ?? [];
+
+  $new_post = array(
+    'ID' => $post->ID,
+    'post_type' => $post->post_type,
+    'post_status' => $post->post_status,
+    'post_title' => $post->post_title,
+    'post_excerpt' => $post->post_excerpt,
+    'post_content' => $post->post_content,
+    'post_parent' => $post->post_parent,
+    'menu_order' => $post->menu_order,
+    'post_author' => $post->post_author,
+    'post_password' => $post->post_password,
+    'post_name' => $post->post_name,
+    'post_date_gmt' => $post->post_date_gmt,
+    'post_modified_gmt' => $post->post_modified_gmt
+  );
+
+  $new_meta = get_post_meta( $post_id );
+  $new_meta = is_array( $new_meta ) ? $new_meta : [];
+
+  /**
+   * Fires after a post transitions from old to new state.
+   *
+   * @since 5.33.2
+   *
+   * @param int     $post_id   Post ID.
+   * @param array   $old_post  Old post fields snapshot.
+   * @param array   $new_post  New post fields.
+   * @param array   $old_meta  Old meta fields snapshot.
+   * @param array   $new_meta  New meta fields.
+   * @param WP_Post $post      Post object.
+   * @param bool    $update    Whether this was an update.
+   */
+
+  do_action( 'fictioneer_post_transition', $post_id, $old_post, $new_post, $old_meta, $new_meta, $post, $update );
+}
+add_action( 'save_post', 'fictioneer_post_transition', 99, 3 );

@@ -88,19 +88,19 @@ Fires within the Fictioneer user profile section in the WordPress `wp-admin/prof
 * $profile_user (WP_User) – The owner of the currently edited profile.
 
 **Hooked Actions:**
-* `fictioneer_admin_profile_fields_fingerprint( $profile_user )` – User fingerprint field. Priority 5.
-* `fictioneer_admin_profile_fields_flags( $profile_user )` – User flags. Priority 6.
-* `fictioneer_admin_editor_settings( $profile_user )` – User flags. Priority 6.
-* `fictioneer_admin_profile_fields_oauth( $profile_user )` – User OAuth connections. Priority 7.
-* `fictioneer_admin_profile_fields_skins( $profile_user )` – Local custom CSS skins. Priority 7.
-* `fictioneer_admin_profile_fields_data_nodes( $profile_user )` – User data nodes. Priority 8.
-* `fictioneer_admin_profile_post_unlocks( $profile_user )` - Unlock password-protected posts. Priority 9.
-* `fictioneer_admin_profile_patreon( $profile_user )` – User Patreon membership data (if any). Priority 10.
-* `fictioneer_admin_profile_moderation( $profile_user )` – Moderation flags and message. Priority 10.
-* `fictioneer_admin_profile_author( $profile_user )` – Author page select, support message, and support links. Priority 20.
-* `fictioneer_admin_profile_oauth( $profile_user )` – OAuth 2.0 account binding IDs. Priority 30.
-* `fictioneer_admin_profile_badge( $profile_user )` – Override badge. Priority 40.
-* `fictioneer_admin_profile_external_avatar( $profile_user )` – External avatar URL. Priority 50.
+* `fictioneer_admin_profile_fields_fingerprint()` – User fingerprint field. Priority 5.
+* `fictioneer_admin_profile_fields_flags()` – User flags. Priority 6.
+* `fictioneer_admin_editor_settings()` – User flags. Priority 6.
+* `fictioneer_admin_profile_fields_oauth()` – User OAuth connections. Priority 7.
+* `fictioneer_admin_profile_fields_skins()` – Local custom CSS skins. Priority 7.
+* `fictioneer_admin_profile_fields_data_nodes()` – User data nodes. Priority 8.
+* `fictioneer_admin_profile_post_unlocks()` - Unlock password-protected posts. Priority 9.
+* `fictioneer_admin_profile_patreon()` – User Patreon membership data (if any). Priority 10.
+* `fictioneer_admin_profile_moderation()` – Moderation flags and message. Priority 10.
+* `fictioneer_admin_profile_author()` – Author page select, support message, and support links. Priority 20.
+* `fictioneer_admin_profile_oauth()` – OAuth 2.0 account binding IDs. Priority 30.
+* `fictioneer_admin_profile_badge()` – Override badge. Priority 40.
+* `fictioneer_admin_profile_external_avatar()` – External avatar URL. Priority 50.
 
 ---
 
@@ -989,6 +989,23 @@ Fires inside the `.post__footer-right` container within the article footer in th
 
 **Hooked Actions:**
 * `fictioneer_post_subscribe_button( $post_id, $args )` – Subscription popup menu. Priority 10.
+
+---
+
+### `do_action( 'fictioneer_post_transition', $post_id, $old_post, $new_post, $old_meta, $new_meta, $post, $update )`
+Fires after a post update has fully completed (priority 99 in the [save_post](https://developer.wordpress.org/reference/hooks/save_post/) hook), providing a unified view of the pre-update and post-update state of both post fields and post meta.
+
+**Parameters:**
+- $post_id (int) – ID of the updated post.
+- $old_post (array) – Post fields before the update.
+- $new_post (array) – Post fields after the update.
+- $old_meta (array) – Post meta fields before the update.
+- $new_meta (array) – Post meta fields after the update.
+- $post`(WP_Post) – Current post object.
+- $update (bool) – Whether this was an update of an existing post (unreliable).
+
+**Hooked Actions:**
+* `fictioneer_watch_story_and_chapter_transitions()` – Perform actions when a story or chapter is updated.
 
 ---
 
