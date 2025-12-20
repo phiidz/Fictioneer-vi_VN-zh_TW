@@ -881,6 +881,23 @@ if ( ! function_exists( 'fictioneer_get_user_by_id_or_email' ) ) {
   }
 }
 
+/**
+ * [Deprecated] Unset the first occurrence of a value from an array.
+ *
+ * @since 5.7.5
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils::array_unset_by_value() instead.
+ *
+ * @param mixed $value   The value to look for.
+ * @param array $array   The array to be modified.
+ * @param bool  $strict  Whether to use strict comparison. Default false.
+ *
+ * @return array The modified array.
+ */
+
+function fictioneer_unset_by_value( $value, $array, $strict = false ) {
+  Utils::array_unset_by_value( $value, $array, $strict );
+}
+
 // =============================================================================
 // GET STORY DATA
 // =============================================================================

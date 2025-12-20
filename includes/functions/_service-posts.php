@@ -1,5 +1,7 @@
 <?php
 
+use Fictioneer\Utils;
+
 // =============================================================================
 // LOG POST UPDATES HELPER
 // =============================================================================
@@ -414,7 +416,7 @@ function fictioneer_remove_chapter_from_story( $chapter_id ) {
   }
 
   // Update story
-  $chapters = fictioneer_unset_by_value( $chapter_id, $chapters );
+  $chapters = Utils::array_unset_by_value( $chapter_id, $chapters );
 
   update_post_meta( $story_id, 'fictioneer_story_chapters', $chapters );
   update_post_meta( $story_id, 'fictioneer_chapters_modified', current_time( 'mysql', true ) );

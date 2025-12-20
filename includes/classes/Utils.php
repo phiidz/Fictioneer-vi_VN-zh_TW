@@ -762,4 +762,31 @@ class Utils {
 
     return false;
   }
+
+  /**
+   * Unset the first occurrence of a value from an array.
+   *
+   * @since 5.7.5
+   * @since 5.33.2 - Refactored and moved into Utils class.
+   *
+   * @param mixed $value   The value to look for.
+   * @param array $array   The array to be modified.
+   * @param bool  $strict  Whether to use strict comparison. Default false.
+   *
+   * @return array The modified array.
+   */
+
+  public static function array_unset_by_value( mixed $value, array $array, bool $strict = false ) : array {
+    if ( $array === [] ) {
+      return $array;
+    }
+
+    $key = array_search( $value, $array, $strict );
+
+    if ( $key !== false ) {
+      unset( $array[ $key ] );
+    }
+
+    return $array;
+  }
 }
