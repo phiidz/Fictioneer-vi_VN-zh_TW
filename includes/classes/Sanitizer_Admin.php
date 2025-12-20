@@ -2,13 +2,9 @@
 
 namespace Fictioneer;
 
-use Fictioneer\Traits\Singleton_Trait;
-
 defined( 'ABSPATH' ) OR exit;
 
 class Sanitizer_Admin {
-  use Singleton_Trait;
-
   /**
    * Sanitize a selected option.
    *

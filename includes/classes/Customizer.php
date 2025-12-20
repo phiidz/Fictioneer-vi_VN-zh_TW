@@ -2,13 +2,9 @@
 
 namespace Fictioneer;
 
-use Fictioneer\Traits\Singleton_Trait;
-
 defined( 'ABSPATH' ) OR exit;
 
 class Customizer {
-  use Singleton_Trait;
-
   /**
    * Return the CSS loaded from a snippet file.
    *

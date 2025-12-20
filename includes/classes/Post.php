@@ -5,7 +5,6 @@ namespace Fictioneer;
 defined( 'ABSPATH' ) OR exit;
 
 class Post {
-
   /**
    * Get permalink via get_permalink() or custom build for post-like data.
    *

@@ -2,13 +2,9 @@
 
 namespace Fictioneer;
 
-use Fictioneer\Traits\Singleton_Trait;
-
 defined( 'ABSPATH' ) OR exit;
 
 class Utils_Admin {
-  use Singleton_Trait;
-
   /**
    * Return array of adjectives for randomized username generation.
    *
