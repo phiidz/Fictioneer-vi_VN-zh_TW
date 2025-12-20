@@ -487,7 +487,7 @@ if ( ! function_exists( 'fictioneer_hsl_font_code' ) ) {
 }
 
 /**
- * [Deprecated] Helper that returns a font family value
+ * [Deprecated] Helper that returns a font family value.
  *
  * @since 5.10.0
  * @deprecated 5.33.2 - Use \Fictioneer\Fonts::get_font_family() instead.
@@ -941,10 +941,6 @@ if ( ! function_exists( 'fictioneer_get_fonts' ) ) {
     return Fonts::get_fonts();
   }
 }
-
-// =============================================================================
-// GET STORY DATA
-// =============================================================================
 
 if ( ! function_exists( 'fictioneer_get_story_data' ) ) {
   /**
