@@ -534,7 +534,7 @@ function fictioneer_get_metabox_select( $post, $meta_key, $options, $args = [] )
 }
 
 /**
- * Returns HTML for a textarea meta field
+ * Return HTML for a textarea meta field.
  *
  * @since 5.7.4
  *
@@ -589,7 +589,7 @@ function fictioneer_get_metabox_textarea( $post, $meta_key, $args = [] ) {
 }
 
 /**
- * Returns HTML for a image meta field
+ * Return HTML for a image meta field.
  *
  * @since 5.7.4
  *
@@ -648,7 +648,7 @@ function fictioneer_get_metabox_image( $post, $meta_key, $args = [] ) {
 }
 
 /**
- * Returns HTML for an eBook meta field
+ * Return HTML for an eBook meta field.
  *
  * @since 5.8.0
  *
@@ -747,7 +747,7 @@ function fictioneer_get_metabox_ebook( $post, $meta_key, $args = [] ) {
 }
 
 /**
- * Returns HTML for a token array meta field
+ * Return HTML for a token array meta field.
  *
  * @since 5.7.4
  *
@@ -844,7 +844,7 @@ function fictioneer_get_metabox_tokens( $post, $meta_key, $options, $args = [] )
 }
 
 /**
- * Returns HTML for an icon class meta field
+ * Return HTML for an icon class meta field.
  *
  * @since 5.7.4
  *
@@ -908,7 +908,7 @@ function fictioneer_get_metabox_icons( $post, $meta_key, $args = [] ) {
 }
 
 /**
- * Returns HTML for an editor meta field
+ * Return HTML for an editor meta field.
  *
  * Note: As of WordPress 6.3.1, the TinyMCE editor does not properly load in
  * Firefox if the visual tab is preselected. It does work if you switch from
@@ -978,7 +978,7 @@ function fictioneer_get_metabox_editor( $post, $meta_key, $args = [] ) {
 }
 
 /**
- * Returns HTML for a relationship meta field
+ * Return HTML for a relationship meta field.
  *
  * @since 5.8.0
  *
@@ -4148,65 +4148,8 @@ function fictioneer_save_post_metaboxes( $post_id ) {
   // --- Save --------------------------------------------------------------------
 
   fictioneer_bulk_update_post_meta( $post_id, $fields );
-
-  // --- After update ------------------------------------------------------------
-
-  // Update relationship registry
-  if ( isset( $_POST['fictioneer_post_featured'] ) ) {
-    fictioneer_update_post_relationship_registry( $post_id );
-  }
 }
 add_action( 'save_post', 'fictioneer_save_post_metaboxes' );
-
-/**
- * Update relationship registry for 'post' post types
- *
- * @since 5.0.0
- *
- * @param int $post_id  The post ID.
- */
-
-function fictioneer_update_post_relationship_registry( $post_id ) {
-  // Setup
-  $registry = fictioneer_get_relationship_registry();
-  $featured = get_post_meta( $post_id, 'fictioneer_post_featured', true );
-
-  // Update relationships
-  $registry[ $post_id ] = [];
-
-  if ( is_array( $featured ) && ! empty( $featured ) ) {
-    foreach ( $featured as $featured_id ) {
-      $registry[ $post_id ][ $featured_id ] = 'is_featured';
-
-      if ( ! isset( $registry[ $featured_id ] ) ) {
-        $registry[ $featured_id ] = [];
-      }
-
-      $registry[ $featured_id ][ $post_id ] = 'featured_by';
-    }
-  } else {
-    $featured = [];
-  }
-
-  // Check for and remove outdated direct references
-  foreach ( $registry as $key => $entry ) {
-    // Skip if...
-    if ( absint( $key ) < 1 || ! is_array( $entry ) || in_array( $key, $featured ) ) {
-      continue;
-    }
-
-    // Unset if in array
-    unset( $registry[ $key ][ $post_id ] );
-
-    // Remove node if empty
-    if ( empty( $registry[ $key ] ) ) {
-      unset( $registry[ $key ] );
-    }
-  }
-
-  // Update database
-  fictioneer_save_relationship_registry( $registry );
-}
 
 // =============================================================================
 // COLLECTION META FIELDS

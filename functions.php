@@ -340,11 +340,6 @@ if ( ! defined( 'FICTIONEER_CACHE_PURGE_ASSIST' ) ) {
   define( 'FICTIONEER_CACHE_PURGE_ASSIST', true );
 }
 
-// Boolean: Theme relationship cache purging on post update
-if ( ! defined( 'FICTIONEER_RELATIONSHIP_PURGE_ASSIST' ) ) {
-  define( 'FICTIONEER_RELATIONSHIP_PURGE_ASSIST', true );
-}
-
 // Boolean: Menu items for search
 if ( ! defined( 'FICTIONEER_SHOW_SEARCH_IN_MENUS' ) ) {
   define( 'FICTIONEER_SHOW_SEARCH_IN_MENUS', true );

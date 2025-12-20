@@ -1560,7 +1560,6 @@ define( 'CONSTANT_NAME', value );
 | FICTIONEER_ALERT_EXPIRATION | integer | How long alerts are kept in the database in seconds. Default `7776000` (90 days).
 | FICTIONEER_SITEMAP_ENTRIES_PER_PAGE | integer | How many entries per page the sitemap shows. Default `2000`.
 | FICTIONEER_CACHE_PURGE_ASSIST | boolean | Whether to call the cache purge assist function on post updates. Default `true`.
-| FICTIONEER_RELATIONSHIP_PURGE_ASSIST | boolean | Whether to purge related post caches. Default `true`.
 | FICTIONEER_SHOW_SEARCH_IN_MENUS | boolean | Whether to show search page links in menus. Default `true`.
 | FICTIONEER_ATTACHMENT_PAGES | boolean | Whether to enable pages for attachments (no theme templates). Default `false`.
 | FICTIONEER_SHOW_OAUTH_HASHES | boolean | Whether to show OAuth ID hashes in user profiles (admin only). Default `false`.

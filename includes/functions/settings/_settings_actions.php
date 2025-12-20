@@ -145,7 +145,6 @@ function fictioneer_admin_settings_notices() {
       'fictioneer-added-moderator-role' => __( 'Moderator role has been added.', 'fictioneer' ),
       'fictioneer-not-added-moderator-role' => __( 'Moderator role could not be added or already exists.', 'fictioneer' ),
       'fictioneer-removed-moderator-role' => __( 'Moderator role has been removed.', 'fictioneer' ),
-      'fictioneer-reset-post-relationship-registry' => __( 'Post relationship registry reset.', 'fictioneer' ),
       'fictioneer-updated-role-caps' => __( 'Role capabilities have been updated.', 'fictioneer' ),
       'fictioneer-updated-editor-caps' => __( 'Editor capabilities have been updated.', 'fictioneer' ),
       'fictioneer-updated-moderator-caps' => __( 'Moderator capabilities have been updated.', 'fictioneer' ),
@@ -619,26 +618,7 @@ add_action( 'admin_post_fictioneer_remove_unused_tags', 'fictioneer_tools_remove
 // REPAIR TOOLS ACTIONS
 // =============================================================================
 
-/**
- * Reset post relationship registry
- *
- * @since 5.2.5
- */
-
-function fictioneer_tools_reset_post_relationship_registry() {
-  // Verify request
-  fictioneer_verify_admin_action( 'fictioneer_reset_post_relationship_registry' );
-
-  // Relay
-  fictioneer_save_relationship_registry( [] );
-
-  // Log
-  fictioneer_log( __( 'Post relationship registry reset.', 'fictioneer' ) );
-
-  // Finish
-  fictioneer_finish_admin_action( 'fictioneer-reset-post-relationship-registry' );
-}
-add_action( 'admin_post_fictioneer_reset_post_relationship_registry', 'fictioneer_tools_reset_post_relationship_registry' );
+// None (anymore)
 
 // =============================================================================
 // UPDATE ROLE
