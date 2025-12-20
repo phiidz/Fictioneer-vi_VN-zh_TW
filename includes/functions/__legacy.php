@@ -5,6 +5,7 @@ use Fictioneer\Sanitizer_Admin;
 use Fictioneer\Utils;
 use Fictioneer\Utils_Admin;
 use Fictioneer\Customizer;
+use Fictioneer\Fonts;
 
 // =============================================================================
 // SANITIZER DELEGATES
@@ -489,7 +490,7 @@ if ( ! function_exists( 'fictioneer_hsl_font_code' ) ) {
  * [Deprecated] Helper that returns a font family value
  *
  * @since 5.10.0
- * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_font_family() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Fonts::get_font_family() instead.
  *
  * @param string $option        Name of the theme mod.
  * @param string $font_default  Fallback font.
@@ -499,7 +500,7 @@ if ( ! function_exists( 'fictioneer_hsl_font_code' ) ) {
  */
 
 function fictioneer_get_custom_font( $option, $font_default, $mod_default ) {
-  return Utils::get_font_family( $option, $font_default, $mod_default );
+  return Fonts::get_font_family( $option, $font_default, $mod_default );
 }
 
 /**
@@ -589,18 +590,18 @@ if ( ! function_exists( 'fictioneer_get_fading_gradient' ) ) {
  * [Deprecated] Build bundled font stylesheet.
  *
  * @since 5.10.0
- * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::bundle_fonts() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Fonts::bundle_fonts() instead.
  */
 
 function fictioneer_build_bundled_fonts() : void {
-  Utils_Admin::bundle_fonts();
+  Fonts::bundle_fonts();
 }
 
 /**
  * [Deprecated] Return fonts data from a Google Fonts link.
  *
  * @since 5.10.0
- * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::extract_font_from_google_link() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Fonts::extract_font_from_google_link() instead.
  *
  * @param string $link  Google Fonts link.
  *
@@ -609,7 +610,7 @@ function fictioneer_build_bundled_fonts() : void {
  */
 
 function fictioneer_extract_font_from_google_link( $link ) {
-  return Utils_Admin::extract_font_from_google_link( $link );
+  return Fonts::extract_font_from_google_link( $link );
 }
 
 /**
@@ -619,7 +620,7 @@ function fictioneer_extract_font_from_google_link( $link ) {
  * be added to the result array and therefore removed from the site.
  *
  * @since 5.10.0
- * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::get_font_data() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Fonts::get_font_data() instead.
  *
  * @return array Array of font data. Keys: skip, chapter, version, key, name,
  *               family, type, styles, weights, charsets, formats, about, note,
@@ -627,7 +628,7 @@ function fictioneer_extract_font_from_google_link( $link ) {
  */
 
 function fictioneer_get_font_data() : array {
-  return Utils::get_font_data();
+  return Fonts::get_font_data();
 }
 
 // =============================================================================
@@ -819,7 +820,7 @@ function fictioneer_get_global_page() {
  * [Deprecated] Return a CSS font-family value, quoted if required.
  *
  * @since 5.10.0
- * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_font_family_value() instead.
+ * @deprecated 5.33.2 - Use \Fictioneer\Fonts::get_font_family_value() instead.
  *
  * @param string $font_value  The font family value.
  * @param string $quote       Optional. The wrapping character. Default '"'.
@@ -828,7 +829,7 @@ function fictioneer_get_global_page() {
  */
 
 function fictioneer_font_family_value( $font_value, $quote = '"' ) {
-  return Utils::get_font_family_value( $font_value, $quote );
+  return Fonts::get_font_family_value( $font_value, $quote );
 }
 
 if ( ! function_exists( 'fictioneer_url_exists' ) ) {
@@ -931,13 +932,13 @@ if ( ! function_exists( 'fictioneer_get_fonts' ) ) {
    * @since 5.1.1
    * @since 5.10.0 - Refactor for font manager.
    * @since 5.12.5 - Add theme mod for chapter body font.
-   * @deprecated 5.33.2 - Use \Fictioneer\Utils::get_fonts() instead.
+   * @deprecated 5.33.2 - Use \Fictioneer\Fonts::get_fonts() instead.
    *
    * @return array Font items (css, name, and alt).
    */
 
   function fictioneer_get_fonts() {
-    return Utils::get_fonts();
+    return Fonts::get_fonts();
   }
 }
 
