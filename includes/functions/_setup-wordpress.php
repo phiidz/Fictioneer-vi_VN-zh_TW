@@ -7,7 +7,7 @@ use Fictioneer\Sanitizer;
 // =============================================================================
 
 /**
- * Toggle maintenance mode from settings with message
+ * Toggle maintenance mode from settings with message.
  *
  * @since 5.0.0
  * @since 5.12.0 - Exclude Customizer preview.
@@ -30,7 +30,7 @@ add_action( 'get_header', 'fictioneer_maintenance_mode' );
 // =============================================================================
 
 /**
- * Remove clutter and don't provide information to potential attackers
+ * Remove clutter and don't provide information to potential attackers.
  */
 
 if ( get_option( 'fictioneer_remove_head_clutter' ) ) {
@@ -48,7 +48,7 @@ if ( ! get_option( 'fictioneer_enable_xmlrpc' ) ) {
 // =============================================================================
 
 /**
- * Remove default sitemaps if custom sitemaps are enabled
+ * Remove default sitemaps if custom sitemaps are enabled.
  */
 
 if ( get_option( 'fictioneer_enable_sitemap' ) && ! fictioneer_seo_plugin_active() ) {
@@ -56,11 +56,11 @@ if ( get_option( 'fictioneer_enable_sitemap' ) && ! fictioneer_seo_plugin_active
 }
 
 // =============================================================================
-// CUSTOMIZE EXCERPTS
+// EXCERPTS
 // =============================================================================
 
 /**
- * Change excerpt length
+ * Change excerpt length.
  *
  * @since 4.0.0
  *
@@ -73,7 +73,7 @@ function fictioneer_custom_excerpt_length( $length ) {
 add_filter( 'excerpt_length', 'fictioneer_custom_excerpt_length' );
 
 /**
- * Replace excerpt ellipsis
+ * Replace excerpt ellipsis.
  *
  * @since 5.2.5
  *
@@ -86,11 +86,11 @@ function fictioneer_excerpt_ellipsis() {
 add_filter( 'excerpt_more', 'fictioneer_excerpt_ellipsis' );
 
 // =============================================================================
-// CUSTOMIZE ADMIN BAR
+// ADMIN BAR
 // =============================================================================
 
 /**
- * Reduce admin bar based on setting
+ * Reduce admin bar items.
  *
  * @since 5.0.0
  */
@@ -114,11 +114,11 @@ if ( get_option( 'fictioneer_reduce_admin_bar' ) ) {
 }
 
 // =============================================================================
-// LOGOUT REDIRECT
+// LOGOUT
 // =============================================================================
 
 /**
- * Change redirect after logout
+ * Change redirect after logout.
  *
  * @since 4.0.0
  *
@@ -156,12 +156,8 @@ if ( get_option( 'fictioneer_logout_redirects_home' ) ) {
   add_filter( 'logout_url', 'fictioneer_logout_redirect', 10, 2 );
 }
 
-// =============================================================================
-// CUSTOM LOGOUT
-// =============================================================================
-
 /**
- * Add route to logout script
+ * Add route to logout script.
  *
  * @since 5.0.0
  */
@@ -175,7 +171,7 @@ if ( FICTIONEER_LOGOUT_ENDPOINT && ! get_option( 'fictioneer_disable_theme_logou
 }
 
 /**
- * Logout without _wpnonce and no login screen
+ * Logout without _wpnonce and no login screen.
  *
  * @since 5.0.0
  */
@@ -220,7 +216,7 @@ if ( FICTIONEER_LOGOUT_ENDPOINT && ! get_option( 'fictioneer_disable_theme_logou
 
 if ( ! function_exists( 'fictioneer_get_logout_url' ) ) {
   /**
-   * Fictioneer logout URL with optional redirect
+   * Fictioneer logout URL with optional redirect.
    *
    * @since 5.0.0
    *
@@ -249,12 +245,8 @@ if ( ! function_exists( 'fictioneer_get_logout_url' ) ) {
   }
 }
 
-// =============================================================================
-// AFTER LOGOUT CLEANUP
-// =============================================================================
-
 /**
- * Make sure local storage is cleared on logout
+ * Make sure local storage is cleared on logout.
  *
  * @since 5.0.0
  * @since 5.26.1 - Use wp_print_inline_script_tag().
@@ -280,7 +272,7 @@ add_action( 'login_form', 'fictioneer_after_logout_cleanup' );
 // =============================================================================
 
 /**
- * Show custom post types in tag and category archives
+ * Show custom post types in tag and category archives.
  *
  * @since 4.0.0
  * @link https://wordpress.stackexchange.com/a/28147/223620
@@ -312,7 +304,7 @@ add_action( 'pre_get_posts', 'fictioneer_extend_taxonomy_pages' );
 // =============================================================================
 
 /**
- * Re-queries the term counts for the tax cloud
+ * Re-queries the term counts for the tax cloud.
  *
  * @since 5.26.1
  * @link https://developer.wordpress.org/reference/hooks/get_terms/
@@ -373,11 +365,11 @@ if ( get_option( 'fictioneer_exclude_non_stories_from_cloud_counts' ) ) {
 }
 
 // =============================================================================
-// MODIFY RSS FEEDS
+// RSS FEEDS
 // =============================================================================
 
 /**
- * Get template for story feed (chapters)
+ * Get template for story feed (chapters).
  *
  * @since 4.0.0
  */
@@ -387,7 +379,7 @@ function fictioneer_story_rss_template() {
 }
 
 /**
- * Add feed for story (chapters)
+ * Add feed for story (chapters).
  *
  * @since 4.0.0
  */
@@ -397,7 +389,7 @@ function fictioneer_story_rss() {
 }
 
 /**
- * Add custom main feed
+ * Add custom main feed.
  *
  * @since 4.0.0
  */
@@ -425,7 +417,7 @@ if ( get_option( 'fictioneer_enable_theme_rss' ) ) {
 }
 
 /**
- * Ensures RSS excerpts are valid in XML
+ * Ensure RSS excerpts are valid in XML.
  *
  * @since 5.21.1
  *
@@ -443,7 +435,7 @@ function fictioneer_filter_rss_excerpt( $excerpt ) {
 add_filter( 'the_excerpt_rss', 'fictioneer_filter_rss_excerpt' );
 
 /**
- * Removes protected posts from RSS feeds.
+ * Remove protected posts from RSS feeds.
  *
  * @since 5.27.3
  *
@@ -463,12 +455,8 @@ if ( get_option( 'fictioneer_exclude_protected_from_rss' ) ) {
   add_filter( 'fictioneer_filter_rss_story_query_args', 'fictioneer_exclude_protected_from_rss' );
 }
 
-// =============================================================================
-// OUTPUT RSS
-// =============================================================================
-
 /**
- * Output RSS feed
+ * Render RSS feed link.
  *
  * @since 5.0.0
  *
@@ -532,7 +520,7 @@ if ( get_option( 'fictioneer_enable_theme_rss' ) ) {
 // =============================================================================
 
 /**
- * Remove the "Protected" prefix from titles
+ * Remove the "Protected" prefix from titles.
  *
  * @since 3.0
  */
@@ -547,7 +535,7 @@ add_filter( 'protected_title_format', 'fictioneer_remove_protected_text' );
 // =============================================================================
 
 /**
- * Changes password form and fixes redirect error
+ * Change password form and fixes redirect error.
  *
  * @since 4.0.0
  * @license CC BY-SA 4.0
@@ -582,7 +570,7 @@ function fictioneer_password_form() {
 add_filter( 'the_password_form', 'fictioneer_password_form' );
 
 /**
- * Append Patreon unlock info after password form
+ * Append Patreon unlock info after password form.
  *
  * @since 5.15.0
  *
