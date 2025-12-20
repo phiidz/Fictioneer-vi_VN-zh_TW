@@ -542,16 +542,20 @@ function fictioneer_expire_post_password( $required, $post ) {
 
       clean_post_cache( $post->ID );
 
+      $post_before = $post;
       $post_after = get_post( $post->ID );
 
       do_action( 'edit_post', $post->ID, $post_after );
       do_action( "edit_post_{$post_after->post_type}", $post->ID, $post_after );
-      do_action( 'save_post', $post->ID, $post_after, true );
-      do_action( "save_post_{$post_after->post_type}", $post->ID, $post_after, true );
-      do_action( 'wp_insert_post', $post->ID, $post_after, true );
-      do_action( 'post_updated', $post->ID, $post, $post_after );
 
-      wp_after_insert_post( $post_after, true, $post );
+      do_action( "save_post_{$post_after->post_type}", $post->ID, $post_after, true );
+      do_action( 'save_post', $post->ID, $post_after, true );
+
+      do_action( 'wp_insert_post', $post->ID, $post_after, true );
+
+      do_action( 'post_updated', $post->ID, $post_after, $post_before );
+
+      wp_after_insert_post( $post_after, true, $post_before );
 
       do_action( 'fictioneer_expired_post_password', $post, $password_expiration_date_utc );
 
