@@ -204,7 +204,7 @@ function fictioneer_dynamic_editor_css() {
     $css .= ".components-button.is-secondary{background: rgb(255 255 255 / 90%);}.components-button.is-secondary:hover:not(:disabled,[aria-disabled=true],.is-pressed){background: color-mix(in srgb,var(--wp-components-color-accent,var(--wp-admin-theme-color,#3858e9)) 4%, rgb(255 255 255 / 95%))}";
   }
 
-  wp_add_inline_style( 'wp-edit-blocks', fictioneer_minify_css( $css ) );
+  wp_add_inline_style( 'wp-edit-blocks', Utils::minify_css( $css ) );
 };
 
 if ( ! get_option( 'fictioneer_disable_dynamic_editor_styles' ) ) {

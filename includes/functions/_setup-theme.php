@@ -2168,7 +2168,7 @@ add_action( 'admin_bar_menu', 'fictioneer_adminbar_add_theme_settings_link', 999
 // =============================================================================
 
 /**
- * Register Elementor locations
+ * Register Elementor locations.
  *
  * @since 5.20.0
  *
@@ -2226,7 +2226,7 @@ function fictioneer_elementor_register_locations( $elementor_theme_manager ) {
 }
 
 /**
- * Adds override frontend styles for Elementor
+ * Add override frontend styles for Elementor.
  *
  * @since 5.20.0
  */
@@ -2248,7 +2248,7 @@ function fictioneer_elementor_override_styles() {
   }";
 
   // Output
-  wp_add_inline_style( 'fictioneer-elementor-override', fictioneer_minify_css( $css ) );
+  wp_add_inline_style( 'fictioneer-elementor-override', Utils::minify_css( $css ) );
 }
 
 add_action(
@@ -2262,7 +2262,7 @@ add_action(
 );
 
 /**
- * Adds override editor styles for Elementor
+ * Add override editor styles for Elementor.
  *
  * @since 5.20.0
  */
@@ -2335,12 +2335,12 @@ function fictioneer_override_elementor_editor_styles() {
   ';
 
   // Output
-  wp_add_inline_style( 'fictioneer-elementor-editor-override', fictioneer_minify_css( $css ) );
+  wp_add_inline_style( 'fictioneer-elementor-editor-override', Utils::minify_css( $css ) );
 }
 add_action( 'elementor/editor/after_enqueue_styles', 'fictioneer_override_elementor_editor_styles', 9999 );
 
 /**
- * Adds Fictioneer font group
+ * Add Fictioneer font group.
  *
  * @since 5.20.0
  *
@@ -2359,7 +2359,7 @@ function fictioneer_elementor_add_font_group( $groups ) {
 add_filter( 'elementor/fonts/groups', 'fictioneer_elementor_add_font_group' );
 
 /**
- * Adds Fictioneer fonts to font group
+ * Add Fictioneer fonts to font group.
  *
  * @since 5.20.0
  *
@@ -2386,7 +2386,7 @@ add_filter( 'elementor/fonts/additional_fonts', 'fictioneer_elementor_add_additi
 // =============================================================================
 
 /**
- * Changes the navigation icons of the calendar block
+ * Change the navigation icons of the calendar block.
  *
  * @since 5.22.0
  *

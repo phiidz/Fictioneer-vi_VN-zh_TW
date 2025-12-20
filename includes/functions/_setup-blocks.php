@@ -29,7 +29,7 @@ function fictioneer_add_editor_css( $settings ) {
 
   // Add to settings and continue filter
   $settings['styles'][] = array(
-    'css' => fictioneer_minify_css( $css )
+    'css' => Utils::minify_css( $css )
   );
 
   return $settings;

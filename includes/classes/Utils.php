@@ -586,7 +586,11 @@ class Utils {
    * @return string Minified CSS.
    */
 
-  public static function minify_css( string $css = '' ) : string {
+  public static function minify_css( string $css ) : string {
+    if ( ! $css || $css === '' ) {
+      return '';
+    }
+
     $comments = <<<'EOS'
     (?sx)
         # don't change anything inside of quotes

@@ -2758,7 +2758,7 @@ function fictioneer_get_splide_loading_style( $json_string, $uid ) {
   $style = apply_filters( 'fictioneer_filter_splide_loading_style', $style, $uid, $breakpoints, $json_string );
 
   // Minify
-  $style = fictioneer_minify_css( $style );
+  $style = Utils::minify_css( $style );
 
   // Return style
   return "<style class='splide-placeholder-styles' data-jetpack-boost='ignore' data-no-defer='1' data-no-optimize='1' data-no-minify='1'>{$style}</style>";

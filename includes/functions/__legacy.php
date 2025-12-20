@@ -898,6 +898,29 @@ function fictioneer_unset_by_value( $value, $array, $strict = false ) {
   Utils::array_unset_by_value( $value, $array, $strict );
 }
 
+if ( ! function_exists( 'fictioneer_minify_css' ) ) {
+  /**
+   * [Deprecated] Minify CSS.
+   *
+   * @license CC BY-SA 4.0
+   * @author Qtax https://stackoverflow.com/users/107152/qtax
+   * @author lots0logs https://stackoverflow.com/users/2639936/lots0logs
+   *
+   * @since 4.7.0
+   * @deprecated 5.33.2 - Use \Fictioneer\Utils::minify_css() instead.
+   * @link https://stackoverflow.com/a/15195752/17140970
+   * @link https://stackoverflow.com/a/44350195/17140970
+   *
+   * @param string $string  The to be minified CSS string.
+   *
+   * @return string The minified CSS string.
+   */
+
+  function fictioneer_minify_css( $string ) {
+    return Utils::minify_css( $string );
+  }
+}
+
 // =============================================================================
 // GET STORY DATA
 // =============================================================================
