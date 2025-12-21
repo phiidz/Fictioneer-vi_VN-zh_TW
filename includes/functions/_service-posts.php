@@ -37,7 +37,7 @@ use Fictioneer\Utils_Admin;
   );
 
   // Log
-  fictioneer_log( $message );
+  \Fictioneer\Log::add( $message );
 }
 
 // =============================================================================

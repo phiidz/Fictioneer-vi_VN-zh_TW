@@ -1039,3 +1039,43 @@ if ( ! function_exists( 'fictioneer_count_words' ) ) {
     return Utils_Admin::count_words( $post_id, $content );
   }
 }
+
+/**
+ * [Deprecated] Log a message to the theme log file.
+ *
+ * @since 5.0.0
+ * @deprecated 5.33.2 - Use \Fictioneer\Log::add() instead.
+ *
+ * @param string       $message  What has been updated
+ * @param WP_User|null $user     The user who did it. Defaults to current user.
+ */
+
+function fictioneer_log( $message, $current_user = null ) {
+  \Fictioneer\Log::add( $message, $current_user );
+}
+
+/**
+ * [Deprecated] Retrieve the log entries and returns an HTML representation.
+ *
+ * @since 5.0.0
+ * @deprecated 5.33.2 - Use \Fictioneer\Log::get() instead.
+ *
+ * @return string The HTML representation of the log entries.
+ */
+
+function fictioneer_get_log() {
+  return \Fictioneer\Log::get();
+}
+
+/**
+ * [Deprecated] Retrieve the debug log entries and returns an HTML representation.
+ *
+ * @since 5.0.0
+ * @deprecated 5.33.2 - Use \Fictioneer\Log::get_debug() instead.
+ *
+ * @return string HTML representation of the log entries.
+ */
+
+function fictioneer_get_wp_debug_log() {
+  return \Fictioneer\Log::get_debug();
+}

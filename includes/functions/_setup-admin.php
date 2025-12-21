@@ -4,6 +4,7 @@ use Fictioneer\Sanitizer;
 use Fictioneer\Utils;
 use Fictioneer\Utils_Admin;
 use Fictioneer\Customizer;
+use Fictioneer\Log;
 
 // =============================================================================
 // ADMIN INCLUDES
@@ -1285,7 +1286,7 @@ function fictioneer_look_for_issues() {
   );
 
   // Log
-  fictioneer_log( $update );
+  Log::add( $update );
 }
 
 /**
@@ -1410,7 +1411,7 @@ function fictioneer_log_page_assignment_update( $option, $old_value, $value ) {
   );
 
   // Log
-  fictioneer_log( $message );
+  Log::add( $message );
 }
 
 /**
@@ -1506,7 +1507,7 @@ function fictioneer_log_phrase_update( $option, $old_value, $value ) {
   );
 
   // Log
-  fictioneer_log( $message );
+  Log::add( $message );
 }
 
 /**
@@ -1614,7 +1615,7 @@ function fictioneer_log_connection_update( $connection, $old_value, $value ) {
   );
 
   // Log
-  fictioneer_log( $message );
+  Log::add( $message );
 }
 
 /**

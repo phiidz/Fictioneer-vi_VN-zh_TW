@@ -2,6 +2,7 @@
 
 use Fictioneer\Utils;
 use Fictioneer\Utils_Admin;
+use Fictioneer\Log;
 
 // =============================================================================
 // UTILITY
@@ -252,7 +253,7 @@ function fictioneer_delete_all_epubs() {
   }
 
   // Log
-  fictioneer_log(
+  Log::add(
     __( 'Deleted all generated ePUBs from the server.', 'fictioneer' )
   );
 
@@ -280,7 +281,7 @@ function fictioneer_tools_add_moderator_role() {
     $notice = ['fictioneer-added-moderator-role', 'success'];
 
     // Log
-    fictioneer_log( __( 'Moderator role added.', 'fictioneer' ) );
+    Log::add( __( 'Moderator role added.', 'fictioneer' ) );
   } else {
     $notice = ['fictioneer-not-added-moderator-role', 'failure'];
   }
@@ -304,7 +305,7 @@ function fictioneer_tools_initialize_roles() {
   fictioneer_initialize_roles( true );
 
   // Log
-  fictioneer_log(
+  Log::add(
     __( 'Initialized roles.', 'fictioneer' )
   );
 
@@ -327,7 +328,7 @@ function fictioneer_tools_move_story_tags_to_genres() {
   fictioneer_convert_taxonomies( 'fcn_story', 'fcn_genre', 'post_tag', true, true );
 
   // Log
-  fictioneer_log( __( 'Story tags converted to genres.', 'fictioneer' ) );
+  Log::add( __( 'Story tags converted to genres.', 'fictioneer' ) );
 
   // Finish
   fictioneer_finish_admin_action( 'fictioneer-story-tags-to-genres' );
@@ -370,7 +371,7 @@ function fictioneer_tools_disable_font() {
   fictioneer_clear_all_cached_partials();
 
   // Log
-  fictioneer_log(
+  Log::add(
     sprintf(
       __( 'Disabled "%s" font key. Currently disabled keys: %s.', 'fictioneer' ),
       $font_key,
@@ -422,7 +423,7 @@ function fictioneer_tools_enable_font() {
   fictioneer_clear_all_cached_partials();
 
   // Log
-  fictioneer_log(
+  Log::add(
     sprintf(
       __( 'Enabled "%s" font key. Currently disabled keys: %s.', 'fictioneer' ),
       $font_key,
@@ -461,7 +462,7 @@ function fictioneer_tools_duplicate_story_tags_to_genres() {
   fictioneer_convert_taxonomies( 'fcn_story', 'fcn_genre', 'post_tag', true );
 
   // Log
-  fictioneer_log( __( 'Story tags duplicated as genres.', 'fictioneer' ) );
+  Log::add( __( 'Story tags duplicated as genres.', 'fictioneer' ) );
 
   // Finish
   fictioneer_finish_admin_action( 'fictioneer-duplicate-tags-to-genres' );
@@ -486,7 +487,7 @@ function fictioneer_tools_move_chapter_tags_to_genres() {
   fictioneer_convert_taxonomies( 'fcn_chapter', 'fcn_genre', 'post_tag', true, true );
 
   // Log
-  fictioneer_log( __( 'Chapter tags converted to genres.', 'fictioneer' ) );
+  Log::add( __( 'Chapter tags converted to genres.', 'fictioneer' ) );
 
   // Finish
   fictioneer_finish_admin_action( 'fictioneer-chapter-tags-to-genres' );
@@ -507,7 +508,7 @@ function fictioneer_tools_duplicate_chapter_tags_to_genres() {
   fictioneer_convert_taxonomies( 'fcn_chapter', 'fcn_genre', 'post_tag', true );
 
   // Log
-  fictioneer_log( __( 'Chapter tags duplicated as genres.', 'fictioneer' ) );
+  Log::add( __( 'Chapter tags duplicated as genres.', 'fictioneer' ) );
 
   // Finish
   fictioneer_finish_admin_action( 'fictioneer-duplicate-tags-to-genres' );
@@ -541,7 +542,7 @@ function fictioneer_tools_append_default_genres() {
   }
 
   // Log
-  fictioneer_log( __( 'Added default genres.', 'fictioneer' ) );
+  Log::add( __( 'Added default genres.', 'fictioneer' ) );
 
   // Finish
   fictioneer_finish_admin_action( 'fictioneer-append-default-genres' );
@@ -577,7 +578,7 @@ function fictioneer_tools_append_default_tags() {
   }
 
   // Log
-  fictioneer_log( __( 'Added default tags.', 'fictioneer' ) );
+  Log::add( __( 'Added default tags.', 'fictioneer' ) );
 
   // Finish
   fictioneer_finish_admin_action( 'fictioneer-append-default-tags' );
@@ -607,7 +608,7 @@ function fictioneer_tools_remove_unused_tags() {
   }
 
   // Log
-  fictioneer_log( __( 'Removed unused tags.', 'fictioneer' ) );
+  Log::add( __( 'Removed unused tags.', 'fictioneer' ) );
 
   // Finish
   fictioneer_finish_admin_action( 'fictioneer-remove-unused-tags' );
@@ -676,7 +677,7 @@ function fictioneer_update_role() {
   }
 
   // Log
-  fictioneer_log(
+  Log::add(
     sprintf(
       __( 'Updated "%s" role.', 'fictioneer' ),
       $role_name
@@ -761,7 +762,7 @@ function fictioneer_add_role() {
     );
   } else {
     // Log
-    fictioneer_log(
+    Log::add(
       sprintf(
         __( 'Added "%s" role.', 'fictioneer' ),
         $name
@@ -823,7 +824,7 @@ function fictioneer_remove_role() {
   remove_role( $role );
 
   // Log
-  fictioneer_log(
+  Log::add(
     sprintf(
       __( 'Removed "%s" role.', 'fictioneer' ),
       $role
@@ -969,7 +970,7 @@ function fictioneer_tools_legacy_cleanup() {
 
     delete_option( 'fictioneer_database_cleanup' ); // Was previously saved wrongly far into the future
 
-    fictioneer_log( __( 'Legacy cleanup removed old sitemap and flushed the permalinks.', 'fictioneer' ) );
+    Log::add( __( 'Legacy cleanup removed old sitemap and flushed the permalinks.', 'fictioneer' ) );
 
     $count++;
   }
@@ -998,7 +999,7 @@ function fictioneer_tools_legacy_cleanup() {
 
     // If old SEO data exists...
     if ( $meta_rows > 0 ) {
-      fictioneer_log( sprintf( __( 'Legacy cleanup removed %s SEO rows.', 'fictioneer' ), $meta_rows ) );
+      Log::add( sprintf( __( 'Legacy cleanup removed %s SEO rows.', 'fictioneer' ), $meta_rows ) );
 
       // Query all posts
       $args = array(
@@ -1144,7 +1145,7 @@ function fictioneer_tools_optimize_database() {
   $total = $post_meta_count + $orphaned_post_meta_count + $comment_meta_count + $options_meta_count;
 
   // Log
-  fictioneer_log(
+  Log::add(
     sprintf(
       __( 'Optimized database and removed %s superfluous or orphaned rows.', 'fictioneer' ),
       $total
@@ -1260,7 +1261,7 @@ function fictioneer_tools_add_story_hidden_fields() {
   fictioneer_append_meta_fields( 'fcn_story', 'fictioneer_story_hidden', 0 );
 
   // Log
-  fictioneer_log( __( 'Appended missing "fictioneer_story_hidden" meta fields with value 0.', 'fictioneer' ) );
+  Log::add( __( 'Appended missing "fictioneer_story_hidden" meta fields with value 0.', 'fictioneer' ) );
 
   // Redirect
   wp_safe_redirect(
@@ -1290,7 +1291,7 @@ function fictioneer_tools_add_story_sticky_fields() {
   fictioneer_append_meta_fields( 'fcn_story', 'fictioneer_story_sticky', 0 );
 
   // Log
-  fictioneer_log( __( 'Appended missing "fictioneer_story_sticky" meta fields with value 0.', 'fictioneer' ) );
+  Log::add( __( 'Appended missing "fictioneer_story_sticky" meta fields with value 0.', 'fictioneer' ) );
 
   // Redirect
   wp_safe_redirect(
@@ -1320,7 +1321,7 @@ function fictioneer_tools_add_chapter_hidden_fields() {
   fictioneer_append_meta_fields( 'fcn_chapter', 'fictioneer_chapter_hidden', 0 );
 
   // Log
-  fictioneer_log( __( 'Appended missing "fictioneer_chapter_hidden" meta fields with value 0.', 'fictioneer' ) );
+  Log::add( __( 'Appended missing "fictioneer_chapter_hidden" meta fields with value 0.', 'fictioneer' ) );
 
   // Redirect
   wp_safe_redirect(
@@ -1379,7 +1380,7 @@ function fictioneer_purge_theme_caches() {
   wp_cache_flush();
 
   // Log
-  fictioneer_log( __( 'Purged theme caches.', 'fictioneer' ) );
+  Log::add( __( 'Purged theme caches.', 'fictioneer' ) );
 }
 
 /**
@@ -1631,7 +1632,7 @@ function fictioneer_connection_delete_patreon_tiers() {
   delete_option( 'fictioneer_connection_patreon_tiers' );
 
   // Log
-  fictioneer_log( __( 'Deleted global Patreon tiers.', 'fictioneer' ) );
+  Log::add( __( 'Deleted global Patreon tiers.', 'fictioneer' ) );
 
   // Redirect
   wp_safe_redirect(
@@ -1715,7 +1716,7 @@ function fictioneer_enable_mu_plugin() {
     $result = array( 'success' => 'fictioneer-mu-plugin-copy-success' );
 
     // Log
-    fictioneer_log(
+    Log::add(
       sprintf(
         __( 'Enabled mu-plugin: %s', 'fictioneer' ),
         $plugin
@@ -1759,7 +1760,7 @@ function fictioneer_disable_mu_plugin() {
     $result = array( 'success' => 'fictioneer-mu-plugin-delete-success' );
 
     // Log
-    fictioneer_log(
+    Log::add(
       sprintf(
         __( 'Disabled mu-plugin: %s', 'fictioneer' ),
         $plugin
@@ -2031,7 +2032,7 @@ function fictioneer_flush_permalinks() {
 
     flush_rewrite_rules();
 
-    fictioneer_log(
+    Log::add(
       __( 'Flushed permalinks', 'fictioneer' )
     );
   }
