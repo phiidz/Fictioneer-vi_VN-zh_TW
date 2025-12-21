@@ -2604,7 +2604,7 @@ function fictioneer_shortcode_tooltip( $atts, $content = null ) {
 
   // Collect footnote if allowed
   if ( $footnote_allowed ) {
-    do_action( 'fictioneer_collect_footnote', $tooltip_id_counter, $tooltip_content );
+    do_action( 'fictioneer_collect_footnote', $tooltip_id_counter, html_entity_decode( $tooltip_content ) );
   }
 
   return $html;
