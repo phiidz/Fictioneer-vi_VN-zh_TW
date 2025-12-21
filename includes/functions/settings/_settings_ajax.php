@@ -4,6 +4,8 @@
 // VALIDATION
 // =============================================================================
 
+use Fictioneer\Utils_Admin;
+
 /**
  * Validate settings AJAX request
  *
@@ -281,7 +283,7 @@ function fictioneer_ajax_recount_words() {
   // Count words and update
   if ( ! empty( $results ) ) {
     foreach ( $results as $post ) {
-      update_post_meta( $post->ID, '_word_count', fictioneer_count_words( $post->ID, $post->post_content ) );
+      update_post_meta( $post->ID, '_word_count', Utils_Admin::count_words( $post->ID, $post->post_content ) );
     }
 
     if ( ! $max_pages ) {

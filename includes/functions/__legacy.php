@@ -1020,3 +1020,22 @@ function fictioneer_prepare_chapter_groups( $story_id, $chapters ) {
 function fictioneer_get_story_comment_count( $story_id, $chapter_ids = null ) {
   return Story::get_story_comment_count( $story_id, $chapter_ids );
 }
+
+if ( ! function_exists( 'fictioneer_count_words' ) ) {
+  /**
+   * [Deprecated] Return word count of a post.
+   *
+   * @since 5.25.0
+   * @since 5.30.0 - Fixed for accuracy (hopefully).
+   * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::count_words() instead.
+   *
+   * @param int         $post_id  ID of the post to count the words of.
+   * @param string|null $content  Optional. The post content. Queries the field by default.
+   *
+   * @return int The word count.
+   */
+
+  function fictioneer_count_words( $post_id, $content = null ) {
+    return Utils_Admin::count_words( $post_id, $content );
+  }
+}

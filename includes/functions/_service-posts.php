@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Utils;
+use Fictioneer\Utils_Admin;
 
 // =============================================================================
 // LOG POST UPDATES HELPER
@@ -213,7 +214,7 @@ function fictioneer_save_word_count( $post_id ) {
   }
 
   // Count
-  $word_count = fictioneer_count_words( $post_id );
+  $word_count = Utils_Admin::count_words( $post_id );
 
   // Save
   update_post_meta( $post_id, '_word_count', $word_count );

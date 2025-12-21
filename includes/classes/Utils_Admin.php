@@ -645,4 +645,34 @@ class Utils_Admin {
 
     return ( $statusCode >= 200 && $statusCode < 300 );
   }
+
+  /**
+   * Return word count of a post.
+   *
+   * @since 5.25.0
+   * @since 5.30.0 - Fixed for accuracy (hopefully).
+   * @since 5.33.2 - Moved into Utils_Admin class.
+   *
+   * @param int         $post_id  ID of the post to count the words of.
+   * @param string|null $content  Optional. The post content. Queries the field by default.
+   *
+   * @return int The word count.
+   */
+
+  public static function count_words( int $post_id, ?string $content = null ) : int {
+    // Prepare
+    $content = $content ?? get_post_field( 'post_content', $post_id ) ?: '';
+    $content = strip_shortcodes( $content );
+    $content = strip_tags( $content );
+    $content = html_entity_decode( $content, ENT_QUOTES | ENT_HTML5 );
+    $content = preg_replace( '/[‐–—―‒−⁃]/u', ' - ', $content );
+
+    preg_match_all(
+      "/\b\p{L}[\p{L}\p{N}'’]*(?:-\p{L}[\p{L}\p{N}'’]*)*\b/u",
+      $content,
+      $matches
+    );
+
+    return count( $matches[0] );
+  }
 }
