@@ -6,6 +6,7 @@ use Fictioneer\Utils;
 use Fictioneer\Utils_Admin;
 use Fictioneer\Customizer;
 use Fictioneer\Fonts;
+use Fictioneer\Story;
 
 // =============================================================================
 // SANITIZER DELEGATES
@@ -959,7 +960,7 @@ if ( ! function_exists( 'fictioneer_get_story_data' ) ) {
    */
 
   function fictioneer_get_story_data( $story_id, $show_comments = true, $args = [] ) {
-    return \Fictioneer\Story::get_data( $story_id, $show_comments, $args );
+    return Story::get_data( $story_id, $show_comments, $args );
   }
 }
 
@@ -979,5 +980,24 @@ if ( ! function_exists( 'fictioneer_get_story_data' ) ) {
  */
 
 function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = false, $slow = false ) {
-  return \Fictioneer\Story::get_chapter_posts( $story_id, $args, $full, $slow );
+  return Story::get_chapter_posts( $story_id, $args, $full, $slow );
+}
+
+/**
+ * [Deprecated] Group and prepares chapters for a specific story.
+ *
+ * Note: If chapter groups are disabled, all chapters will be
+ * within the 'all_chapters' group.
+ *
+ * @since 5.25.0
+ * @deprecated 5.33.2 - Use \Fictioneer\Story::prepare_chapter_groups() instead.
+ *
+ * @param int   $story_id  ID of the story.
+ * @param array $chapters  Array of WP_Post or post-like objects.
+ *
+ * @return array The grouped and prepared chapters.
+ */
+
+function fictioneer_prepare_chapter_groups( $story_id, $chapters ) {
+  return Story::prepare_chapter_groups( $story_id, $chapters );
 }
