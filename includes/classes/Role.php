@@ -71,6 +71,12 @@ class Role {
     if ( ! current_user_can( 'update_core' ) ) {
       add_action( 'admin_head', [ self::class, 'remove_update_notice' ] );
     }
+
+    // === FCN_SHORTCODES ========================================================
+
+    if ( ! current_user_can( 'fcn_shortcodes' ) ) {
+      add_filter( 'wp_insert_post_data', [ self::class, 'strip_shortcodes_on_save' ], 1 );
+    }
   }
 
   /**
@@ -434,5 +440,67 @@ class Role {
 
   public static function remove_update_notice(){
     remove_action( 'admin_notices', 'update_nag', 3 );
+  }
+
+  /**
+   * Strip shortcodes from content before saving to database.
+   *
+   * Note: The user can still use shortcodes on pages that already have them.
+   * This is not ideal, but an edge case. Someone who cannot use shortcodes
+   * usually also cannot edit others posts.
+   *
+   * @since 5.6.0
+   * @since 5.33.2 - Moved into Role class.
+   *
+   * @param array $data  Array of slashed, sanitized, and processed post data.
+   *
+   * @return array Modified post data with shortcodes removed.
+   */
+
+  public static function strip_shortcodes_on_save( array $data ) : array {
+    if (
+      current_user_can( 'fcn_shortcodes' ) ||
+      get_current_user_id() !== (int) ( $data['post_author'] ?? 0 )
+    ) {
+      return $data;
+    }
+
+    if ( empty( $data['post_content'] ) || strpos( $data['post_content'], '[' ) === false ) {
+      return $data;
+    }
+
+    add_filter( 'strip_shortcodes_tagnames', [ self::class, 'exempt_shortcodes_from_removal' ] );
+
+    $data['post_content'] = strip_shortcodes( $data['post_content'] );
+
+    // Only do this for the trigger post or bad things can happen!
+    remove_filter( 'wp_insert_post_data', [ self::class, 'strip_shortcodes_on_save' ], 1 );
+    remove_filter( 'strip_shortcodes_tagnames', [ self::class, 'exempt_shortcodes_from_removal' ] );
+
+    return $data;
+  }
+
+  /**
+   * Exempt shortcodes from being removed by strip_shortcodes().
+   *
+   * @since 5.14.0
+   * @since 5.25.0 - Allowed 'fcnt' shortcode to pass.
+   * @since 5.33.2 - Moved into Role class.
+   *
+   * @param array $tags_to_remove  Tags that strip_shortcodes() would remove.
+   *
+   * @return array Updated tags to be removed.
+   */
+
+  public static function exempt_shortcodes_from_removal( array $tags_to_remove ) : array {
+    $exempt = ['fictioneer_fa', 'fcnt'];
+
+    foreach ( $exempt as $tag ) {
+      if ( ( $key = array_search( $tag, $tags_to_remove, true ) ) !== false ) {
+        unset( $tags_to_remove[ $key ] );
+      }
+    }
+
+    return $tags_to_remove;
   }
 }
