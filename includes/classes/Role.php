@@ -148,6 +148,13 @@ class Role {
     if ( current_user_can( 'fcn_upload_restrictions' ) ) {
       add_filter( 'wp_handle_upload_prefilter', [ self::class, 'upload_restrictions' ] );
     }
+
+    // === FCN_ALL_BLOCKS ========================================================
+
+    if ( ! current_user_can( 'fcn_all_blocks' ) ) {
+      add_filter( 'allowed_block_types_all', [ self::class, 'restrict_block_types' ], 20, 2 );
+      add_filter( 'wp_insert_post_data', [ self::class, 'remove_restricted_block_content' ], 1 );
+    }
   }
 
   /**
@@ -970,5 +977,89 @@ class Role {
     }
 
     return $file;
+  }
+
+  /**
+   * Remove restricted Gutenberg blocks content on save.
+   *
+   * @since 5.6.0
+   * @since 5.33.2 - Moved into Role class.
+   *
+   * @param array $data  Array of slashed, sanitized, and processed post data.
+   *
+   * @return array Modified post data.
+   */
+
+  public static function remove_restricted_block_content( array $data ) : array {
+    if ( empty( $data['post_content'] ) || ! is_string( $data['post_content'] ) ) {
+      // Only do this for the trigger post or bad things can happen!
+      remove_filter( 'wp_insert_post_data', [ self::class, 'remove_restricted_block_content' ], 1 );
+
+      return $data;
+    }
+
+    $forbidden_patterns = array(
+      '/<!--\s*wp:buttons.*?-->(.*?)<!--\s*\/wp:buttons.*?\s*-->/s',
+      '/<!--\s*wp:button.*?-->(.*?)<!--\s*\/wp:button.*?\s*-->/s',
+      '/<!--\s*wp:audio.*?-->(.*?)<!--\s*\/wp:audio.*?\s*-->/s',
+      '/<!--\s*wp:video.*?-->(.*?)<!--\s*\/wp:video.*?\s*-->/s',
+      '/<!--\s*wp:file.*?-->(.*?)<!--\s*\/wp:file.*?\s*-->/s',
+      '/<!--\s*wp:jetpack.*?-->(.*?)<!--\s*\/wp:jetpack.*?\s*-->/s' // Because it's common enough
+    );
+
+    foreach ( $forbidden_patterns as $pattern ) {
+      $data['post_content'] = preg_replace( $pattern, '', $data['post_content'] );
+    }
+
+    // Only do this for the trigger post or bad things can happen!
+    remove_filter( 'wp_insert_post_data', [ self::class, 'remove_restricted_block_content' ], 1 );
+
+    return $data;
+  }
+
+  /**
+   * Restrict block types available in the editor.
+   *
+   * @since 5.6.0
+   * @since 5.33.2 - Moved into Role class.
+   *
+   * @param bool|array               $allowed_blocks  Allowed blocks.
+   * @param \WP_Block_Editor_Context $context         Editor context.
+   *
+   * @return array Allowed block types.
+   */
+
+  public static function restrict_block_types( $allowed_blocks, \WP_Block_Editor_Context $context ) : array {
+    $allowed = array(
+      'core/image',
+      'core/paragraph',
+      'core/heading',
+      'core/columns',
+      'core/list',
+      'core/list-item',
+      'core/gallery',
+      'core/quote',
+      'core/pullquote',
+      'core/verse',
+      'core/table',
+      'core/code',
+      'core/preformatted',
+      'core/html',
+      'core/separator',
+      'core/spacer',
+      'core/more',
+      'core/embed',
+      'core-embed/youtube',
+      'core-embed/soundcloud',
+      'core-embed/spotify',
+      'core-embed/vimeo',
+      'core-embed/twitter',
+    );
+
+    if ( current_user_can( 'fcn_shortcodes' ) ) {
+      $allowed[] = 'core/shortcode';
+    }
+
+    return $allowed;
   }
 }

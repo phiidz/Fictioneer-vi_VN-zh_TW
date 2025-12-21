@@ -337,7 +337,7 @@ Fictioneer customizes WordPress by using as many standard action and filter hook
 | ---: | :--- |
 | `admin_body_class` | `fictioneer_add_classes_to_admin_body` (10)
 | `admin_comment_types_dropdown` | `fictioneer_add_private_to_comment_filter` (10), `fictioneer_add_user_deleted_to_comment_filter` (10)
-| `allowed_block_types_all` | `fictioneer_allowed_block_types` (10), `fictioneer_restrict_block_types` (20)
+| `allowed_block_types_all` | `fictioneer_allowed_block_types` (10), `\Fictioneer\Role::restrict_block_types` (20)
 | `block_editor_settings_all` | `fictioneer_disable_font_library` (10), `fictioneer_add_editor_css` (10), `fictioneer_modify_editor_settings` (10)
 | `body_class` | `fictioneer_add_classes_to_body` (10)
 | `cancel_comment_reply_link` | `__return_empty_string` (10)
@@ -404,7 +404,7 @@ Fictioneer customizes WordPress by using as many standard action and filter hook
 | `user_has_cap` | `\Fictioneer\Role::edit_only_comments` (10)
 | `wp_list_comments_args` | `fictioneer_comment_list_args` (10)
 | `wp_handle_upload_prefilter` | `\Fictioneer\Role::upload_restrictions` (10)
-| `wp_insert_post_data` | `fictioneer_remove_restricted_block_content` (1), `\Fictioneer\Role::strip_shortcodes_on_save` (1), `fictioneer_see_some_evil` (1), `fictioneer_prevent_publish_date_update` (1), `\Fictioneer\Role::prevent_parent_and_order_update` (1), `fictioneer_prevent_track_and_ping_updates` (1)
+| `wp_insert_post_data` | `Fictioneer\Role::remove_restricted_block_content` (1), `\Fictioneer\Role::strip_shortcodes_on_save` (1), `fictioneer_see_some_evil` (1), `fictioneer_prevent_publish_date_update` (1), `\Fictioneer\Role::prevent_parent_and_order_update` (1), `fictioneer_prevent_track_and_ping_updates` (1)
 | `wp_is_application_passwords_available` | `__return_false` (10)
 | `wp_resource_hints` | `fictioneer_remove_emoji_resource_hint` (10)
 | `wp_robots` | `wp_robots_no_robots` (10), `fictioneer_meta_robots` (10)
