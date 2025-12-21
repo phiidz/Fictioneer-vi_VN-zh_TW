@@ -169,6 +169,15 @@ class Role {
     if ( ! current_user_can( 'fcn_edit_date' ) ) {
       add_filter( 'wp_insert_post_data', [ self::class, 'prevent_publish_date_update' ], 1, 2 );
     }
+
+    // === FCN_CLASSIC_EDITOR ====================================================
+
+    if ( current_user_can( 'fcn_classic_editor' ) ) {
+      add_filter( 'use_block_editor_for_post_type', '__return_false' );
+      add_action( 'add_meta_boxes', [ self::class, 'restrict_classic_metaboxes' ] );
+      add_action( 'admin_head', [ self::class, 'classic_editor_css_restrictions' ] );
+      add_action( 'admin_footer', [ self::class, 'classic_editor_js_restrictions' ] );
+    }
   }
 
   /**
@@ -1186,5 +1195,104 @@ class Role {
     }
 
     return $data;
+  }
+
+  /**
+   * Inject CSS for the classic editor.
+   *
+   * @since 5.6.2
+   * @since 5.33.2 - Moved into Role class.
+   */
+
+  public static function classic_editor_css_restrictions() : void {
+    global $pagenow;
+
+    if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' ) {
+      return;
+    }
+
+    echo '<style type="text/css">.selectit[for="ping_status"], #add-new-comment {display: none !important;}</style>';
+  }
+
+  /**
+   * Inject JavaScript for the classic editor.
+   *
+   * @since 5.6.2
+   * @since 5.26.1 - Use wp_print_inline_script_tag().
+   * @since 5.33.2 - Moved into Role class.
+   */
+
+  public static function classic_editor_js_restrictions() : void {
+    global $pagenow;
+
+    if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' ) {
+      return;
+    }
+
+    wp_print_inline_script_tag(
+      'document.querySelectorAll(".selectit[for=ping_status], #add-new-comment").forEach(element => {element.remove();});',
+      array(
+        'id' => 'fictioneer-iife-classic-editor-restrictions',
+        'type' => 'text/javascript',
+        'data-jetpack-boost' => 'ignore',
+        'data-no-optimize' => '1',
+        'data-no-defer' => '1',
+        'data-no-minify' => '1'
+      )
+    );
+  }
+
+  /**
+   * Restrict metaboxes in the classic editor.
+   *
+   * @since 5.6.2
+   * @since 5.33.2 - Moved into Role class.
+   */
+
+  public static function restrict_classic_metaboxes() : void {
+    $post_types = ['post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation'];
+
+    // Trackbacks
+    remove_meta_box( 'trackbacksdiv', $post_types, 'normal' );
+
+    // Tags
+    if ( ! current_user_can( 'assign_post_tags' ) ) {
+      remove_meta_box( 'tagsdiv-post_tag', $post_types, 'side' );
+    }
+
+    // Categories
+    if ( ! current_user_can( 'assign_categories' ) ) {
+      remove_meta_box( 'categorydiv', $post_types, 'side' );
+    }
+
+    // Genres
+    if ( ! current_user_can( 'assign_fcn_genres' ) ) {
+      remove_meta_box( 'fcn_genrediv', $post_types, 'side' );
+    }
+
+    // Fandoms
+    if ( ! current_user_can( 'assign_fcn_fandoms' ) ) {
+      remove_meta_box( 'fcn_fandomdiv', $post_types, 'side' );
+    }
+
+    // Characters
+    if ( ! current_user_can( 'assign_fcn_characters' ) ) {
+      remove_meta_box( 'fcn_characterdiv', $post_types, 'side' );
+    }
+
+    // Content Warnings
+    if ( ! current_user_can( 'assign_fcn_content_warnings' ) ) {
+      remove_meta_box( 'fcn_content_warningdiv', $post_types, 'side' );
+    }
+
+    // Permalink
+    if ( ! current_user_can( 'fcn_edit_permalink' ) ) {
+      remove_meta_box( 'slugdiv', $post_types, 'normal' );
+    }
+
+    // Page template
+    if ( ! current_user_can( 'fcn_select_page_template' ) ) {
+      remove_meta_box( 'pageparentdiv', $post_types, 'side' );
+    }
   }
 }
