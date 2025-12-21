@@ -1001,3 +1001,22 @@ function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = fals
 function fictioneer_prepare_chapter_groups( $story_id, $chapters ) {
   return Story::prepare_chapter_groups( $story_id, $chapters );
 }
+
+/**
+ * [Deprecated] Returns the comment count of all story chapters
+ *
+ * Note: Includes comments from hidden and non-chapter chapters.
+ *
+ * @since 5.22.2
+ * @since 5.22.3 - Switched to SQL query.
+ * @deprecated 5.33.2 - Use \Fictioneer\Story::get_story_comment_count() instead.
+ *
+ * @param int        $story_id     ID of the story.
+ * @param array|null $chapter_ids  Optional. Array of chapter IDs.
+ *
+ * @return int Number of comments.
+ */
+
+function fictioneer_get_story_comment_count( $story_id, $chapter_ids = null ) {
+  return Story::get_story_comment_count( $story_id, $chapter_ids );
+}

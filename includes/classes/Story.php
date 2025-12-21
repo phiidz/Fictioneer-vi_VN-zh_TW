@@ -497,7 +497,7 @@ class Story {
     $chapter_ids = $cache['chapter_ids'] ?? [];
 
     if ( $chapter_ids ) {
-      $comment_count = fictioneer_get_story_comment_count( $story_id, $chapter_ids );
+      $comment_count = self::get_story_comment_count( $story_id, $chapter_ids );
     }
 
     $cache['comment_count'] = $comment_count;
@@ -520,6 +520,51 @@ class Story {
     }
 
     return $cache;
+  }
+
+  /**
+   * Returns the comment count of all story chapters
+   *
+   * Note: Includes comments from hidden and non-chapter chapters.
+   *
+   * @since 5.22.2
+   * @since 5.22.3 - Switched to SQL query.
+   * @since 5.33.2 - Mnd moved into Story class.
+   *
+   * @param int        $story_id     ID of the story.
+   * @param array|null $chapter_ids  Optional. Array of chapter IDs.
+   *
+   * @return int Number of comments.
+   */
+
+  public static function get_story_comment_count( int $story_id, ?array $chapter_ids = null ) : int {
+    $comment_count = 0;
+    $chapter_ids = $chapter_ids ?? fictioneer_get_story_chapter_ids( $story_id );
+
+    if ( empty( $chapter_ids ) ) {
+      return 0;
+    }
+
+    global $wpdb;
+
+    $batch_limit = (int) apply_filters( 'fictioneer_filter_query_batch_limit', 800, 'story_chapter_posts' );
+    $batch_limit = max( 100, min( 2000, $batch_limit ) );
+
+    foreach ( array_chunk( $chapter_ids, $batch_limit ) as $chunk ) {
+      $placeholders = implode( ',', array_fill( 0, count( $chunk ), '%d' ) );
+      $query = $wpdb->prepare("
+        SELECT COUNT(comment_ID)
+        FROM {$wpdb->comments} c
+        INNER JOIN {$wpdb->posts} p ON c.comment_post_ID = p.ID
+        WHERE p.post_type = 'fcn_chapter'
+        AND p.ID IN ($placeholders)
+        AND c.comment_approved = '1'
+      ", ...$chunk );
+
+      $comment_count += $wpdb->get_var( $query );
+    }
+
+    return $comment_count;
   }
 
   /**

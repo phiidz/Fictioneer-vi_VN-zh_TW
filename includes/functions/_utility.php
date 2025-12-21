@@ -71,58 +71,6 @@ if ( ! function_exists( 'fictioneer_seo_plugin_active' ) ) {
 }
 
 // =============================================================================
-// GET STORY DATA
-// =============================================================================
-
-/**
- * Returns the comment count of all story chapters
- *
- * Note: Includes hidden and non-chapter posts.
- *
- * @since 5.22.2
- * @since 5.22.3 - Switched to SQL query.
- *
- * @param int        $story_id     ID of the story.
- * @param array|null $chapter_ids  Optional. Array of chapter IDs.
- *
- * @return int Number of comments.
- */
-
-function fictioneer_get_story_comment_count( $story_id, $chapter_ids = null ) {
-  // Setup
-  $comment_count = 0;
-  $chapter_ids = $chapter_ids ?? fictioneer_get_story_chapter_ids( $story_id );
-
-  // No chapters?
-  if ( empty( $chapter_ids ) ) {
-    return 0;
-  }
-
-  // SQL
-  global $wpdb;
-
-  $batch_limit = (int) apply_filters( 'fictioneer_filter_query_batch_limit', 800, 'story_chapter_posts' );
-  $batch_limit = max( 100, min( 2000, $batch_limit ) );
-
-  foreach ( array_chunk( $chapter_ids, $batch_limit ) as $chunk ) {
-    $placeholders = implode( ',', array_fill( 0, count( $chunk ), '%d' ) );
-    $query = $wpdb->prepare("
-      SELECT COUNT(comment_ID)
-      FROM {$wpdb->comments} c
-      INNER JOIN {$wpdb->posts} p ON c.comment_post_ID = p.ID
-      WHERE p.post_type = 'fcn_chapter'
-      AND p.ID IN ($placeholders)
-      AND c.comment_approved = '1'
-    ", ...$chunk );
-
-    $comment_count += $wpdb->get_var( $query );
-  }
-
-  // Return result
-  return $comment_count;
-}
-
-// =============================================================================
 // GET AUTHOR STATISTICS
 // =============================================================================
 
