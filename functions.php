@@ -450,6 +450,15 @@ if ( ! defined( 'FICTIONEER_ENABLE_ALL_AUTHOR_PROFILES' ) ) {
   define( 'FICTIONEER_ENABLE_ALL_AUTHOR_PROFILES', false );
 }
 
+/*
+ * Arrays
+ */
+
+// Array: Allowed page templates ('name' => 'Display Name') without permission check
+if ( ! defined( 'FICTIONEER_ALLOWED_PAGE_TEMPLATES' ) ) {
+  define( 'FICTIONEER_ALLOWED_PAGE_TEMPLATES', [] );
+}
+
 // =======================================================================================
 // AUTOLOADER
 // =======================================================================================
