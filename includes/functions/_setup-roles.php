@@ -582,42 +582,6 @@ if ( ! current_user_can( 'manage_options' ) ) {
 
 // No restriction can be applied to administrators
 if ( ! current_user_can( 'manage_options' ) ) {
-  // === FCN_EDIT_OTHERS_{POST_TYPE} ===========================================
-
-  /**
-   * Limit users to their own fiction posts
-   *
-   * @since 5.6.0
-   *
-   * @param WP_Query $query  The WP_Query instance (passed by reference).
-   */
-
-  function fictioneer_edit_others_fictioneer_posts( $query ) {
-    global $pagenow;
-
-    // Abort conditions...
-    if ( ! $query->is_admin || $pagenow != 'edit.php' ) {
-      return;
-    }
-
-    // Setup
-    $post_type = $query->get( 'post_type' );
-
-    // Abort if wrong post type
-    if ( ! in_array( $post_type, ['fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation'] ) ) {
-      return;
-    }
-
-    // Prepare
-    $post_type_plural = $post_type == 'fcn_story' ? 'fcn_stories' : "{$post_type}s";
-
-    // Add author to query unless user can edit the fiction of others
-    if ( ! current_user_can( "edit_others_{$post_type_plural}" ) ) {
-      $query->set( 'author', get_current_user_id() );
-    }
-  }
-  add_action( 'pre_get_posts', 'fictioneer_edit_others_fictioneer_posts' );
-
   // === FCN_READ_OTHERS_FILES =================================================
 
   /**

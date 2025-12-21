@@ -5,6 +5,15 @@ namespace Fictioneer;
 defined( 'ABSPATH' ) OR exit;
 
 class Role {
+  private static $type_to_plural = array(
+    'post' => 'posts',
+    'page' => 'pages',
+    'fcn_story' => 'fcn_stories',
+    'fcn_chapter' => 'fcn_chapters',
+    'fcn_collection' => 'fcn_collections',
+    'fcn_recommendation' => 'fcn_recommendations'
+  );
+
   /**
    * Add capability restrictions.
    *
@@ -77,6 +86,11 @@ class Role {
     if ( ! current_user_can( 'fcn_shortcodes' ) ) {
       add_filter( 'wp_insert_post_data', [ self::class, 'strip_shortcodes_on_save' ], 1 );
     }
+
+    // === EDIT_OTHERS_{POST_TYPE} ===============================================
+
+    add_action( 'pre_get_posts', [ self::class, 'limit_posts_to_author' ] );
+    add_filter( 'wp_count_posts', [ self::class, 'filter_counts_by_author' ], 10, 2 );
   }
 
   /**
@@ -502,5 +516,88 @@ class Role {
     }
 
     return $tags_to_remove;
+  }
+
+  /**
+   * Limit admin post list-table to only include own posts.
+   *
+   * @since 5.6.0
+   * @since 5.33.2 - Moved into Role class.
+   *
+   * @param \WP_Query $query The WP_Query instance (passed by reference).
+   */
+
+  public static function limit_posts_to_author( \WP_Query $query ) : void {
+    global $pagenow;
+
+    if ( ! is_admin() || ! $query->is_main_query() || $pagenow !== 'edit.php' ) {
+      return;
+    }
+
+    $post_type = (string) $query->get( 'post_type' );
+
+    if ( ! isset( self::$type_to_plural[ $post_type ] ) ) {
+      return;
+    }
+
+    if ( ! current_user_can( 'edit_others_' . self::$type_to_plural[ $post_type ] ) ) {
+      $query->set( 'author', get_current_user_id() );
+    }
+  }
+
+  /**
+   * Filter list-table counts (All/Published/Trash) to only include own posts.
+   *
+   * @since 5.33.2
+   *
+   * @param \stdClass $counts  Post counts.
+   * @param string    $type    Post type.
+   *
+   * @return \stdClass Filtered counts.
+   */
+
+  public static function filter_counts_by_author( $counts, $type ) {
+    global $pagenow, $wpdb;
+
+    if ( ! is_admin() || $pagenow !== 'edit.php' ) {
+      return $counts;
+    }
+
+    if ( ! isset( self::$type_to_plural[ $type ] ) ) {
+      return $counts;
+    }
+
+    if ( current_user_can( 'edit_others_' . self::$type_to_plural[ $type ] ) ) {
+      return $counts;
+    }
+
+    $author = get_current_user_id();
+
+    $rows = $wpdb->get_results(
+      $wpdb->prepare(
+        "SELECT post_status, COUNT(*) AS num_posts
+        FROM {$wpdb->posts}
+        WHERE post_type = %s
+          AND post_author = %d
+        GROUP BY post_status",
+        $type,
+        $author
+      ),
+      OBJECT_K
+    );
+
+    $out = new \stdClass();
+
+    foreach ( get_object_vars( $counts ) as $status => $n ) {
+      $out->$status = isset( $rows[ $status ] ) ? (int) $rows[ $status ]->num_posts : 0;
+    }
+
+    foreach ( $rows as $status => $row ) {
+      if ( ! property_exists( $out, $status ) ) {
+        $out->$status = (int) $row->num_posts;
+      }
+    }
+
+    return $out;
   }
 }
