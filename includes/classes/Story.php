@@ -920,7 +920,7 @@ class Story {
     }
 
     // Update story total word count
-    $new_total_words = (int) ( $data['word_count'] ?? 0 );
+    $new_total_words = (int) ( $data['word_count_raw'] ?? 0 );
     $old_total_words = (int) get_post_meta( $story_id, 'fictioneer_story_total_word_count', true );
 
     if ( $old_total_words !== $new_total_words ) {
