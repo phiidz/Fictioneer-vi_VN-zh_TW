@@ -31,15 +31,15 @@ class Role {
    * @since 5.16.0 - Add Patreon unlock checks and static variable cache.
    * @since 5.33.2 - Moved into Role class.
    *
-   * @param bool     $required  Whether the user needs to supply a password.
-   * @param \WP_Post $post      Post object.
+   * @param bool          $required  Whether the user needs to supply a password.
+   * @param \WP_Post|null $post      Post object.
    *
    * @return bool True or false.
    */
 
-  public static function bypass_password( bool $required, \WP_Post $post ) : bool {
+  public static function bypass_password( bool $required, $post ) : bool {
     // Already unlocked
-    if ( ! $required ) {
+    if ( ! $required || ! $post ) {
       return $required;
     }
 
