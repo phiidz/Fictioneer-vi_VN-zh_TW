@@ -193,8 +193,11 @@ function fictioneer_extend_search_query( $query ) {
   // Setup
   $tax_array = [];
   $author_name = sanitize_text_field( $_GET['author_name'] ?? '' );
-  $min_words = absint( $_GET['miw'] ?? 0 );
-  $max_words = absint( $_GET['maw'] ?? 0 );
+
+  $words_multiplier = floatval( get_option( 'fictioneer_word_count_multiplier', 1.0 ) );
+  $words_multiplier = $words_multiplier > 0 ? $words_multiplier : 1.0;
+  $min_words = (int) floor( absint( $_GET['miw'] ?? 0 ) / $words_multiplier );
+  $max_words = (int) ceil( absint( $_GET['maw'] ?? 0 ) / $words_multiplier );
 
   $is_any_post = isset( $_GET['post_type'] ) && ( $_GET['post_type'] === 'any' ) ? 1 : 0;
   $authors_in = empty( $_GET['authors'] ) ? [] : array_map( 'absint', explode( ',', $_GET['authors'] ) );
@@ -420,46 +423,65 @@ function fictioneer_extend_search_query( $query ) {
     );
   }
 
+  $post_types = (array) $query->get( 'post_type' );
+  $has_multiple_types = count( array_unique( $post_types ) ) > 1;
+  $include_stories = in_array( 'fcn_story', $post_types, true );
+
   if ( $min_words ) {
-    $meta_query_stack[] = array(
-      'relation' => 'OR',
-      array(
+    $min_clause = [];
+
+    if ( $has_multiple_types ) {
+      $min_clause[] = array(
         'key' => '_word_count',
         'value' => $min_words,
         'compare' => '>=',
         'type' => 'numeric'
-      ),
-      array(
+      );
+    }
+
+    if ( $include_stories ) {
+      $min_clause[] = array(
         'key' => 'fictioneer_story_total_word_count',
         'value' => $min_words,
         'compare' => '>=',
         'type' => 'numeric'
-      )
-    );
+      );
+    }
+
+    $meta_query_stack[] = count( $min_clause ) > 1
+      ? array_merge( array( 'relation' => 'OR' ), $min_clause )
+      : $min_clause[0];
   }
 
   if ( $max_words ) {
-    $meta_query_stack[] = array(
-      'relation' => 'OR',
-      array(
+    $max_clause = [];
+
+    if ( $has_multiple_types ) {
+      $max_clause[] = array(
         'key' => '_word_count',
         'value' => $max_words,
         'compare' => '<=',
         'type' => 'numeric'
-      ),
-      array(
+      );
+    }
+
+    if ( $include_stories ) {
+      $max_clause[] = array(
         'key' => 'fictioneer_story_total_word_count',
         'value' => $max_words,
         'compare' => '<=',
         'type' => 'numeric'
-      )
-    );
+      );
+    }
+
+    $meta_query_stack[] = count( $max_clause ) > 1
+      ? array_merge( array( 'relation' => 'OR' ), $max_clause )
+      : $max_clause[0];
   }
 
   // Only query stories and chapters for word limits
   if ( $min_words || $max_words  ) {
-    $types = (array) $query->get( 'post_type' );
-    $query->set( 'post_type', array_intersect( $types, ['fcn_story', 'fcn_chapter'] ) );
+    $query->set( 'post_type', array_intersect( $post_types, ['fcn_story', 'fcn_chapter'] ) );
   }
 
   if ( $meta_query_stack ) {
