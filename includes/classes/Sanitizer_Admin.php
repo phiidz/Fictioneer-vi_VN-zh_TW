@@ -661,4 +661,48 @@ class Sanitizer_Admin {
 
     return array_values( array_intersect( $post_ids, $filtered_ids ) );
   }
+
+  /**
+   * Filter out non-valid blog story array IDs.
+   *
+   * @since 5.26.0
+   * @since 5.30.0 - Refactored for optional author.
+   * @since 5.33.2 - Moved into Sanitizer_Admin class.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int[]    $story_blogs      Array of story blog IDs.
+   * @param int|null $story_author_id  Optional. Author ID of the story.
+   *
+   * @return int[] Filtered and validated array of IDs.
+   */
+
+  public static function filter_valid_blog_story_ids( $story_blogs, $story_author_id = null ) : array {
+    global $wpdb;
+
+    $story_blogs = wp_parse_id_list( $story_blogs );
+    $story_blogs = array_values( array_filter( $story_blogs ) );
+
+    if ( empty( $story_blogs ) ) {
+      return [];
+    }
+
+    $placeholders = implode( ',', array_fill( 0, count( $story_blogs ), '%d' ) );
+
+    $where_author = $story_author_id !== null ? 'AND p.post_author = %d' : '';
+    $sql = "
+      SELECT p.ID
+      FROM {$wpdb->posts} p
+      WHERE p.ID IN ($placeholders)
+        $where_author
+        AND p.post_type = 'fcn_story'
+        AND p.post_status IN ('publish', 'private', 'future')
+    ";
+
+    $args = $story_author_id !== null
+      ? array_merge( $story_blogs, [ $story_author_id ] )
+      : $story_blogs;
+
+    return $wpdb->get_col( $wpdb->prepare( $sql, ...$args ) );
+  }
 }

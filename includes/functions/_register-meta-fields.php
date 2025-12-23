@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Sanitizer_Admin;
 
 // =============================================================================
 // AUTH CALLBACKS
@@ -1662,7 +1663,7 @@ function fictioneer_register_collection_meta_fields() {
           return [];
         }
 
-        $meta_value = \Fictioneer\Sanitizer_Admin::filter_valid_collection_ids( $meta_value );
+        $meta_value = Sanitizer_Admin::filter_valid_collection_ids( $meta_value );
 
         if ( ! $meta_value ) {
           return [];
@@ -1825,7 +1826,7 @@ function fictioneer_register_post_meta_fields() {
           return [];
         }
 
-        $meta_value = \Fictioneer\Sanitizer_Admin::filter_valid_featured_ids( $meta_value );
+        $meta_value = Sanitizer_Admin::filter_valid_featured_ids( $meta_value );
 
         if ( ! $meta_value ) {
           return [];
@@ -1859,7 +1860,7 @@ function fictioneer_register_post_meta_fields() {
           return [];
         }
 
-        $meta_value = fictioneer_sql_filter_valid_blog_story_ids( $meta_value );
+        $meta_value = Sanitizer_Admin::filter_valid_blog_story_ids( $meta_value );
 
         if ( ! $meta_value ) {
           return [];

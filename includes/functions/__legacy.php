@@ -1230,7 +1230,7 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_collection_ids' ) ) {
 
 if ( ! function_exists( 'fictioneer_sql_filter_valid_featured_ids' ) ) {
   /**
-   * Filter out non-valid featured array IDs.
+   * [Deprecated] Filter out non-valid featured array IDs.
    *
    * @since 5.26.0
    * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer_Admin::filter_valid_featured_ids() instead.
@@ -1244,5 +1244,26 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_featured_ids' ) ) {
 
   function fictioneer_sql_filter_valid_featured_ids( $post_ids ) {
     return Sanitizer_Admin::filter_valid_featured_ids( $post_ids );
+  }
+}
+
+if ( ! function_exists( 'fictioneer_sql_filter_valid_blog_story_ids' ) ) {
+  /**
+   * [Deprecated] Filter out non-valid blog story array IDs.
+   *
+   * @since 5.26.0
+   * @since 5.30.0 - Refactored for optional author.
+   * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer_Admin::filter_valid_blog_story_ids() instead.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int[]    $story_blogs      Array of story blog IDs.
+   * @param int|null $story_author_id  Optional. Author ID of the story.
+   *
+   * @return int[] Filtered and validated array of IDs.
+   */
+
+  function fictioneer_sql_filter_valid_blog_story_ids( $story_blogs, $story_author_id = null ) {
+    return Sanitizer_Admin::filter_valid_blog_story_ids( $story_blogs, $story_author_id );
   }
 }

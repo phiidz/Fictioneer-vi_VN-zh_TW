@@ -402,58 +402,6 @@ function fictioneer_set_chapter_story_parent( $chapter_id, $story_id ) {
 // SPECIFIC SQL QUERIES
 // =============================================================================
 
-if ( ! function_exists( 'fictioneer_sql_filter_valid_blog_story_ids' ) ) {
-  /**
-   * Filter out non-valid blog story array IDs.
-   *
-   * Note: This is a lot faster than using WP_Query().
-   *
-   * @since 5.26.0
-   * @since 5.30.0 - Refactored for optional author.
-   *
-   * @global wpdb $wpdb  WordPress database object.
-   *
-   * @param int[]    $story_blogs      Array of story blog IDs.
-   * @param int|null $story_author_id  Optional. Author ID of the story.
-   *
-   * @return int[] Filtered and validated array of IDs.
-   */
-
-  function fictioneer_sql_filter_valid_blog_story_ids( $story_blogs, $story_author_id = null ) {
-    global $wpdb;
-
-    // Prepare
-    $story_blogs = wp_parse_id_list( $story_blogs );
-    $story_blogs = array_values( array_filter( $story_blogs ) );
-
-    if ( empty( $story_blogs ) ) {
-      return [];
-    }
-
-    // Prepare placeholders
-    $placeholders = implode( ',', array_fill( 0, count( $story_blogs ), '%d' ) );
-
-    // Prepare SQL query
-    $where_author = $story_author_id !== null ? 'AND p.post_author = %d' : '';
-    $sql = "
-      SELECT p.ID
-      FROM {$wpdb->posts} p
-      WHERE p.ID IN ($placeholders)
-        $where_author
-        AND p.post_type = 'fcn_story'
-        AND p.post_status IN ('publish', 'private', 'future')
-    ";
-
-    // Prepare arguments
-    $args = $story_author_id !== null
-      ? array_merge( $story_blogs, [ $story_author_id ] )
-      : $story_blogs;
-
-    // Execute and return
-    return $wpdb->get_col( $wpdb->prepare( $sql, ...$args ) );
-  }
-}
-
 if ( ! function_exists( 'fictioneer_sql_has_new_story_chapters' ) ) {
   /**
    * Check whether there any added chapters are to be considered "new".
