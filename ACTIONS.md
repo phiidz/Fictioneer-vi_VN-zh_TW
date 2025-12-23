@@ -906,6 +906,32 @@ Short-circuits the `fictioneer_render_icon_menu()` helper, allowing you to rende
 
 ---
 
+### `do_action( 'fictioneer_override_render_search_authors', $authors, $query_var, $singular, $plural, $args )`
+Short-circuits the `\Fictioneer\Search::render_search_authors()` helper, allowing you to render your own search input.
+
+**$args:**
+* $authors (array) – Array of WP_User objects.
+* $query_var (string) – Query variable.
+* $singular (string) – Singular display name of input.
+* $plural (string) – Plural display name of input.
+* $args (array|null) – Optional. Optional arguments.
+
+---
+
+### `do_action( 'fictioneer_override_render_search_taxonomies', $taxonomies, $type, $query_var, $and_var, $singular, $plural, $args )`
+Short-circuits the `\Fictioneer\Search::render_search_taxonomies()` helper, allowing you to render your own search input.
+
+**$args:**
+* $taxonomies (array) – Array of WP_Term objects.
+* $type (string) – The taxonomy type.
+* $query_var (string) – Query variable.
+* $and_var (string) – Name of the submitted operator field.
+* $singular (string) – Singular display name of input.
+* $plural (string) – Plural display name of input.
+* $args (array|null) – Optional. Optional arguments.
+
+---
+
 ### `do_action( 'fictioneer_post_after_content', $post_id, $args )`
 Fires right after the article content in the `_post.php` partial and `single-post.php` template. Mind the render context, which can be `'loop'`, `'shortcode_fictioneer_blog'`, or `'single-post'`.
 

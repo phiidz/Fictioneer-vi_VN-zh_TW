@@ -298,7 +298,7 @@ Fictioneer customizes WordPress by using as many standard action and filter hook
 | `manage_{$type}_posts_custom_column` | `fictioneer_manage_posts_column_patreon` (10), `fictioneer_manage_posts_column_chapter_story` (10)
 | `personal_options_update` | `fictioneer_update_admin_user_profile` (10), `fictioneer_update_my_user_profile` (10), `fictioneer_update_admin_unlocked_posts` (10)
 | `post_updated` | `fictioneer_snapshot_post` (3)
-| `pre_get_posts` | `fictioneer_extend_search_query` (11), `\Fictioneer\Role_Admin::limit_media_ajax_query_attachments` (10), `\Fictioneer\Role_Admin::limit_media_list_view` (10), `fictioneer_filter_chapters_by_story` (10), `fictioneer_extend_taxonomy_pages` (10), `\Fictioneer\Role_Admin::limit_posts_to_author` (10), `fictioneer_add_sof_to_taxonomy_query` (10)
+| `pre_get_posts` | `\Fictioneer\Role_Admin::limit_media_ajax_query_attachments` (10), `\Fictioneer\Role_Admin::limit_media_list_view` (10), `fictioneer_filter_chapters_by_story` (10), `fictioneer_extend_taxonomy_pages` (10), `\Fictioneer\Role_Admin::limit_posts_to_author` (10), `fictioneer_add_sof_to_taxonomy_query` (10)
 | `private_to_draft` | `fictioneer_chapter_to_draft` (10)
 | `profile_update` | `fictioneer_on_profile_change` (10)
 | `publish_to_draft` | `fictioneer_chapter_to_draft` (10)

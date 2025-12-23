@@ -1120,3 +1120,47 @@ if ( ! function_exists( 'fictioneer_bulk_update_post_meta' ) ) {
     Utils_Admin::bulk_update_post_meta( $post_id, $fields );
   }
 }
+
+// =============================================================================
+// SEARCH DELEGATES
+// =============================================================================
+
+if ( ! function_exists( 'fcn_keyword_search_taxonomies_input' ) ) {
+  /**
+   * [Deprecated] Render taxonomies keyword input field for search form.
+   *
+   * @since 5.0.0
+   * @deprecated 5.33.2 - Use \Fictioneer\Search::render_search_taxonomies() instead.
+   *
+   * @param array  $taxonomies  Array of WP_Term objects.
+   * @param string $type        The taxonomy type.
+   * @param string $query_var   Name of the submitted collection field.
+   * @param string $and_var     Name of the submitted operator field.
+   * @param string $singular    Singular display name of taxonomy.
+   * @param string $plural      Plural display name of taxonomy.
+   * @param array  $args        Optional arguments.
+   */
+
+  function fcn_keyword_search_taxonomies_input( $taxonomies, $type, $query_var, $and_var, $singular, $plural, $args = [] ) {
+    \Fictioneer\Search::render_search_taxonomies( $taxonomies, $type, $query_var, $and_var, $singular, $plural, $args );
+  }
+}
+
+if ( ! function_exists( 'fcn_keyword_search_authors_input' ) ) {
+  /**
+   * [Deprecated] Render authors keyword input field for search form.
+   *
+   * @since 5.0.0
+   * @deprecated 5.33.2 - Use \Fictioneer\Search::render_search_authors() instead.
+   *
+   * @param array  $authors    Array of WP_User objects.
+   * @param string $query_var  Name of the submitted collection field.
+   * @param string $singular   Singular display name of taxonomy.
+   * @param string $plural     Plural display name of taxonomy.
+   * @param array  $args       Optional arguments.
+   */
+
+  function fcn_keyword_search_authors_input( $authors, $query_var, $singular, $plural, $args = [] ) {
+     \Fictioneer\Search::render_search_authors( $authors, $query_var, $singular, $plural, $args );
+  }
+}

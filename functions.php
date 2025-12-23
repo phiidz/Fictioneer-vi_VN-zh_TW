@@ -731,7 +731,15 @@ if ( get_option( 'fictioneer_enable_storygraph_api' ) ) {
  * Add search.
  */
 
-require_once __DIR__ . '/includes/functions/_module-search.php';
+if ( ! get_option( 'fictioneer_disable_theme_search' ) ) {
+  add_action( 'pre_get_posts', function( \WP_Query $query ) {
+    if ( is_admin() || ! $query->is_main_query() || ! $query->is_search() ) {
+      return;
+    }
+
+    \Fictioneer\Search::extend_query( $query );
+  }, 11 );
+}
 
 /**
  * Generate SEO schema graphs.
