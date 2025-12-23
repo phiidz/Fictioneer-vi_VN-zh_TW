@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Sanitizer_Admin;
 
 // =============================================================================
 // ALLOWED ORDERBY
@@ -400,62 +401,6 @@ function fictioneer_set_chapter_story_parent( $chapter_id, $story_id ) {
 // =============================================================================
 // SPECIFIC SQL QUERIES
 // =============================================================================
-
-if ( ! function_exists( 'fictioneer_sql_filter_valid_chapter_ids' ) ) {
-  /**
-   * Filter out non-valid chapter array IDs.
-   *
-   * Note: This is a lot faster than using WP_Query().
-   *
-   * @since 5.26.0
-   *
-   * @global wpdb $wpdb  WordPress database object.
-   *
-   * @param int   $story_id     Story ID.
-   * @param int[] $chapter_ids  Array of chapter IDs.
-   *
-   * @return int[] Filtered and validated array of IDs.
-   */
-
-  function fictioneer_sql_filter_valid_chapter_ids( $story_id, $chapter_ids ) {
-    global $wpdb;
-
-    // Prepare
-    $chapter_ids = wp_parse_id_list( $chapter_ids );
-    $chapter_ids = array_values( array_filter( $chapter_ids ) );
-
-    if ( empty( $chapter_ids ) ) {
-      return [];
-    }
-
-    // Prepare placeholders and values
-    $placeholders = implode( ',', array_fill( 0, count( $chapter_ids ), '%d' ) );
-    $values = $chapter_ids;
-
-    // Prepare SQL query
-    $sql =
-      "SELECT p.ID
-      FROM {$wpdb->posts} p
-      LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id
-      WHERE p.post_type = 'fcn_chapter'
-        AND p.ID IN ($placeholders)
-        AND p.post_status NOT IN ('trash', 'draft', 'auto-draft', 'inherit')";
-
-    if ( defined('FICTIONEER_FILTER_STORY_CHAPTERS') && FICTIONEER_FILTER_STORY_CHAPTERS ) {
-      $sql .= " AND pm.meta_key = %s AND pm.meta_value = %d";
-      $values[] = 'fictioneer_chapter_story';
-      $values[] = $story_id;
-    }
-
-    $query = $wpdb->prepare( $sql, ...$values );
-
-    // Execute
-    $filtered_ids = $wpdb->get_col( $query );
-
-    // Restore order and return
-    return array_values( array_intersect( $chapter_ids, $filtered_ids ) );
-  }
-}
 
 if ( ! function_exists( 'fictioneer_sql_filter_valid_page_ids' ) ) {
   /**

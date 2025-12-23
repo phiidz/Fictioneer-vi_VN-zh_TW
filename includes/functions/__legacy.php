@@ -1164,3 +1164,27 @@ if ( ! function_exists( 'fcn_keyword_search_authors_input' ) ) {
      \Fictioneer\Search::render_search_authors( $authors, $query_var, $singular, $plural, $args );
   }
 }
+
+// =============================================================================
+// SPECIFIC SQL QUERIES
+// =============================================================================
+
+if ( ! function_exists( 'fictioneer_sql_filter_valid_chapter_ids' ) ) {
+  /**
+   * [Deprecated] Filter out non-valid chapter array IDs.
+   *
+   * @since 5.26.0
+   * @deprecated 5.33.2 - Use \Fictioneer\Sanitizer_Admin::filter_valid_chapter_ids() instead.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int   $story_id     Story ID.
+   * @param int[] $chapter_ids  Array of chapter IDs.
+   *
+   * @return int[] Filtered and validated array of IDs.
+   */
+
+  function fictioneer_sql_filter_valid_chapter_ids( $story_id, $chapter_ids ) {
+    return Sanitizer_Admin::filter_valid_chapter_ids( $story_id, $chapter_ids );
+  }
+}

@@ -1,6 +1,7 @@
 <?php
 
 use Fictioneer\Sanitizer;
+use Fictioneer\Sanitizer_Admin;
 use Fictioneer\Utils_Admin;
 
 // Array: Example collection of Font Awesome icons
@@ -2592,7 +2593,7 @@ function fictioneer_save_story_metaboxes( $post_id ) {
     $previous_chapter_ids = fictioneer_get_story_chapter_ids( $post_id );
 
     // Filter out non-valid chapter IDs
-    $chapter_ids = fictioneer_sql_filter_valid_chapter_ids( $post_id, $_POST['fictioneer_story_chapters'] );
+    $chapter_ids = Sanitizer_Admin::filter_valid_chapter_ids( $post_id, $_POST['fictioneer_story_chapters'] );
 
     if ( empty( $chapter_ids ) ) {
       $fields['fictioneer_story_chapters'] = []; // Ensure empty meta is removed
