@@ -402,62 +402,6 @@ function fictioneer_set_chapter_story_parent( $chapter_id, $story_id ) {
 // SPECIFIC SQL QUERIES
 // =============================================================================
 
-if ( ! function_exists( 'fictioneer_sql_has_new_story_chapters' ) ) {
-  /**
-   * Check whether there any added chapters are to be considered "new".
-   *
-   * @since 5.26.0
-   *
-   * @global wpdb $wpdb  WordPress database object.
-   *
-   * @param int   $story_id              Story ID.
-   * @param int[] $chapter_ids           Current array of chapter IDs.
-   * @param int[] $previous_chapter_ids  Previous array of chapter IDs.
-   *
-   * @return bool True or false.
-   */
-  function fictioneer_sql_has_new_story_chapters( $story_id, $chapter_ids, $previous_chapter_ids ) {
-    global $wpdb;
-
-    // Any chapters added?
-    $chapter_diff = array_diff( $chapter_ids, $previous_chapter_ids );
-
-    if ( empty( $chapter_diff ) ) {
-      return;
-    }
-
-    // Filter allowed statuses
-    $allowed_statuses = apply_filters(
-      'fictioneer_filter_chapters_added_statuses',
-      ['publish'],
-      $story_id
-    );
-
-    // Prepare placeholders for IN clauses
-    $chapter_placeholders = implode( ',', array_fill( 0, count( $chapter_diff ), '%d' ) );
-    $status_placeholders = implode( ',', array_fill( 0, count( $allowed_statuses ), '%s' ) );
-
-    // Prepare SQL query
-    $sql =
-      "SELECT p.ID
-      FROM {$wpdb->posts} p
-      LEFT JOIN {$wpdb->postmeta} pm_hidden ON p.ID = pm_hidden.post_id
-      WHERE p.post_type = 'fcn_chapter'
-        AND p.ID IN ($chapter_placeholders)
-        AND p.post_status IN ($status_placeholders)
-        AND (pm_hidden.meta_key != 'fictioneer_chapter_hidden' OR pm_hidden.meta_value IS NULL)
-      LIMIT 1";
-
-    $query = $wpdb->prepare( $sql, ...$chapter_diff, ...$allowed_statuses );
-
-    // Execute the query to check for new valid chapters
-    $new_chapters = $wpdb->get_col( $query );
-
-    // Report
-    return ! empty( $new_chapters );
-  }
-}
-
 if ( ! function_exists( 'fictioneer_sql_get_co_authored_story_ids' ) ) {
   /**
    * Return story IDs where the user is a co-author.

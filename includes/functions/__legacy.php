@@ -1121,6 +1121,27 @@ if ( ! function_exists( 'fictioneer_bulk_update_post_meta' ) ) {
   }
 }
 
+if ( ! function_exists( 'fictioneer_sql_has_new_story_chapters' ) ) {
+  /**
+   * [Deprecated] Check whether there any added chapters are to be considered "new".
+   *
+   * @since 5.26.0
+   * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::has_new_story_chapters() instead.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int   $story_id              Story ID.
+   * @param int[] $chapter_ids           Current array of chapter IDs.
+   * @param int[] $previous_chapter_ids  Previous array of chapter IDs.
+   *
+   * @return bool True if new chapters, false otherwise.
+   */
+
+  function fictioneer_sql_has_new_story_chapters( $story_id, $chapter_ids, $previous_chapter_ids ) {
+    return Utils_Admin::has_new_story_chapters( $story_id, $chapter_ids, $previous_chapter_ids );
+  }
+}
+
 // =============================================================================
 // SEARCH DELEGATES
 // =============================================================================

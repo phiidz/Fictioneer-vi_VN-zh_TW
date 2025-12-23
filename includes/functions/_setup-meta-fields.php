@@ -2609,7 +2609,7 @@ function fictioneer_save_story_metaboxes( $post_id ) {
     }
 
     // Remember when chapters have been added
-    if ( fictioneer_sql_has_new_story_chapters( $post_id, $chapter_ids, $previous_chapter_ids ) ) {
+    if ( Utils_Admin::has_new_story_chapters( $post_id, $chapter_ids, $previous_chapter_ids ) ) {
       update_post_meta( $post_id, 'fictioneer_chapters_added', current_time( 'mysql', true ) );
     }
 

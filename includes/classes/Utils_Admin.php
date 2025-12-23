@@ -850,4 +850,54 @@ class Utils_Admin {
     // Cache cleanup
     wp_cache_delete( $post_id, 'post_meta' );
   }
+
+  /**
+   * Check whether there any added chapters are to be considered "new".
+   *
+   * @since 5.26.0
+   * @since 5.33.2 - Moved into Utils_Admin class.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int   $story_id              Story ID.
+   * @param int[] $chapter_ids           Current array of chapter IDs.
+   * @param int[] $previous_chapter_ids  Previous array of chapter IDs.
+   *
+   * @return bool True if new chapters, false otherwise.
+   */
+
+  public static function has_new_story_chapters( $story_id, $chapter_ids, $previous_chapter_ids ) : bool {
+    global $wpdb;
+
+    $chapter_diff = array_diff( $chapter_ids, $previous_chapter_ids );
+
+    if ( empty( $chapter_diff ) ) {
+      return false;
+    }
+
+    $allowed_statuses = apply_filters(
+      'fictioneer_filter_chapters_added_statuses',
+      ['publish'],
+      $story_id
+    );
+
+    $chapter_placeholders = implode( ',', array_fill( 0, count( $chapter_diff ), '%d' ) );
+    $status_placeholders = implode( ',', array_fill( 0, count( $allowed_statuses ), '%s' ) );
+
+    $sql =
+      "SELECT p.ID
+      FROM {$wpdb->posts} p
+      LEFT JOIN {$wpdb->postmeta} pm_hidden ON p.ID = pm_hidden.post_id
+      WHERE p.post_type = 'fcn_chapter'
+        AND p.ID IN ($chapter_placeholders)
+        AND p.post_status IN ($status_placeholders)
+        AND (pm_hidden.meta_key != 'fictioneer_chapter_hidden' OR pm_hidden.meta_value IS NULL)
+      LIMIT 1";
+
+    $query = $wpdb->prepare( $sql, ...$chapter_diff, ...$allowed_statuses );
+
+    $new_chapters = $wpdb->get_col( $query );
+
+    return ! empty( $new_chapters );
+  }
 }
