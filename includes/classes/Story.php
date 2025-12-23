@@ -503,7 +503,7 @@ class Story {
     $old_total_comment_count = (int) get_post_field( 'comment_count', $story_id, 'raw' );
 
     if ( $old_total_comment_count !== $new_total_comment_count ) {
-      fictioneer_sql_update_comment_count( $story_id, $new_total_comment_count );
+      Utils_Admin::update_comment_count( $story_id, $new_total_comment_count );
     }
 
     if ( defined( 'FICTIONEER_ENABLE_STORY_DATA_META_CACHE' ) && FICTIONEER_ENABLE_STORY_DATA_META_CACHE ) {
@@ -922,7 +922,7 @@ class Story {
       $old_total_comment_count = (int) get_post_field( 'comment_count', $story_id, 'raw' );
 
       if ( $old_total_comment_count !== $new_total_comment_count ) {
-        fictioneer_sql_update_comment_count( $story_id, $new_total_comment_count );
+        Utils_Admin::update_comment_count( $story_id, $new_total_comment_count );
       }
     }
   }

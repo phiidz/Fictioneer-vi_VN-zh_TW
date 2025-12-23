@@ -1045,4 +1045,28 @@ class Utils_Admin {
       'co_author' => $co_author
     );
   }
+
+  /**
+   * Update the comment count of a post.
+   *
+   * @since 5.26.0
+   * @since 5.33.2 - Moved into Utils_Admin class.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int $post_id  Post ID.
+   * @param int $count    Comment count.
+   */
+
+  public static function update_comment_count( $post_id, $count ) : void {
+    global $wpdb;
+
+    $wpdb->update(
+      $wpdb->posts,
+      array( 'comment_count' => $count ),
+      array( 'ID' => $post_id ),
+      ['%d'],
+      ['%d']
+    );
+  }
 }

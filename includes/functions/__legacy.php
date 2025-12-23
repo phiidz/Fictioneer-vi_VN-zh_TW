@@ -1163,9 +1163,10 @@ if ( ! function_exists( 'fictioneer_sql_get_co_authored_story_ids' ) ) {
 
 if ( ! function_exists( 'fictioneer_sql_get_chapter_story_selection' ) ) {
   /**
-   * Return selectable stories for chapter assignments.
+   * [Deprecated] Return selectable stories for chapter assignments.
    *
    * @since 5.26.0
+   * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::get_chapter_story_selection() instead.
    *
    * @global wpdb $wpdb  WordPress database object.
    *
@@ -1178,6 +1179,22 @@ if ( ! function_exists( 'fictioneer_sql_get_chapter_story_selection' ) ) {
   function fictioneer_sql_get_chapter_story_selection( $post_author_id, $current_story_id = 0 ) {
     return Utils_Admin::get_chapter_story_selection( $post_author_id, $current_story_id );
   }
+}
+
+/**
+ * [Deprecated] Update the comment count of a post.
+ *
+ * @since 5.26.0
+ * @deprecated 5.33.2 - Use \Fictioneer\Utils_Admin::update_comment_count() instead.
+ *
+ * @global wpdb $wpdb  WordPress database object.
+ *
+ * @param int $post_id  Post ID.
+ * @param int $count    Comment count.
+ */
+
+function fictioneer_sql_update_comment_count( $post_id, $count ) {
+  Utils_Admin::update_comment_count( $post_id, $count );
 }
 
 // =============================================================================

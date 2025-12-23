@@ -400,33 +400,6 @@ function fictioneer_set_chapter_story_parent( $chapter_id, $story_id ) {
 }
 
 // =============================================================================
-// SPECIFIC SQL QUERIES
-// =============================================================================
-
-/**
- * Update the comment count of a post.
- *
- * @since 5.26.0
- *
- * @global wpdb $wpdb  WordPress database object.
- *
- * @param int $post_id  Post ID.
- * @param int $count    Comment count.
- */
-
-function fictioneer_sql_update_comment_count( $post_id, $count ) {
-  global $wpdb;
-
-  $wpdb->update(
-    $wpdb->posts,
-    array( 'comment_count' => $count ),
-    array( 'ID' => $post_id ),
-    ['%d'],
-    ['%d']
-  );
-}
-
-// =============================================================================
 // SPOTLIGHT QUERY
 // =============================================================================
 
