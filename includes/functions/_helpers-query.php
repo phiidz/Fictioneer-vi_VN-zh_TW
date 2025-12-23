@@ -422,6 +422,7 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_chapter_ids' ) ) {
 
     // Prepare
     $chapter_ids = wp_parse_id_list( $chapter_ids );
+    $chapter_ids = array_values( array_filter( $chapter_ids ) );
 
     if ( empty( $chapter_ids ) ) {
       return [];
@@ -477,6 +478,7 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_page_ids' ) ) {
 
     // Prepare
     $page_ids = wp_parse_id_list( $page_ids );
+    $page_ids = array_values( array_filter( $page_ids ) );
 
     if ( empty( $page_ids ) || FICTIONEER_MAX_CUSTOM_PAGES_PER_STORY < 1 ) {
       return [];
@@ -528,6 +530,7 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_collection_ids' ) ) {
 
     // Prepare
     $item_ids = wp_parse_id_list( $item_ids );
+    $item_ids = array_values( array_filter( $item_ids ) );
 
     if ( empty( $item_ids ) ) {
       return [];
@@ -592,6 +595,7 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_featured_ids' ) ) {
 
     // Prepare
     $post_ids = wp_parse_id_list( $post_ids );
+    $post_ids = array_values( array_filter( $post_ids ) );
 
     if ( empty( $post_ids ) ) {
       return [];
@@ -638,6 +642,7 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_blog_story_ids' ) ) {
 
     // Prepare
     $story_blogs = wp_parse_id_list( $story_blogs );
+    $story_blogs = array_values( array_filter( $story_blogs ) );
 
     if ( empty( $story_blogs ) ) {
       return [];
