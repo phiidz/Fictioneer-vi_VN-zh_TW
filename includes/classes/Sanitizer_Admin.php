@@ -567,4 +567,60 @@ class Sanitizer_Admin {
 
     return array_values( array_intersect( $page_ids, $filtered_page_ids ) );
   }
+
+  /**
+   * Filter out non-valid story page array IDs.
+   *
+   * @since 5.26.0
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int[] $item_ids  Array of collection item IDs.
+   *
+   * @return int[] Filtered and validated array of IDs.
+   */
+
+  public static function filter_valid_collection_ids( $item_ids ) : array {
+    global $wpdb;
+
+    $item_ids = wp_parse_id_list( $item_ids );
+    $item_ids = array_values( array_filter( $item_ids ) );
+
+    if ( empty( $item_ids ) ) {
+      return [];
+    }
+
+    $forbidden = array_unique([
+      get_option( 'fictioneer_user_profile_page', 0 ),
+      get_option( 'fictioneer_bookmarks_page', 0 ),
+      get_option( 'fictioneer_stories_page', 0 ),
+      get_option( 'fictioneer_chapters_page', 0 ),
+      get_option( 'fictioneer_recommendations_page', 0 ),
+      get_option( 'fictioneer_collections_page', 0 ),
+      get_option( 'fictioneer_bookshelf_page', 0 ),
+      get_option( 'fictioneer_authors_page', 0 ),
+      get_option( 'fictioneer_404_page', 0 ),
+      get_option( 'page_on_front', 0 ),
+      get_option( 'page_for_posts', 0 )
+    ]);
+
+    $item_ids = array_diff( $item_ids, array_map( 'intval', $forbidden ) );
+
+    if ( empty( $item_ids ) ) {
+      return [];
+    }
+
+    $placeholders = implode( ',', array_fill( 0, count( $item_ids ), '%d' ) );
+
+    $sql =
+      "SELECT p.ID
+      FROM {$wpdb->posts} p
+      WHERE p.ID IN ($placeholders)
+        AND p.post_type IN ('post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation')
+        AND p.post_status IN ('publish', 'private', 'future')";
+
+    $filtered_item_ids = $wpdb->get_col( $wpdb->prepare( $sql, ...$item_ids ) );
+
+    return array_values( array_intersect( $item_ids, $filtered_item_ids ) );
+  }
 }

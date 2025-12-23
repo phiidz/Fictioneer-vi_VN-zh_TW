@@ -1662,7 +1662,7 @@ function fictioneer_register_collection_meta_fields() {
           return [];
         }
 
-        $meta_value = fictioneer_sql_filter_valid_collection_ids( $meta_value );
+        $meta_value = \Fictioneer\Sanitizer_Admin::filter_valid_collection_ids( $meta_value );
 
         if ( ! $meta_value ) {
           return [];

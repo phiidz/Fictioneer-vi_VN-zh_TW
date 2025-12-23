@@ -4302,7 +4302,7 @@ function fictioneer_save_collection_metaboxes( $post_id ) {
 
   // Collection items
   if ( isset( $_POST['fictioneer_collection_items'] ) ) {
-    $item_ids = fictioneer_sql_filter_valid_collection_ids( $_POST['fictioneer_collection_items'] );
+    $item_ids = Sanitizer_Admin::filter_valid_collection_ids( $_POST['fictioneer_collection_items'] );
 
     if ( empty( $item_ids ) ) {
       $fields['fictioneer_collection_items'] = []; // Ensure empty meta is removed
