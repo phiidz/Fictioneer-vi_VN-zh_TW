@@ -421,9 +421,7 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_chapter_ids' ) ) {
     global $wpdb;
 
     // Prepare
-    $chapter_ids = is_array( $chapter_ids ) ? $chapter_ids : [ $chapter_ids ];
-    $chapter_ids = array_map( 'intval', $chapter_ids );
-    $chapter_ids = array_filter( $chapter_ids, function( $value ) { return $value > 0; } );
+    $chapter_ids = wp_parse_id_list( $chapter_ids );
 
     if ( empty( $chapter_ids ) ) {
       return [];
@@ -480,9 +478,7 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_page_ids' ) ) {
     global $wpdb;
 
     // Prepare
-    $page_ids = is_array( $page_ids ) ? $page_ids : [ $page_ids ];
-    $page_ids = array_map( 'intval', $page_ids );
-    $page_ids = array_filter( $page_ids, function( $value ) { return $value > 0; } );
+    $page_ids = wp_parse_id_list( $page_ids );
 
     if ( empty( $page_ids ) || FICTIONEER_MAX_CUSTOM_PAGES_PER_STORY < 1 ) {
       return [];
@@ -534,9 +530,7 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_collection_ids' ) ) {
     global $wpdb;
 
     // Prepare
-    $item_ids = is_array( $item_ids ) ? $item_ids : [ $item_ids ];
-    $item_ids = array_map( 'intval', $item_ids );
-    $item_ids = array_filter( $item_ids, function( $value ) { return $value > 0; } );
+    $item_ids = wp_parse_id_list( $item_ids );
 
     if ( empty( $item_ids ) ) {
       return [];
@@ -602,9 +596,7 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_featured_ids' ) ) {
     global $wpdb;
 
     // Prepare
-    $post_ids = is_array( $post_ids ) ? $post_ids : [ $post_ids ];
-    $post_ids = array_map( 'intval', $post_ids );
-    $post_ids = array_filter( $post_ids, function( $value ) { return $value > 0; } );
+    $post_ids = wp_parse_id_list( $post_ids );
 
     if ( empty( $post_ids ) ) {
       return [];
@@ -652,9 +644,7 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_blog_story_ids' ) ) {
     global $wpdb;
 
     // Prepare
-    $story_blogs = is_array( $story_blogs ) ? $story_blogs : [ $story_blogs ];
-    $story_blogs = array_map( 'intval', $story_blogs );
-    $story_blogs = array_filter( $story_blogs, function( $value ) { return $value > 0; } );
+    $story_blogs = wp_parse_id_list( $story_blogs );
 
     if ( empty( $story_blogs ) ) {
       return [];
