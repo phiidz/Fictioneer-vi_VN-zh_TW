@@ -852,7 +852,6 @@ class Utils {
    */
 
   public static function deprecated( $function, $version, $replacement ) {
-    return;
     if ( defined( 'WP_DEBUG' ) && WP_DEBUG && wp_get_environment_type() !== 'production' ) {
       trigger_error(
         sprintf(
