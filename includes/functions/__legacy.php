@@ -142,8 +142,8 @@ function fictioneer_explode_list( $string ) {
  * @since 5.15.0
  * @deprecated 5.34.0 - Use \Fictioneer\Utils::parse_list() in comma-mode instead.
  *
- * @param string     $input  The comma-separated list.
- * @param array|null $args   Deprecated.
+ * @param string $input  The comma-separated list.
+ * @param array  $args   Deprecated. Optional flags ('unique', 'absint').
  *
  * @return array The comma-separated list turned array.
  */
