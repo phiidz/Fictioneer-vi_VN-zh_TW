@@ -76,12 +76,17 @@ class Utils {
    *
    * @param array|string $input_list  List of values.
    * @param string|null  $sanitizer   Optional. Name of sanitizer function.
+   * @param string       $mode        Optional. Parsing mode (auto or comma). Default auto.
    *
    * @return array Array of values.
    */
 
-  public static function parse_list( $input_list, $sanitizer = null ) : array {
-    $values = wp_parse_list( $input_list ?? '' );
+  public static function parse_list( $input_list, $sanitizer = null, $mode = 'auto' ) : array {
+    if ( $mode === 'comma' && is_string( $input_list ) ) {
+      $values = array_map( 'trim', explode( ',', $input_list ) );
+    } else {
+      $values = wp_parse_list( $input_list );
+    }
 
     if ( $sanitizer && is_callable( $sanitizer ) ) {
       $values = array_map( $sanitizer, $values );
@@ -89,7 +94,14 @@ class Utils {
       $values = array_values( $values );
     }
 
-    return $values;
+    $values = array_filter(
+      $values,
+      static function( $v ) {
+        return $v !== '';
+      }
+    );
+
+    return array_values( $values );
   }
 
   /**
