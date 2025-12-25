@@ -330,6 +330,30 @@ function fictioneer_update_admin_user_profile( $updated_user_id ) {
         sanitize_text_field( $_POST['fictioneer_patreon_id_hash'] ?? '' )
       );
     }
+
+    // Capabilities
+    $user = get_user_by( 'id', $updated_user_id );
+
+    if ( $user instanceof WP_User ) {
+      $caps = array(
+        'fcn_custom_page_css' => 'fictioneer_cap_fcn_custom_page_css',
+        'fcn_unfiltered_css' => 'fictioneer_cap_fcn_unfiltered_css',
+        'fcn_shortcodes' => 'fictioneer_cap_fcn_shortcodes',
+        'fcn_custom_page_header' => 'fictioneer_cap_fcn_custom_page_header'
+      );
+
+      foreach ( $caps as $cap => $field ) {
+        if ( ! isset( $_POST[ $field ] ) ) {
+          continue;
+        }
+
+        if ( Sanitizer::sanitize_bool( $_POST[ $field ] ) ) {
+          $user->add_cap( $cap );
+        } else {
+          $user->remove_cap( $cap );
+        }
+      }
+    }
   }
 }
 add_action( 'personal_options_update', 'fictioneer_update_admin_user_profile' );
@@ -2306,6 +2330,65 @@ function fictioneer_admin_profile_external_avatar( $profile_user ) {
   <?php // <--- End HTML
 }
 add_action( 'fictioneer_admin_user_sections', 'fictioneer_admin_profile_external_avatar', 50 );
+
+// =============================================================================
+// SHOW CAPABILITY SECTION
+// =============================================================================
+
+/**
+ * Render HTML for the capabilities section in the wp-admin user profile.
+ *
+ * @since 5.34.0
+ *
+ * @param WP_User $profile_user  The profile user object. Not necessarily the one
+ *                               currently editing the profile!
+ */
+
+function fictioneer_admin_profile_capabilities( $profile_user ) {
+  // Abort conditions...
+  if ( ! current_user_can( 'manage_options' ) ) {
+    return;
+  }
+
+  // Start HTML ---> ?>
+  <tr class="user-moderation-flags-wrap">
+    <th><?php _e( 'Additional Capabilities' ); ?></th>
+    <td>
+      <fieldset>
+        <div>
+          <label for="fictioneer_cap_fcn_custom_page_css" class="checkbox-group">
+            <input type="hidden" name="fictioneer_cap_fcn_custom_page_css" value="0">
+            <input name="fictioneer_cap_fcn_custom_page_css" type="checkbox" id="fictioneer_cap_fcn_custom_page_css" <?php echo checked( 1, ! empty( $profile_user->caps['fcn_custom_page_css'] ), false ); ?> value="1">
+            <span><?php _ex( 'Custom Page CSS', 'Capability translation', 'fictioneer' ); ?></span>
+          </label>
+        </div>
+        <div>
+          <label for="fictioneer_cap_fcn_unfiltered_css" class="checkbox-group">
+            <input type="hidden" name="fictioneer_cap_fcn_unfiltered_css" value="0">
+            <input name="fictioneer_cap_fcn_unfiltered_css" type="checkbox" id="fictioneer_cap_fcn_unfiltered_css" <?php echo checked( 1, ! empty( $profile_user->caps['fcn_unfiltered_css'] ), false ); ?> value="1">
+            <span><?php _ex( 'Unfiltered CSS', 'Capability translation', 'fictioneer' ); ?></span>
+          </label>
+        </div>
+        <div>
+          <label for="fictioneer_cap_fcn_shortcodes" class="checkbox-group">
+            <input type="hidden" name="fictioneer_cap_fcn_shortcodes" value="0">
+            <input name="fictioneer_cap_fcn_shortcodes" type="checkbox" id="fictioneer_cap_fcn_shortcodes" <?php echo checked( 1, ! empty( $profile_user->caps['fcn_shortcodes'] ), false ); ?> value="1">
+            <span><?php _ex( 'Shortcodes', 'Capability translation', 'fictioneer' ); ?></span>
+          </label>
+        </div>
+        <div>
+          <label for="fictioneer_cap_fcn_custom_page_header" class="checkbox-group">
+            <input type="hidden" name="fictioneer_cap_fcn_custom_page_header" value="0">
+            <input name="fictioneer_cap_fcn_custom_page_header" type="checkbox" id="fictioneer_cap_fcn_custom_page_header" <?php echo checked( 1, ! empty( $profile_user->caps['fcn_custom_page_header'] ), false ); ?> value="1">
+            <span><?php _ex( 'Custom Page Header', 'Capability translation', 'fictioneer' ); ?></span>
+          </label>
+        </div>
+      </fieldset>
+    </td>
+  </tr>
+  <?php // <--- End HTML
+}
+add_action( 'fictioneer_admin_user_sections', 'fictioneer_admin_profile_capabilities', 60 );
 
 // =============================================================================
 // DANGER ZONE SECTION
