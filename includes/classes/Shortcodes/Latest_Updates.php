@@ -2,7 +2,6 @@
 
 namespace Fictioneer\Shortcodes;
 
-use Fictioneer\Sanitizer;
 use Fictioneer\Shortcodes\Base;
 
 defined( 'ABSPATH' ) OR exit;
@@ -11,7 +10,7 @@ class Latest_Updates {
   /**
    * Shortcode callback.
    *
-   * @since 3.0
+   * @since 4.3.0
    * @since 5.34.0 - Moved into class.
    *
    * @param array|string $attr     Raw shortcode attributes.
@@ -32,7 +31,7 @@ class Latest_Updates {
       $args['classes'] .= ' splide _splide-placeholder';
     }
 
-    $transient_enabled = ! empty( $args['cache'] ) && Base::transients_enabled( 'fictioneer_latest_stories' );
+    $transient_enabled = ! empty( $args['cache'] ) && Base::transients_enabled( $shortcode );
 
     if ( $transient_enabled ) {
       $transient_key = Base::transient_key( $shortcode, $args, $attr );
