@@ -2,6 +2,7 @@
 
 use Fictioneer\Sanitizer;
 use Fictioneer\Utils;
+use Fictioneer\Utils_Admin;
 
 // =============================================================================
 // UTILITY
@@ -1742,7 +1743,7 @@ function fictioneer_admin_profile_post_unlocks( $profile_user ) {
 
           <?php foreach ( $posts as $post ) : ?>
             <?php
-              $type = fictioneer_get_post_type_label( $post->post_type );
+              $type = Utils_Admin::get_post_type_label( $post->post_type );
               $title = fictioneer_get_safe_title( $post->ID );
               $item_title = sprintf(
                 _x( 'Author: %s | Title: %s', 'Unlock post item.', 'fictioneer' ),
@@ -1822,7 +1823,7 @@ function fictioneer_ajax_search_posts_to_unlock() {
     wp_send_json_success( array( 'html' => '' ) );
   } else {
     foreach ( $posts->posts as $post ) {
-      $type = fictioneer_get_post_type_label( $post->post_type );
+      $type = Utils_Admin::get_post_type_label( $post->post_type );
       $title = fictioneer_get_safe_title( $post->ID );
       $item_title = sprintf(
         _x( 'Author: %s | Title: %s', 'Unlock post item.', 'fictioneer' ),

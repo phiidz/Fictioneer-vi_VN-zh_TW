@@ -1948,7 +1948,7 @@ function fictioneer_convert_line_breaks() {
 
       if ( $post ) {
         $title = fictioneer_get_safe_title( $post );
-        $type = fictioneer_get_post_type_label( $post->post_type );
+        $type = Utils_Admin::get_post_type_label( $post->post_type );
 
         $output[] = "<tr><td style='padding-right: 24px;'>{$post_id}</td><td style='padding-right: 24px;'>{$type}</td><td>{$title}</td></tr>";
       }

@@ -1416,7 +1416,7 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_blog_story_ids' ) ) {
 }
 
 /**
- * [Deprecated] Translated label of the post status.
+ * [Deprecated] Translated label of post status.
  *
  * @since 5.24.5
  * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_post_status_label() instead.
@@ -1428,6 +1428,21 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_blog_story_ids' ) ) {
 
 function fictioneer_get_post_status_label( $status ) {
   return Utils_Admin::get_post_status_label( $status );
+}
+
+/**
+ * [Deprecated] Translated label of post type.
+ *
+ * @since 5.25.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::get_post_type_label() instead.
+ *
+ * @param string $type  Post type.
+ *
+ * @return string Translated label of the post type or the post type if custom.
+ */
+
+function fictioneer_get_post_type_label( $type ) {
+  return Utils_Admin::get_post_type_label( $type );
 }
 
 // =============================================================================

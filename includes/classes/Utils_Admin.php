@@ -1213,7 +1213,7 @@ class Utils_Admin {
   }
 
   /**
-   * Translated label of the post status.
+   * Translated label of post status.
    *
    * @since 5.24.5
    * @since 5.34.0 - Moved into Utils_Admin class.
@@ -1238,5 +1238,33 @@ class Utils_Admin {
     }
 
     return $labels[ $status ] ?? $status;
+  }
+
+  /**
+   * Translated label of post type.
+   *
+   * @since 5.25.0
+   * @since 5.34.0 - Moved into Utils_Admin class.
+   *
+   * @param string $type  Post type.
+   *
+   * @return string Translated label of the post type or the post type if custom.
+   */
+
+  public static function get_post_type_label( $type ) : string {
+    static $labels = null;
+
+    if ( $labels === null ) {
+      $labels = array(
+        'post' => _x( 'Post', 'Post type label.', 'fictioneer' ),
+        'page' => _x( 'Page', 'Post type label.', 'fictioneer' ),
+        'fcn_story' => _x( 'Story', 'Post type label.', 'fictioneer' ),
+        'fcn_chapter' => _x( 'Chapter', 'Post type label.', 'fictioneer' ),
+        'fcn_collection' => _x( 'Collection', 'Post type label.', 'fictioneer' ),
+        'fcn_recommendation' => _x( 'Rec', 'Post type label.', 'fictioneer' )
+      );
+    }
+
+    return $labels[ $type ] ?? $type;
   }
 }

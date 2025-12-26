@@ -1588,7 +1588,7 @@ function fictioneer_ajax_get_relationship_story_pages( $post_id, $meta_key ) {
 function fictioneer_callback_relationship_collection( $selected, $meta_key, $args = [] ) {
   foreach ( $selected as $item ) {
     $title = fictioneer_get_safe_title( $item, 'admin-callback-relationship-collection' );
-    $label = esc_html( fictioneer_get_post_type_label( $item->post_type ) );
+    $label = esc_html( Utils_Admin::get_post_type_label( $item->post_type ) );
     $classes = ['fictioneer-meta-field__relationships-item', 'fictioneer-meta-field__relationships-values-item'];
 
     // Start HTML ---> ?>
@@ -1679,7 +1679,7 @@ function fictioneer_ajax_get_relationship_collection( $post_id, $meta_key ) {
   foreach ( $query->posts as $item ) {
     // Chapter setup
     $title = fictioneer_get_safe_title( $item, 'admin-ajax-get-relationship-collection' );
-    $label = esc_html( fictioneer_get_post_type_label( $item->post_type ) );
+    $label = esc_html( Utils_Admin::get_post_type_label( $item->post_type ) );
     $classes = ['fictioneer-meta-field__relationships-item', 'fictioneer-meta-field__relationships-source-item'];
 
     // Build and append item
@@ -1733,7 +1733,7 @@ function fictioneer_ajax_get_relationship_collection( $post_id, $meta_key ) {
 function fictioneer_callback_relationship_featured( $selected, $meta_key, $args = [] ) {
   foreach ( $selected as $item ) {
     $title = fictioneer_get_safe_title( $item, 'admin-callback-relationship-featured' );
-    $label = esc_html( fictioneer_get_post_type_label( $item->post_type ) );
+    $label = esc_html( Utils_Admin::get_post_type_label( $item->post_type ) );
     $classes = ['fictioneer-meta-field__relationships-item', 'fictioneer-meta-field__relationships-values-item'];
 
     // Start HTML ---> ?>
@@ -1808,7 +1808,7 @@ function fictioneer_ajax_get_relationship_featured( $post_id, $meta_key ) {
   foreach ( $query->posts as $item ) {
     // Chapter setup
     $title = fictioneer_get_safe_title( $item, 'admin-ajax-get-relationship-featured' );
-    $label = esc_html( fictioneer_get_post_type_label( $item->post_type ) );
+    $label = esc_html( Utils_Admin::get_post_type_label( $item->post_type ) );
     $classes = ['fictioneer-meta-field__relationships-item', 'fictioneer-meta-field__relationships-source-item'];
 
     // Build and append item
