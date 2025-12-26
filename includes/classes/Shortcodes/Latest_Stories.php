@@ -30,10 +30,10 @@ class Latest_Stories {
       $args['classes'] .= ' splide _splide-placeholder';
     }
 
-    $transient_enabled = ! empty( $args['cache'] ) && Base::transients_enabled( $shortcode );
+    $transient_enabled = ! empty( $args['cache'] ) && Shortcode::transients_enabled( $shortcode );
 
     if ( $transient_enabled ) {
-      $transient_key = Base::transient_key( $shortcode, $args, $attr );
+      $transient_key = Shortcode::transient_key( $shortcode, $args, $attr );
       $cached = get_transient( $transient_key );
 
       if ( is_string( $cached ) && $cached !== '' ) {
@@ -60,7 +60,7 @@ class Latest_Stories {
       ! empty( $args['splide'] ) &&
       strpos( $args['classes'] ?? '', 'no-auto-splide' ) === false
     ) {
-      $html = str_replace( '</section>', Base::splide_inline_script() . '</section>', $html );
+      $html = str_replace( '</section>', Shortcode::splide_inline_script() . '</section>', $html );
     }
 
     if ( $transient_enabled ) {

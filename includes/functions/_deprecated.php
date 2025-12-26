@@ -1646,7 +1646,7 @@ function fictioneer_get_user_patreon_data( $user = null ) {
  * @since 5.6.3
  * @since 5.23.1 - Do not turn off with cache plugin.
  * @since 5.25.0 - Refactored with option.
- * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Base::transients_enabled() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Shortcode::transients_enabled() instead.
  *
  * @param string $shortcode  The shortcode in question.
  *
@@ -1654,9 +1654,9 @@ function fictioneer_get_user_patreon_data( $user = null ) {
  */
 
 function fictioneer_enable_shortcode_transients( $shortcode = null ) {
-  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Shortcodes\Base::transients_enabled()' );
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Shortcodes\Shortcode::transients_enabled()' );
 
-  return \Fictioneer\Shortcodes\Base::transients_enabled( $shortcode );
+  return \Fictioneer\Shortcodes\Shortcode::transients_enabled( $shortcode );
 }
 
 /**
@@ -1715,7 +1715,7 @@ if ( ! function_exists( 'fictioneer_shortcode_query' ) ) {
    * [Deprecated] Return query result for shortcode.
    *
    * @since 5.4.9
-   * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Base::query() instead.
+   * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Shortcode::query() instead.
    *
    * @param array $args  Query arguments.
    *
@@ -1723,9 +1723,9 @@ if ( ! function_exists( 'fictioneer_shortcode_query' ) ) {
    */
 
   function fictioneer_shortcode_query( $args ) {
-    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Shortcodes\Base::query()' );
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Shortcodes\Shortcode::query()' );
 
-    return \Fictioneer\Shortcodes\Base::query( $args );
+    return \Fictioneer\Shortcodes\Shortcode::query( $args );
   }
 }
 
@@ -1733,7 +1733,7 @@ if ( ! function_exists( 'fictioneer_shortcode_query' ) ) {
  * [Deprecated] Tax query argument for shortcode.
  *
  * @since 5.2.0
- * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Base::tax_query_args() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Shortcode::tax_query_args() instead.
  *
  * @param array $args  Arguments of the shortcode partial.
  *
@@ -1741,9 +1741,9 @@ if ( ! function_exists( 'fictioneer_shortcode_query' ) ) {
  */
 
 function fictioneer_get_shortcode_tax_query( $args ) {
-  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Shortcodes\Base::tax_query_args()' );
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Shortcodes\Shortcode::tax_query_args()' );
 
-  return \Fictioneer\Shortcodes\Base::tax_query_args( $args );
+  return \Fictioneer\Shortcodes\Shortcode::tax_query_args( $args );
 }
 
 /**
@@ -1754,15 +1754,15 @@ function fictioneer_get_shortcode_tax_query( $args ) {
  *
  * @since 5.25.0
  * @since 5.26.1 - Use wp_print_inline_script_tag().
- * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Base::splide_inline_script() instead.
+ * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Shortcode::splide_inline_script() instead.
  *
  * @return string Inline Splide script.
  */
 
 function fictioneer_get_splide_inline_init() {
-  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Shortcodes\Base::splide_inline_script()' );
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Shortcodes\Shortcode::splide_inline_script()' );
 
-  return \Fictioneer\Shortcodes\Base::splide_inline_script();
+  return \Fictioneer\Shortcodes\Shortcode::splide_inline_script();
 }
 
 /**

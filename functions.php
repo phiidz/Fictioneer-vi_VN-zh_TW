@@ -553,7 +553,7 @@ require_once __DIR__ . '/includes/functions/_setup-types-and-terms.php';
 
 require_once __DIR__ . '/includes/functions/_setup-shortcodes.php';
 
-\Fictioneer\Shortcodes\Base::register();
+\Fictioneer\Shortcodes\Shortcode::register();
 
 /**
  * Set up blocks.

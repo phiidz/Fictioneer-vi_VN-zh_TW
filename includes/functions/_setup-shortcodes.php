@@ -36,7 +36,7 @@ function fictioneer_shortcode_latest_posts( $attr ) {
   $args = \Fictioneer\Shortcodes\Attributes::parse( $attr, 'fictioneer_latest_posts', 1 );
 
   // Transient?
-  $transient_enabled = \Fictioneer\Shortcodes\Base::transients_enabled( 'fictioneer_latest_posts' );
+  $transient_enabled = \Fictioneer\Shortcodes\Shortcode::transients_enabled( 'fictioneer_latest_posts' );
 
   if ( $transient_enabled && $args['cache'] ) {
     $base = serialize( $args ) . serialize( $attr );
@@ -287,7 +287,7 @@ function fictioneer_shortcode_chapter_list( $attr ) {
   );
 
   // Transient?
-  $transient_enabled = \Fictioneer\Shortcodes\Base::transients_enabled( 'fictioneer_chapter_list' );
+  $transient_enabled = \Fictioneer\Shortcodes\Shortcode::transients_enabled( 'fictioneer_chapter_list' );
 
   if ( $transient_enabled && $cache ) {
     $base = serialize( $query_args ) . serialize( $attr ) . $classes;
@@ -301,7 +301,7 @@ function fictioneer_shortcode_chapter_list( $attr ) {
   }
 
   // Query
-  $chapter_query = \Fictioneer\Shortcodes\Base::query( $query_args );
+  $chapter_query = \Fictioneer\Shortcodes\Shortcode::query( $query_args );
 
   // Return empty case if...
   if ( ! $chapter_query->have_posts() ) {
@@ -756,7 +756,7 @@ function fictioneer_shortcode_blog( $attr ) {
 
   // Taxonomies?
   if ( ! empty( $args['taxonomies'] ) ) {
-    $query_args['tax_query'] = \Fictioneer\Shortcodes\Base::tax_query_args( $args );
+    $query_args['tax_query'] = \Fictioneer\Shortcodes\Shortcode::tax_query_args( $args );
   }
 
   // Excluded tags?
@@ -783,7 +783,7 @@ function fictioneer_shortcode_blog( $attr ) {
   $query_args = apply_filters( 'fictioneer_filter_shortcode_blog_query_args', $query_args, $args );
 
   // Transient?
-  $transient_enabled = \Fictioneer\Shortcodes\Base::transients_enabled( 'fictioneer_blog' );
+  $transient_enabled = \Fictioneer\Shortcodes\Shortcode::transients_enabled( 'fictioneer_blog' );
 
   if ( $transient_enabled && $args['cache'] ) {
     $base = serialize( $query_args ) . serialize( $args ) . serialize( $attr );
@@ -951,7 +951,7 @@ function fictioneer_shortcode_article_cards( $attr ) {
   }
 
   // Transient?
-  $transient_enabled = \Fictioneer\Shortcodes\Base::transients_enabled( 'fictioneer_article_cards' );
+  $transient_enabled = \Fictioneer\Shortcodes\Shortcode::transients_enabled( 'fictioneer_article_cards' );
 
   if ( $transient_enabled && $args['cache'] ) {
     $base = serialize( $args ) . serialize( $attr );
@@ -971,7 +971,7 @@ function fictioneer_shortcode_article_cards( $attr ) {
   $html = fictioneer_minify_html( ob_get_clean() );
 
   if ( ( $args['splide'] ?? 0 ) && strpos( $args['classes'], 'no-auto-splide' ) === false ) {
-    $html = str_replace( '</section>', \Fictioneer\Shortcodes\Base::splide_inline_script() . '</section>', $html );
+    $html = str_replace( '</section>', \Fictioneer\Shortcodes\Shortcode::splide_inline_script() . '</section>', $html );
   }
 
   if ( $transient_enabled && $args['cache'] ) {
@@ -1047,7 +1047,7 @@ function fictioneer_shortcode_story_section( $attr ) {
   }
 
   // Transient?
-  $transient_enabled = \Fictioneer\Shortcodes\Base::transients_enabled( 'fictioneer_story_section' );
+  $transient_enabled = \Fictioneer\Shortcodes\Shortcode::transients_enabled( 'fictioneer_story_section' );
 
   if ( $transient_enabled && $cache ) {
     $base = serialize( $attr ) . $classes;
@@ -1176,7 +1176,7 @@ function fictioneer_shortcode_story_actions( $attr ) {
   );
 
   // Transient?
-  $transient_enabled = \Fictioneer\Shortcodes\Base::transients_enabled( 'fictioneer_story_actions' );
+  $transient_enabled = \Fictioneer\Shortcodes\Shortcode::transients_enabled( 'fictioneer_story_actions' );
 
   if ( $transient_enabled && $cache ) {
     $base = serialize( $attr ) . $classes;

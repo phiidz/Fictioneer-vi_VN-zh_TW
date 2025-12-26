@@ -4,7 +4,7 @@ namespace Fictioneer\Shortcodes;
 
 defined( 'ABSPATH' ) OR exit;
 
-class Base {
+class Shortcode {
   /**
    * Query result for shortcode.
    *
