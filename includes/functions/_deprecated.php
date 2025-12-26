@@ -1445,6 +1445,68 @@ function fictioneer_get_post_type_label( $type ) {
   return Utils_Admin::get_post_type_label( $type );
 }
 
+if ( ! function_exists( 'fictioneer_get_stories_total_word_count' ) ) {
+  /**
+   * [Deprecated] Returns the total word count of all published stories
+   *
+   * Note: Does not include standalone chapters for performance reasons.
+   *
+   * @since 4.0.0
+   * @since 5.22.3 - Refactored with SQL query for better performance.
+   * @deprecated 5.34.0 - Use \Fictioneer\Stats::get_stories_total_word_count() instead.
+   *
+   * @return int The word count of all published stories.
+   */
+
+  function fictioneer_get_stories_total_word_count() {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Stats::get_stories_total_word_count' );
+
+    return \Fictioneer\Stats::get_stories_total_word_count();
+  }
+}
+
+if ( ! function_exists( 'fictioneer_get_author_statistics' ) ) {
+  /**
+   * [Deprecated] Return author's statistics.
+   *
+   * @since 4.6.0
+   * @since 5.27.4 - Optimized.
+   * @deprecated 5.34.0 - Use \Fictioneer\Stats::get_author_statistics() instead.
+   *
+   * @param int $author_id  User ID of the author.
+   *
+   * @return array|false Array of statistics or false if user does not exist.
+   */
+
+  function fictioneer_get_author_statistics( $author_id ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Stats::get_author_statistics' );
+
+    return \Fictioneer\Stats::get_author_statistics( $author_id );
+  }
+}
+
+if ( ! function_exists( 'fictioneer_get_collection_statistics' ) ) {
+  /**
+   * Return a collection's statistics.
+   *
+   * @since 5.9.2
+   * @since 5.26.0 - Refactored with custom SQL.
+   * @deprecated 5.34.0 - Use \Fictioneer\Stats::get_collection_statistics() instead.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int $collection_id  ID of the collection.
+   *
+   * @return array Array of statistics.
+   */
+
+  function fictioneer_get_collection_statistics( $collection_id ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Stats::get_collection_statistics' );
+
+    return \Fictioneer\Stats::get_collection_statistics( $collection_id );
+  }
+}
+
 // =============================================================================
 // USER HELPER DELEGATES
 // =============================================================================

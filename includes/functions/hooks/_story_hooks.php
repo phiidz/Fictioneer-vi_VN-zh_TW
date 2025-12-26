@@ -30,7 +30,7 @@ function fictioneer_stories_statistics( $args ) {
 
   // Compute statistics if necessary
   if ( ! $statistics ) {
-    $words = fictioneer_get_stories_total_word_count();
+    $words = \Fictioneer\Stats::get_stories_total_word_count();
 
     $statistics = array(
       'stories' => array(
