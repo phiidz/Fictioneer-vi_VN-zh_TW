@@ -781,7 +781,7 @@ if ( ! get_option( 'fictioneer_disable_theme_search' ) ) {
  */
 
 if ( get_option( 'fictioneer_enable_seo' ) && ! fictioneer_seo_plugin_active() ) {
-  require_once __DIR__ . '/includes/functions/_module-schemas.php';
+  \Fictioneer\SEO\Schema::init();
 }
 
 /**
