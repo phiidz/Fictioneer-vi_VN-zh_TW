@@ -135,20 +135,30 @@ final class Schema_Node {
     $node = array(
       '@type' => $type ?: self::article_type( $post ),
       '@id' => self::entity_id( $post ),
-      'headline' => $title ?: fictioneer_get_safe_title( $post, 'seo-schema-article-node' ),
       'description' => $description ?: self::description( $post ),
       'url' => get_permalink( $post ),
-      'author' => array(
-        '@type' => 'Person',
-        '@id' => '#author',
-        'url' => get_author_posts_url( $post->post_author ) ?: get_site_url( null, '', 'https' ),
-        'name' => get_the_author_meta( 'display_name', $post->post_author ) ?: 'Unknown'
-      ),
       'mainEntityOfPage' => array( '@id' => "#webpage" ),
       'inLanguage' => get_bloginfo( 'language' ),
       'datePublished' => get_the_date( 'c', $post ),
       'dateModified' => get_the_modified_date( 'c', $post )
     );
+
+    if ( $title = self::article_title( $post, $title ) ) {
+      $node[ $title[0] ] = $title[1];
+    }
+
+    $author = array(
+      '@type' => 'Person',
+      '@id' => '#author',
+      'url' => get_author_posts_url( $post->post_author ) ?: get_site_url( null, '', 'https' ),
+      'name' => get_the_author_meta( 'display_name', $post->post_author ) ?: 'Unknown'
+    );
+
+    if ( $post->post_type === 'fcn_collection' ) {
+      $node['creator'] = $author;
+    } else {
+      $node['author'] = $author;
+    }
 
     if ( $image_data ) {
       $node['image'] = array( '@id' => "#primaryimage" );
@@ -160,9 +170,6 @@ final class Schema_Node {
     }
 
     if ( $post->post_type === 'fcn_story' || $post->post_type === 'fcn_chapter' ) {
-      $node['name'] = $node['headline'];
-      unset( $node['headline'] );
-
       if ( $genres = self::terms( $post, 'fcn_genre' ) ) {
         $node['genre'] = $genres;
       }
@@ -525,7 +532,7 @@ final class Schema_Node {
         return ['CollectionPage', 'WebPage'];
     }
 
-    if ( $post->post_type === 'fcn_story' ) {
+    if ( $post->post_type === 'fcn_story' || $post->post_type === 'fcn_collection' ) {
       return ['CollectionPage', 'WebPage'];
     }
 
@@ -551,7 +558,33 @@ final class Schema_Node {
       return ['Chapter', 'CreativeWork'];
     }
 
+    if ( $post->post_type === 'fcn_collection' ) {
+      return ['Collection', 'CreativeWork'];
+    }
+
     return 'Article';
+  }
+
+  /**
+   * Article name or headline.
+   *
+   * @since 5.34.0
+   *
+   * @param \WP_Post $post      Post object.
+   * @param string|null $title  Optional. Title to be used.
+   *
+   * @return array Tuple with a node key (0) and value (1).
+   */
+
+  private static function article_title( $post, $title = null ) : array {
+    $title = $title ?: fictioneer_get_safe_title( $post, 'seo-schema-article-node' );
+    $key = 'headline';
+
+    if ( in_array( $post->post_type, ['fcn_story', 'fcn_chapter', 'fcn_collection'], true ) ) {
+      $key = 'name';
+    }
+
+    return [ $key, $title ];
   }
 
   /**
@@ -583,6 +616,10 @@ final class Schema_Node {
       return '#chapter';
     }
 
+    if ( $post->post_type === 'fcn_collection' ) {
+      return '#collection';
+    }
+
     return '#article';
   }
 
@@ -603,6 +640,10 @@ final class Schema_Node {
 
     if ( $post->post_type === 'fcn_chapter' ) {
       return '#chapter';
+    }
+
+    if ( $post->post_type === 'fcn_collection' ) {
+      return '#collection';
     }
 
     return '#article';
