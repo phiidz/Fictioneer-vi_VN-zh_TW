@@ -1268,153 +1268,6 @@ if ( ! function_exists( 'fictioneer_soft_delete_user_comments' ) ) {
   }
 }
 
-// =============================================================================
-// SEARCH DELEGATES
-// =============================================================================
-
-if ( ! function_exists( 'fcn_keyword_search_taxonomies_input' ) ) {
-  /**
-   * [Deprecated] Render taxonomies keyword input field for search form.
-   *
-   * @since 5.0.0
-   * @deprecated 5.34.0 - Use \Fictioneer\Search::render_search_taxonomies() instead.
-   *
-   * @param array  $taxonomies  Array of WP_Term objects.
-   * @param string $type        The taxonomy type.
-   * @param string $query_var   Name of the submitted collection field.
-   * @param string $and_var     Name of the submitted operator field.
-   * @param string $singular    Singular display name of taxonomy.
-   * @param string $plural      Plural display name of taxonomy.
-   * @param array  $args        Optional arguments.
-   */
-
-  function fcn_keyword_search_taxonomies_input( $taxonomies, $type, $query_var, $and_var, $singular, $plural, $args = [] ) {
-    \Fictioneer\Search::render_search_taxonomies( $taxonomies, $type, $query_var, $and_var, $singular, $plural, $args );
-  }
-}
-
-if ( ! function_exists( 'fcn_keyword_search_authors_input' ) ) {
-  /**
-   * [Deprecated] Render authors keyword input field for search form.
-   *
-   * @since 5.0.0
-   * @deprecated 5.34.0 - Use \Fictioneer\Search::render_search_authors() instead.
-   *
-   * @param array  $authors    Array of WP_User objects.
-   * @param string $query_var  Name of the submitted collection field.
-   * @param string $singular   Singular display name of taxonomy.
-   * @param string $plural     Plural display name of taxonomy.
-   * @param array  $args       Optional arguments.
-   */
-
-  function fcn_keyword_search_authors_input( $authors, $query_var, $singular, $plural, $args = [] ) {
-     \Fictioneer\Search::render_search_authors( $authors, $query_var, $singular, $plural, $args );
-  }
-}
-
-// =============================================================================
-// SQL DELEGATES
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_sql_filter_valid_chapter_ids' ) ) {
-  /**
-   * [Deprecated] Filter out non-valid chapter array IDs.
-   *
-   * @since 5.26.0
-   * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::filter_valid_chapter_ids() instead.
-   *
-   * @global wpdb $wpdb  WordPress database object.
-   *
-   * @param int   $story_id     Story ID.
-   * @param int[] $chapter_ids  Array of chapter IDs.
-   *
-   * @return int[] Filtered and validated array of IDs.
-   */
-
-  function fictioneer_sql_filter_valid_chapter_ids( $story_id, $chapter_ids ) {
-    return Sanitizer_Admin::filter_valid_chapter_ids( $story_id, $chapter_ids );
-  }
-}
-
-if ( ! function_exists( 'fictioneer_sql_filter_valid_page_ids' ) ) {
-  /**
-   * [Deprecated] Filter out non-valid story page array IDs.
-   *
-   * @since 5.26.0
-   * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::filter_valid_page_ids() instead.
-   *
-   * @global wpdb $wpdb  WordPress database object.
-   *
-   * @param int   $author_id  Author ID for the pages.
-   * @param int[] $page_ids   Array of page IDs.
-   *
-   * @return int[] Filtered and validated array of IDs.
-   */
-
-  function fictioneer_sql_filter_valid_page_ids( $author_id, $page_ids ) {
-    return Sanitizer_Admin::filter_valid_page_ids( $author_id, $page_ids );
-  }
-}
-
-if ( ! function_exists( 'fictioneer_sql_filter_valid_collection_ids' ) ) {
-  /**
-   * [Deprecated] Filter out non-valid story page array IDs.
-   *
-   * @since 5.26.0
-   * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::filter_valid_collection_ids() instead.
-   *
-   * @global wpdb $wpdb  WordPress database object.
-   *
-   * @param int[] $item_ids  Array of collection item IDs.
-   *
-   * @return int[] Filtered and validated array of IDs.
-   */
-
-  function fictioneer_sql_filter_valid_collection_ids( $item_ids ) {
-    return Sanitizer_Admin::filter_valid_collection_ids( $item_ids );
-  }
-}
-
-if ( ! function_exists( 'fictioneer_sql_filter_valid_featured_ids' ) ) {
-  /**
-   * [Deprecated] Filter out non-valid featured array IDs.
-   *
-   * @since 5.26.0
-   * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::filter_valid_featured_ids() instead.
-   *
-   * @global wpdb $wpdb  WordPress database object.
-   *
-   * @param int[] $post_ids  Array of featured post IDs.
-   *
-   * @return int[] Filtered and validated array of IDs.
-   */
-
-  function fictioneer_sql_filter_valid_featured_ids( $post_ids ) {
-    return Sanitizer_Admin::filter_valid_featured_ids( $post_ids );
-  }
-}
-
-if ( ! function_exists( 'fictioneer_sql_filter_valid_blog_story_ids' ) ) {
-  /**
-   * [Deprecated] Filter out non-valid blog story array IDs.
-   *
-   * @since 5.26.0
-   * @since 5.30.0 - Refactored for optional author.
-   * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::filter_valid_blog_story_ids() instead.
-   *
-   * @global wpdb $wpdb  WordPress database object.
-   *
-   * @param int[]    $story_blogs      Array of story blog IDs.
-   * @param int|null $story_author_id  Optional. Author ID of the story.
-   *
-   * @return int[] Filtered and validated array of IDs.
-   */
-
-  function fictioneer_sql_filter_valid_blog_story_ids( $story_blogs, $story_author_id = null ) {
-    return Sanitizer_Admin::filter_valid_blog_story_ids( $story_blogs, $story_author_id );
-  }
-}
-
 /**
  * [Deprecated] Translated label of post status.
  *
@@ -1427,6 +1280,8 @@ if ( ! function_exists( 'fictioneer_sql_filter_valid_blog_story_ids' ) ) {
  */
 
 function fictioneer_get_post_status_label( $status ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::get_post_status_label' );
+
   return Utils_Admin::get_post_status_label( $status );
 }
 
@@ -1442,6 +1297,8 @@ function fictioneer_get_post_status_label( $status ) {
  */
 
 function fictioneer_get_post_type_label( $type ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::get_post_type_label' );
+
   return Utils_Admin::get_post_type_label( $type );
 }
 
@@ -1504,6 +1361,167 @@ if ( ! function_exists( 'fictioneer_get_collection_statistics' ) ) {
     Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Stats::get_collection_statistics' );
 
     return \Fictioneer\Stats::get_collection_statistics( $collection_id );
+  }
+}
+
+// =============================================================================
+// SEARCH DELEGATES
+// =============================================================================
+
+if ( ! function_exists( 'fcn_keyword_search_taxonomies_input' ) ) {
+  /**
+   * [Deprecated] Render taxonomies keyword input field for search form.
+   *
+   * @since 5.0.0
+   * @deprecated 5.34.0 - Use \Fictioneer\Search::render_search_taxonomies() instead.
+   *
+   * @param array  $taxonomies  Array of WP_Term objects.
+   * @param string $type        The taxonomy type.
+   * @param string $query_var   Name of the submitted collection field.
+   * @param string $and_var     Name of the submitted operator field.
+   * @param string $singular    Singular display name of taxonomy.
+   * @param string $plural      Plural display name of taxonomy.
+   * @param array  $args        Optional arguments.
+   */
+
+  function fcn_keyword_search_taxonomies_input( $taxonomies, $type, $query_var, $and_var, $singular, $plural, $args = [] ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Search::render_search_taxonomies' );
+
+    \Fictioneer\Search::render_search_taxonomies( $taxonomies, $type, $query_var, $and_var, $singular, $plural, $args );
+  }
+}
+
+if ( ! function_exists( 'fcn_keyword_search_authors_input' ) ) {
+  /**
+   * [Deprecated] Render authors keyword input field for search form.
+   *
+   * @since 5.0.0
+   * @deprecated 5.34.0 - Use \Fictioneer\Search::render_search_authors() instead.
+   *
+   * @param array  $authors    Array of WP_User objects.
+   * @param string $query_var  Name of the submitted collection field.
+   * @param string $singular   Singular display name of taxonomy.
+   * @param string $plural     Plural display name of taxonomy.
+   * @param array  $args       Optional arguments.
+   */
+
+  function fcn_keyword_search_authors_input( $authors, $query_var, $singular, $plural, $args = [] ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Search::render_search_authors' );
+
+    \Fictioneer\Search::render_search_authors( $authors, $query_var, $singular, $plural, $args );
+  }
+}
+
+// =============================================================================
+// SQL DELEGATES
+// =============================================================================
+
+if ( ! function_exists( 'fictioneer_sql_filter_valid_chapter_ids' ) ) {
+  /**
+   * [Deprecated] Filter out non-valid chapter array IDs.
+   *
+   * @since 5.26.0
+   * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::filter_valid_chapter_ids() instead.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int   $story_id     Story ID.
+   * @param int[] $chapter_ids  Array of chapter IDs.
+   *
+   * @return int[] Filtered and validated array of IDs.
+   */
+
+  function fictioneer_sql_filter_valid_chapter_ids( $story_id, $chapter_ids ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer_Admin::filter_valid_chapter_ids' );
+
+    return Sanitizer_Admin::filter_valid_chapter_ids( $story_id, $chapter_ids );
+  }
+}
+
+if ( ! function_exists( 'fictioneer_sql_filter_valid_page_ids' ) ) {
+  /**
+   * [Deprecated] Filter out non-valid story page array IDs.
+   *
+   * @since 5.26.0
+   * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::filter_valid_page_ids() instead.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int   $author_id  Author ID for the pages.
+   * @param int[] $page_ids   Array of page IDs.
+   *
+   * @return int[] Filtered and validated array of IDs.
+   */
+
+  function fictioneer_sql_filter_valid_page_ids( $author_id, $page_ids ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer_Admin::filter_valid_page_ids' );
+
+    return Sanitizer_Admin::filter_valid_page_ids( $author_id, $page_ids );
+  }
+}
+
+if ( ! function_exists( 'fictioneer_sql_filter_valid_collection_ids' ) ) {
+  /**
+   * [Deprecated] Filter out non-valid story page array IDs.
+   *
+   * @since 5.26.0
+   * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::filter_valid_collection_ids() instead.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int[] $item_ids  Array of collection item IDs.
+   *
+   * @return int[] Filtered and validated array of IDs.
+   */
+
+  function fictioneer_sql_filter_valid_collection_ids( $item_ids ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer_Admin::filter_valid_collection_ids' );
+
+    return Sanitizer_Admin::filter_valid_collection_ids( $item_ids );
+  }
+}
+
+if ( ! function_exists( 'fictioneer_sql_filter_valid_featured_ids' ) ) {
+  /**
+   * [Deprecated] Filter out non-valid featured array IDs.
+   *
+   * @since 5.26.0
+   * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::filter_valid_featured_ids() instead.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int[] $post_ids  Array of featured post IDs.
+   *
+   * @return int[] Filtered and validated array of IDs.
+   */
+
+  function fictioneer_sql_filter_valid_featured_ids( $post_ids ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer_Admin::filter_valid_featured_ids' );
+
+    return Sanitizer_Admin::filter_valid_featured_ids( $post_ids );
+  }
+}
+
+if ( ! function_exists( 'fictioneer_sql_filter_valid_blog_story_ids' ) ) {
+  /**
+   * [Deprecated] Filter out non-valid blog story array IDs.
+   *
+   * @since 5.26.0
+   * @since 5.30.0 - Refactored for optional author.
+   * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer_Admin::filter_valid_blog_story_ids() instead.
+   *
+   * @global wpdb $wpdb  WordPress database object.
+   *
+   * @param int[]    $story_blogs      Array of story blog IDs.
+   * @param int|null $story_author_id  Optional. Author ID of the story.
+   *
+   * @return int[] Filtered and validated array of IDs.
+   */
+
+  function fictioneer_sql_filter_valid_blog_story_ids( $story_blogs, $story_author_id = null ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer_Admin::filter_valid_blog_story_ids' );
+
+    return Sanitizer_Admin::filter_valid_blog_story_ids( $story_blogs, $story_author_id );
   }
 }
 
