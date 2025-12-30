@@ -1766,9 +1766,9 @@ function fictioneer_get_splide_inline_init() {
 }
 
 /**
- * Shortcode delegate callback for latest stories.
+ * [Deprecated] Shortcode delegate callback for latest stories.
  *
- * @since 5.34.0
+ * @since 5.34.0 - Use \Fictioneer\Shortcodes\Latest_Stories::render() instead.
  *
  * @param array|string $atts     Raw shortcode attributes.
  * @param string       $content  Enclosed content (if any).
@@ -1784,9 +1784,9 @@ function fictioneer_shortcode_latest_stories( $atts, $content, $tag ) {
 }
 
 /**
- * Shortcode delegate callback for latest updates.
+ * [Deprecated] Shortcode delegate callback for latest updates.
  *
- * @since 5.34.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Latest_Updates::render() instead.
  *
  * @param array|string $atts     Raw shortcode attributes.
  * @param string       $content  Enclosed content (if any).
@@ -1803,9 +1803,9 @@ function fictioneer_shortcode_latest_story_updates( $atts, $content, $tag ) {
 add_shortcode( 'fictioneer_latest_updates', 'fictioneer_shortcode_latest_story_updates' );
 
 /**
- * Shortcode delegate callback for latest chapters.
+ * [Deprecated] Shortcode delegate callback for latest chapters.
  *
- * @since 5.34.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Latest_Chapters::render() instead.
  *
  * @param array|string $atts     Raw shortcode attributes.
  * @param string       $content  Enclosed content (if any).
@@ -1821,9 +1821,9 @@ function fictioneer_shortcode_latest_chapters( $atts, $content, $tag ) {
 }
 
 /**
- * Shortcode delegate callback for showcases.
+ * [Deprecated] Shortcode delegate callback for showcases.
  *
- * @since 5.34.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Showcase::render() instead.
  *
  * @param array|string $atts     Raw shortcode attributes.
  * @param string       $content  Enclosed content (if any).
@@ -1839,9 +1839,9 @@ function fictioneer_shortcode_showcase( $atts, $content, $tag ) {
 }
 
 /**
- * Shortcode delegate callback for latest recommendations.
+ * [Deprecated] Shortcode delegate callback for latest recommendations.
  *
- * @since 5.34.0
+ * @deprecated 5.34.0 - Use \Fictioneer\Shortcodes\Latest_Recommendations::render() instead.
  *
  * @param array|string $atts     Raw shortcode attributes.
  * @param string       $content  Enclosed content (if any).
