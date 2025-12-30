@@ -1855,3 +1855,69 @@ function fictioneer_shortcode_latest_recommendations( $attr, $content, $tag ) {
 
   return \Fictioneer\Shortcodes\Latest_Recommendations::render( $attr, $content, $tag );
 }
+
+// =============================================================================
+// SEO DELEGATES
+// =============================================================================
+
+if ( ! function_exists( 'fictioneer_get_seo_title' ) ) {
+  /**
+   * [Deprecated] Get SEO title.
+   *
+   * @since 4.0.0
+   * @since 5.9.4 - Refactored meta caching.
+   * @deprecated 5.34.0 - Use \Fictioneer\SEO\Meta::title() instead.
+   *
+   * @param int   $post_id  Optional. The post ID.
+   * @param array $args     Optional. Array of arguments.
+   *
+   * @return string The SEO title.
+   */
+
+  function fictioneer_get_seo_title( $post_id = null, $args = [] ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\SEO\Meta::title()' );
+
+    return \Fictioneer\SEO\Meta::title( $post_id, $args );
+  }
+}
+
+if ( ! function_exists( 'fictioneer_get_seo_description' ) ) {
+  /**
+   * [Deprecated] Get SEO description.
+   *
+   * @since 4.0.0
+   * @since 5.9.4 - Refactored meta caching.
+   * @deprecated 5.34.0 - Use \Fictioneer\SEO\Meta::description() instead.
+   *
+   * @param int   $post_id  Optional. The post ID.
+   * @param array $args     Optional. Array of arguments.
+   *
+   * @return string The SEO description.
+   */
+
+  function fictioneer_get_seo_description( $post_id = null, $args = [] ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\SEO\Meta::description()' );
+
+    return \Fictioneer\SEO\Meta::description( $post_id, $args );
+  }
+}
+
+if ( ! function_exists( 'fictioneer_get_seo_image' ) ) {
+  /**
+   * [Deprecated] Get SEO image data array.
+   *
+   * @since 4.0.0
+   * @since 5.9.4 - Refactored meta caching.
+   * @deprecated 5.34.0 - Use \Fictioneer\SEO\Meta::image() instead.
+   *
+   * @param int $post_id Optional. The post ID.
+   *
+   * @return array|null Data of the image or null if none has been found.
+   */
+
+  function fictioneer_get_seo_image( $post_id = null ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\SEO\Meta::image()' );
+
+    return \Fictioneer\SEO\Meta::image( $post_id );
+  }
+}

@@ -35,7 +35,7 @@ final class Schema_Node {
    */
 
   public static function primary_image_data( $post, $args = [] ) {
-    $seo_image = fictioneer_get_seo_image( $post->ID );
+    $seo_image = \Fictioneer\SEO\Meta::image( $post->ID );
 
     if ( $seo_image ) {
       // Custom > Thumbnail > Story Thumbnail > OG Default
@@ -429,7 +429,7 @@ final class Schema_Node {
    */
 
   private static function title( $post ) : string {
-    return fictioneer_get_seo_title( $post->ID, array( 'skip_cache' => true ) );
+    return \Fictioneer\SEO\Meta::title( $post->ID, array( 'skip_cache' => true ) );
   }
 
   /**
@@ -468,7 +468,7 @@ final class Schema_Node {
    */
 
   private static function description( $post ) : string {
-    return fictioneer_get_seo_description( $post->ID, array( 'skip_cache' => true ) );
+    return \Fictioneer\SEO\Meta::description( $post->ID, array( 'skip_cache' => true ) );
   }
 
   /**

@@ -570,12 +570,6 @@ if ( get_option( 'fictioneer_enable_sitemap' ) ) {
 }
 
 /**
- * Add SEO features to the site.
- */
-
-require_once __DIR__ . '/includes/functions/_module-seo.php';
-
-/**
  * Generate ePUBs for stories (only in ePUB context).
  */
 
@@ -777,11 +771,12 @@ if ( ! get_option( 'fictioneer_disable_theme_search' ) ) {
 }
 
 /**
- * Generate SEO schema graphs.
+ * Add SEO features to the site.
  */
 
 if ( get_option( 'fictioneer_enable_seo' ) && ! fictioneer_seo_plugin_active() ) {
   \Fictioneer\SEO\Schema::init();
+  \Fictioneer\SEO\Meta::init();
 }
 
 /**
