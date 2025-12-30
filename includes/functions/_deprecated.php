@@ -411,6 +411,8 @@ if ( ! function_exists( 'fictioneer_hex_to_rgb' ) ) {
    */
 
   function fictioneer_hex_to_rgb( $input ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::hex_to_rgb' );
+
     return Utils::hex_to_rgb( $input );
   }
 }
@@ -433,6 +435,8 @@ if ( ! function_exists( 'fictioneer_rgb_to_hsl' ) ) {
    */
 
   function fictioneer_rgb_to_hsl( $input, $precision = 0 ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::rgb_to_hsl' );
+
     return Utils::rgb_to_hsl( $input, $precision );
   }
 }
@@ -454,6 +458,8 @@ if ( ! function_exists( 'fictioneer_get_css_clamp' ) ) {
    */
 
   function fictioneer_get_css_clamp( $min, $max, $wmin, $wmax, $unit = 'vw' ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Customizer::get_clamp' );
+
     return Customizer::get_clamp( $min, $max, $wmin, $wmax, $unit );
   }
 }
@@ -472,6 +478,8 @@ if ( ! function_exists( 'fictioneer_hsl_code' ) ) {
    */
 
   function fictioneer_hsl_code( $hex, $output = 'default' ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::get_hsl_code' );
+
     return Utils::get_hsl_code( $hex, $output );
   }
 }
@@ -490,6 +498,8 @@ if ( ! function_exists( 'fictioneer_hsl_font_code' ) ) {
    */
 
   function fictioneer_hsl_font_code( $hex ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::get_hsl_font_code' );
+
     return Utils::get_hsl_font_code( $hex );
   }
 }
@@ -508,6 +518,8 @@ if ( ! function_exists( 'fictioneer_hsl_font_code' ) ) {
  */
 
 function fictioneer_get_custom_font( $option, $font_default, $mod_default ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Fonts::get_font_family' );
+
   return Fonts::get_font_family( $option, $font_default, $mod_default );
 }
 
@@ -525,20 +537,25 @@ function fictioneer_get_custom_font( $option, $font_default, $mod_default ) {
  */
 
 function fictioneer_get_customizer_css_snippet( $snippet, $filter = null ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Customizer::get_css_snippet' );
+
   return Customizer::get_css_snippet( $snippet );
 }
 
 /**
- * Return associative array of theme colors.
+ * [Deprecated] Return associative array of theme colors.
  *
  * Notes: Considers both parent and child theme.
  *
  * @since 5.21.2
+ * @deprecated 5.34.0 - Use \Fictioneer\Utils::get_theme_colors() instead.
  *
  * @return array Associative array of theme colors.
  */
 
 function fictioneer_get_theme_colors_array() {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::get_theme_colors' );
+
   return Utils::get_theme_colors();
 }
 
@@ -556,6 +573,8 @@ function fictioneer_get_theme_colors_array() {
  */
 
 function fictioneer_get_theme_color( $mod, $default = null ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::get_theme_color' );
+
   return Utils::get_theme_color( $mod, $default );
 }
 
@@ -570,6 +589,8 @@ function fictioneer_get_theme_color( $mod, $default = null ) {
  */
 
 function fictioneer_build_customize_css( $context = null ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Customizer::build_customizer_css' );
+
   Customizer::build_customizer_css( $context );
 }
 
@@ -590,6 +611,8 @@ if ( ! function_exists( 'fictioneer_get_fading_gradient' ) ) {
    */
 
   function fictioneer_get_fading_gradient( $start_opacity, $start, $end, $direction, $hsl = '0 0% 0%' ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Customizer::get_fading_gradient' );
+
     return Customizer::get_fading_gradient( $start_opacity, $start, $end, $direction, $hsl );
   }
 }
@@ -602,6 +625,8 @@ if ( ! function_exists( 'fictioneer_get_fading_gradient' ) ) {
  */
 
 function fictioneer_build_bundled_fonts() : void {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Fonts::bundle_fonts' );
+
   Fonts::bundle_fonts();
 }
 
@@ -618,6 +643,8 @@ function fictioneer_build_bundled_fonts() : void {
  */
 
 function fictioneer_extract_font_from_google_link( $link ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Fonts::extract_font_from_google_link' );
+
   return Fonts::extract_font_from_google_link( $link );
 }
 
@@ -636,6 +663,8 @@ function fictioneer_extract_font_from_google_link( $link ) {
  */
 
 function fictioneer_get_font_data() : array {
+  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Fonts::get_font_data' );
+
   return Fonts::get_font_data();
 }
 
