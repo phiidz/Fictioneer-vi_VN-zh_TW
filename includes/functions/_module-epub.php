@@ -1218,20 +1218,11 @@ function fictioneer_generate_epub() {
 add_action( 'template_redirect', 'fictioneer_generate_epub' );
 
 // =============================================================================
-// AJAX REQUESTS
-// > Return early if no AJAX functions are required.
-// =============================================================================
-
-if ( ! wp_doing_ajax() ) {
-  return;
-}
-
-// =============================================================================
 // AJAX - CHECK IF READY TO DOWNLOAD
 // =============================================================================
 
 /**
- * Start ePUB download if ready.
+ * AJAX: Start ePUB download if ready.
  *
  * @since 5.7.2
  */
