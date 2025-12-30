@@ -1524,6 +1524,8 @@ if ( ! function_exists( 'fictioneer_get_custom_avatar_url' ) ) {
    */
 
   function fictioneer_get_custom_avatar_url( $user ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', 'User::get_custom_avatar_url()' );
+
     return User::get_custom_avatar_url( $user );
   }
 }
@@ -1539,6 +1541,8 @@ if ( ! function_exists( 'fictioneer_get_default_avatar_url' ) ) {
    */
 
   function fictioneer_get_default_avatar_url() {
+    Utils::deprecated( __FUNCTION__, '5.34.0', 'User::get_default_avatar_url()' );
+
     return User::get_default_avatar_url();
   }
 }
@@ -1559,6 +1563,8 @@ if ( ! function_exists( 'fictioneer_get_comment_badge' ) ) {
    */
 
   function fictioneer_get_comment_badge( $user, $comment = null, $post_author_id = 0 ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', 'User::get_comment_badge()' );
+
     return User::get_comment_badge( $user, $comment, $post_author_id );
   }
 }
@@ -1577,6 +1583,8 @@ if ( ! function_exists( 'fictioneer_get_override_badge' ) ) {
    */
 
   function fictioneer_get_override_badge( $user, $default = false ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', 'User::get_override_badge()' );
+
     return User::get_override_badge( $user, $default );
   }
 }
@@ -1595,6 +1603,8 @@ if ( ! function_exists( 'fictioneer_get_patreon_badge' ) ) {
    */
 
   function fictioneer_get_patreon_badge( $user, $default = false ) {
+    Utils::deprecated( __FUNCTION__, '5.34.0', 'User::get_patreon_badge()' );
+
     return User::get_patreon_badge( $user, $default );
   }
 }
@@ -1614,6 +1624,8 @@ if ( ! function_exists( 'fictioneer_get_patreon_badge' ) ) {
  */
 
 function fictioneer_patreon_tiers_valid( $user = null ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', 'User::patreon_tiers_valid()' );
+
   return User::patreon_tiers_valid( $user );
 }
 
@@ -1633,6 +1645,8 @@ function fictioneer_patreon_tiers_valid( $user = null ) {
  */
 
 function fictioneer_get_user_patreon_data( $user = null ) {
+  Utils::deprecated( __FUNCTION__, '5.34.0', 'User::get_user_patreon_data()' );
+
   return User::get_user_patreon_data( $user );
 }
 
