@@ -48,7 +48,7 @@ final class Meta {
 
     $context = self::context();
     $skip_cache = (bool) $args['skip_cache'];
-    $default = trim( $args['default'] );
+    $default = trim( (string) $args['default'] );
 
     if ( $context['title'] !== '' ) {
       return $context['title'];
@@ -56,10 +56,12 @@ final class Meta {
 
     $post_id = $post_id ? (int) $post_id : $context['post_id'];
 
-    $meta_cache = self::get_cache( $post_id );
+    if ( ! $skip_cache ) {
+      $meta_cache = self::get_cache( $post_id );
 
-    if ( ! $skip_cache && ! empty( $meta_cache['title'] ) ) {
-      return $meta_cache['title'];
+      if ( ! empty( $meta_cache['title'] ) ) {
+        return $meta_cache['title'];
+      }
     }
 
     $seo_fields = self::seo_fields( $post_id );
@@ -79,7 +81,6 @@ final class Meta {
       $seo_title = strtr(
         $seo_title,
         array(
-          '{{excerpt}}' => '',
           '{{title}}' => $title,
           '{{site}}' => $site_name
         )
@@ -121,7 +122,7 @@ final class Meta {
 
     $context = self::context();
     $skip_cache = (bool) $args['skip_cache'];
-    $default = trim( $args['default'] );
+    $default = trim( (string) $args['default'] );
 
     if ( $context['description'] !== '' ) {
       return $context['description'];
@@ -129,10 +130,12 @@ final class Meta {
 
     $post_id = $post_id ? (int) $post_id : $context['post_id'];
 
-    $meta_cache = self::get_cache( $post_id );
+    if ( ! $skip_cache ) {
+      $meta_cache = self::get_cache( $post_id );
 
-    if ( ! $skip_cache && ! empty( $meta_cache['description'] ) ) {
-      return $meta_cache['description'];
+      if ( ! empty( $meta_cache['description'] ) ) {
+        return $meta_cache['description'];
+      }
     }
 
     $seo_fields = self::seo_fields( $post_id );
@@ -207,6 +210,10 @@ final class Meta {
 
     $post_id = $post_id ? (int) $post_id : $context['post_id'];
 
+    if ( ! $post_id ) {
+      return self::build_image_array( self::default_og_image_id() );
+    }
+
     $meta_cache = self::get_cache( $post_id );
 
     if ( ! empty( $meta_cache['og_image'] ?? [] ) && is_array( $meta_cache['og_image'] ) ) {
@@ -229,13 +236,15 @@ final class Meta {
       }
     }
 
+    $default_id = self::default_og_image_id();
+
     if ( ! $image_id ) {
-      $image_id = self::default_og_image_id();
+      $image_id = $default_id;
     }
 
     $image = self::build_image_array( $image_id );
 
-    if ( $image ) {
+    if ( $image && $image_id !== $default_id ) {
       self::update_cached_value( $post_id, 'og_image', $image );
     }
 
@@ -314,8 +323,8 @@ final class Meta {
       }
     // Start HTML ---> ?>
     <meta name="twitter:card" content="summary">
-    <meta name="twitter:title" content="<?php echo esc_attr( $og_title ); ?>">
-    <meta name="twitter:description" content="<?php echo esc_attr( $og_description ); ?>">
+    <meta name="twitter:title" content="<?php echo $og_title; ?>">
+    <meta name="twitter:description" content="<?php echo $og_description; ?>">
     <?php // <--- End HTML
 
     if ( $context['show_author'] && $article_twitter !== '' ) {
@@ -342,7 +351,7 @@ final class Meta {
     global $wp;
     global $post;
 
-    $post_id = get_queried_object_id();
+    $post_id = (int) get_queried_object_id();
     $post_type = (string) get_post_type();
     $post_author = (int) ( $post->post_author ?? 0 );
 
@@ -350,9 +359,9 @@ final class Meta {
     $is_aggregated = is_archive() || is_search();
     $is_page = is_page() || $is_frontpage;
     $is_article = ( ! $is_page ) && in_array( $post_type, ['fcn_story', 'fcn_chapter', 'fcn_recommendation', 'post'], true );
-    $show_author = is_single() && ! $is_frontpage && ! $is_aggregated && ! $is_page;
+    $show_author = $is_article && is_single() && ! $is_frontpage && ! $is_aggregated;
 
-    $chapter_story_id = ( $post_type === 'fcn_chapter' ) ? (int) fictioneer_get_chapter_story_id( $post_id ) : 0;
+    $chapter_story_id = ( $post_type === 'fcn_chapter' && $post_id ) ? (int) fictioneer_get_chapter_story_id( $post_id ) : 0;
 
     $canonical_url = wp_get_canonical_url();
 
@@ -366,7 +375,7 @@ final class Meta {
 
     $title = '';
     $description = '';
-    $use_default_image = false;
+    $use_default_image = $is_frontpage;
 
     if ( is_search() ) {
       $use_default_image = true;
@@ -376,7 +385,7 @@ final class Meta {
       );
     } elseif ( is_author() ) {
       $use_default_image = true;
-      $author = get_userdata( get_queried_object_id() );
+      $author = get_userdata( (int) get_queried_object_id() );
       $title = $author
         ? esc_html( sprintf( _x( 'Author: %s', 'SEO author page title.', 'fictioneer' ), $author->display_name ) )
         : esc_html( _x( 'Author', 'SEO fallback title for author pages.', 'fictioneer' ) );
@@ -496,9 +505,9 @@ final class Meta {
 
     if (
       ! is_array( $seo_fields ) ||
-      ! isset( $seo_fields['title'], $seo_fields['description'], $seo_fields['og_image'] )
+      ! isset( $seo_fields['title'], $seo_fields['description'], $seo_fields['og_image_id'] )
     ) {
-      $seo_fields = array( 'title' => '', 'description' => '', 'og_image' => 0 );
+      $seo_fields = array( 'title' => '', 'description' => '', 'og_image_id' => 0 );
     }
 
     self::$data['seo_fields'][ $post_id ] = $seo_fields;
@@ -523,25 +532,25 @@ final class Meta {
 
     if ( is_tag() ) {
       return esc_html(
-        sprintf( _x( 'Tag: %s', 'SEO post tag title.', 'fictioneer' ), single_cat_title( '', false ) )
+        sprintf( _x( 'Tag: %s', 'SEO post tag title.', 'fictioneer' ), single_tag_title( '', false ) )
       );
     }
 
     if ( is_tax( 'fcn_character' ) ) {
       return esc_html(
-        sprintf( _x( 'Character: %s', 'SEO character taxonomy title.', 'fictioneer' ), single_cat_title( '', false ) )
+        sprintf( _x( 'Character: %s', 'SEO character taxonomy title.', 'fictioneer' ), single_term_title( '', false ) )
       );
     }
 
     if ( is_tax( 'fcn_fandom' ) ) {
       return esc_html(
-        sprintf( _x( 'Fandom: %s', 'SEO fandom taxonomy title.', 'fictioneer' ), single_cat_title( '', false ) )
+        sprintf( _x( 'Fandom: %s', 'SEO fandom taxonomy title.', 'fictioneer' ), single_term_title( '', false ) )
       );
     }
 
     if ( is_tax( 'fcn_genre' ) ) {
       return esc_html(
-        sprintf( _x( 'Genre: %s', 'SEO genre taxonomy title.', 'fictioneer' ), single_cat_title( '', false ) )
+        sprintf( _x( 'Genre: %s', 'SEO genre taxonomy title.', 'fictioneer' ), single_term_title( '', false ) )
       );
     }
 
@@ -625,7 +634,7 @@ final class Meta {
           $co_author = get_the_author_meta( 'display_name', $co_author_id );
         }
 
-        if ( empty( $co_author ) && ! in_array( $co_author, $all_authors, true ) ) {
+        if ( ! empty( $co_author ) && ! in_array( $co_author, $all_authors, true ) ) {
           $all_authors[] = $co_author;
         }
       }
@@ -645,6 +654,8 @@ final class Meta {
    */
 
   private static function build_image_array( $image_id ) {
+    $image_id = (int) $image_id;
+
     if ( ! $image_id ) {
       return null;
     }
