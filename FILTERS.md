@@ -307,6 +307,20 @@ Filters the intermediate output array of term HTML nodes (tags, genres, fandoms,
 
 ---
 
+### `apply_filters( 'fictioneer_filter_chapter_aggregates_sql', $sql, $story_id, $chapter_ids, $statuses, $variant )`
+Filters the prepared raw SQL used to query chapters in the `\Fictioneer\Story::get_data()` function. For performance reasons, this function does not use `WP_Query`, as it would be 10-15 times slower. There is generally little need to modify this SQL, so the filter primarily exists to handle edge cases.
+
+**Warning:** Of all filters that can mess up your site, this one can mess up your site the most.
+
+**Parameters:**
+* $sql (string) – Prepared and safe SQL query.
+* $story_id (int) – ID of the story.
+* $chapter_ids (array) – IDs of all associated chapters, in order.
+* $statuses (array) – Array of allowed post statuses to query (already filtered).
+* $variant (string) – Either `'small'` (multi-joins) or `'large'` (ID-scoped) depending on strategy.
+
+---
+
 ### `apply_filters( 'fictioneer_filter_chapter_card_footer', $footer_items, $post, $story, $args )`
 Filters the intermediate output array in the `_card-chapter.php` partial before it is imploded and rendered. Contains statistics with icons such as the number of words, publishing date, comments, and so forth.
 
@@ -735,19 +749,6 @@ function child_query_scheduled_chapters( $statuses ) {
 }
 add_filter( 'fictioneer_filter_get_story_data_queried_chapter_statuses', 'child_query_scheduled_chapters' );
 ```
-
----
-
-### `apply_filters( 'fictioneer_filter_get_story_data_sql', $sql, $story_id, $chapter_ids, $statuses )`
-Filters the prepared raw SQL used to query chapters in the `\Fictioneer\Story::get_data()` function. For performance reasons, this function does not use `WP_Query`, as it would be 10-15 times slower. There is generally little need to modify this SQL, so the filter primarily exists to handle edge cases.
-
-**Warning:** Of all filters that can mess up your site, this one can mess up your site the most.
-
-**Parameters:**
-* $sql (string) – Prepared and safe SQL query.
-* $story_id (int) – ID of the story.
-* $chapter_ids (array) – IDs of all associated chapters, in order.
-* $statuses (array) – Array of allowed post statuses to query (already filtered).
 
 ---
 

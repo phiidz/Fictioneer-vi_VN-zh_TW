@@ -722,7 +722,7 @@ class Story {
       ...$queried_statuses
     );
 
-    $sql = apply_filters( 'fictioneer_filter_get_story_data_sql', $sql, $story_id, $chapter_ids, $queried_statuses );
+    $sql = apply_filters( 'fictioneer_filter_chapter_aggregates_sql', $sql, $story_id, $chapter_ids, $queried_statuses, 'small' );
 
     return $wpdb->get_results( $sql, OBJECT_K ) ?: [];
   }
@@ -781,7 +781,7 @@ class Story {
         ...$args
       );
 
-      $sql = apply_filters( 'fictioneer_filter_get_story_data_sql', $sql, $story_id, $ids, $statuses );
+      $sql = apply_filters( 'fictioneer_filter_chapter_aggregates_sql', $sql, $story_id, $ids, $statuses, 'large' );
 
       return $wpdb->get_results( $sql, OBJECT_K ) ?: [];
     };
