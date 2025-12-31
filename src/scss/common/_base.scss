@@ -92,7 +92,7 @@
       min-height: 800px;
     }
 
-    :where(.recommendation__article, .story__article, .chapter__article, .singular__article, .archive__article, .search-results__article) {
+    :where(.post__article, .recommendation__article, .story__article, .chapter__article, .singular__article, .archive__article, .search-results__article) {
       container-type: inline-size;
     }
   }
