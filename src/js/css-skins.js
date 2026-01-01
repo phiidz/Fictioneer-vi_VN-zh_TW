@@ -1,6 +1,9 @@
 /**
  * Validates a CSS string.
  *
+ * Note: This is a weaker quick client-side check, the strong
+ * validation happens server-side.
+ *
  * @since 5.26.0
  * @param {String} css - The CSS to validate.
  * @return {Boolean} True or false.
@@ -73,7 +76,8 @@ function fcn_validateCss(css) {
     scan.includes('<style') ||
     /expression\s*\(/.test(scan) ||
     /-moz-binding\b/.test(scan) ||
-    /\bbehavior\s*:/.test(scan)
+    /\bbehavior\s*:/.test(scan) ||
+    /\bvbscript\s*:/.test(scan)
   ) {
     return false;
   }
@@ -93,15 +97,16 @@ function fcn_validateCss(css) {
     }
 
     const u = inside.trim().toLowerCase();
+    const normalized = u.replace(/\s+/g, '');
 
-    if (u.startsWith('javascript:')) {
+    if (normalized.startsWith('javascript:') || normalized.startsWith('vbscript:')) {
       return false;
     }
 
-    if (u.startsWith('data:')) {
+    if (normalized.startsWith('data:')) {
       const allowed = /^(data:(image\/(png|jpeg|jpg|gif|webp|svg\+xml)|font\/(woff|woff2)|application\/font-woff2);)/i;
 
-      if (!allowed.test(u)) {
+      if (!allowed.test(normalized)) {
         return false;
       }
     }
