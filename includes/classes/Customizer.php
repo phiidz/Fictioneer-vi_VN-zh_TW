@@ -315,9 +315,9 @@ class Customizer {
 
   public static function build_customizer_css( $context = null ) : void {
     if ( $context === 'preview' ) {
-      $file_path = Utils::get_cache_dir( 'preview' ) . 'customize-preview.css';
+      $file_path = Utils::get_generated_dir( 'customize', 'preview' ) . 'customize-preview.css';
     } else {
-      $file_path = Utils::get_cache_dir( 'build_customize_css' ) . 'customize.css';
+      $file_path = Utils::get_generated_dir( 'customize', 'build_customize_css' ) . 'customize.css';
     }
 
     $css = self::get_customizer_css();

@@ -8,6 +8,66 @@ defined( 'ABSPATH' ) OR exit;
 
 final class Utils {
   /**
+   * Return directory path for theme-generated files.
+   *
+   * @since 5.34.0
+   *
+   * @param string|null $context  Optional. Context of the call. Default null.
+   *
+   * @return string Path of the theme-generated file directory.
+   */
+
+  public static function get_generated_dir( $subdir = '', $context = null ) : string {
+    static $checked = false;
+
+    $dir = apply_filters(
+      'fictioneer_filter_generated_dir',
+      WP_CONTENT_DIR . '/fictioneer-generated/' . $subdir,
+      $context
+    );
+
+    $dir = trailingslashit( $dir );
+
+    if ( ! $checked ) {
+      $checked = true;
+
+      if ( ! is_dir( $dir ) ) {
+        if ( ! wp_mkdir_p( $dir ) ) {
+          error_log(
+            sprintf(
+              '[Fictioneer] Failed to create theme-generated file directory: %s (context: %s)',
+              $dir,
+              $context ?? 'none'
+            )
+          );
+        }
+      }
+    }
+
+    return $dir;
+  }
+
+  /**
+   * Return theme-generated file URI.
+   *
+   * @since 5.34.0
+   *
+   * @param string|null $context  The context of the call. Default null.
+   *
+   * @return string Theme-generated file URI.
+   */
+
+  public static function get_generated_uri( $subdir = '', $context = null ) : string {
+    $uri = apply_filters(
+      'fictioneer_filter_generated_uri',
+      content_url( 'fictioneer-generated/' . $subdir ),
+      $context
+    );
+
+    return trailingslashit( $uri );
+  }
+
+  /**
    * Return directory path of the theme cache.
    *
    * @since 5.23.1

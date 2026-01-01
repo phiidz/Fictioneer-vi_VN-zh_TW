@@ -1025,7 +1025,7 @@ add_action( 'wp_enqueue_scripts', 'fictioneer_style_queue' );
 
 function fictioneer_output_customize_css() {
   // Setup
-  $file_path = Utils::get_cache_dir( 'output_customize_css' ) . 'customize.css';
+  $file_path = Utils::get_generated_dir( 'customize', 'output_customize_css' ) . 'customize.css';
 
   // Create file if it does not exist
   if ( ! file_exists( $file_path ) ) {
@@ -1036,7 +1036,7 @@ function fictioneer_output_customize_css() {
   if ( file_exists( $file_path ) ) {
     wp_enqueue_style(
       'fictioneer-customize',
-      Utils::get_cache_uri( 'output_customize_css' ) . "customize.css",
+      Utils::get_generated_uri( 'customize', 'output_customize_css' ) . "customize.css",
       ['fictioneer-application'],
       fictioneer_get_cache_bust()
     );
@@ -1055,7 +1055,7 @@ if ( ! is_customize_preview() ) {
 
 function fictioneer_output_customize_preview_css() {
   // Setup
-  $file_path = Utils::get_cache_dir( 'output_customize_preview_css' ) . 'customize-preview.css';
+  $file_path = Utils::get_generated_dir( 'customize', 'output_customize_preview_css' ) . 'customize-preview.css';
 
   // Create file if it does not exist
   Customizer::build_customizer_css( 'preview' );
@@ -1064,7 +1064,7 @@ function fictioneer_output_customize_preview_css() {
   if ( file_exists( $file_path ) ) {
     wp_enqueue_style(
       'fictioneer-customize',
-      Utils::get_cache_uri( 'output_customize_preview_css' ) . "customize-preview.css",
+      Utils::get_generated_uri( 'customize', 'output_customize_preview_css' ) . "customize-preview.css",
       ['fictioneer-application'],
       time() // Prevents caching in preview
     );

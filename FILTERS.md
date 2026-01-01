@@ -1593,7 +1593,7 @@ Filters the font array before the bundled-fonts.css stylesheet is built in the `
 ---
 
 ### `apply_filters( 'fictioneer_filter_pre_build_customize_css', $css )`
-Filters the CSS compiled from settings and theme options before it is minified and saved under `/cache/customize.css`. You can potentially append your own CSS or modify the current values, although that will require some regex.
+Filters the CSS compiled from settings and theme options before it is minified and saved under `wp-content/fictioneer-generated/customize.css`. You can potentially append your own CSS or modify the current values, although that will require some regex.
 
 **Parameters:**
 * $css (string) – The compiled customize CSS.

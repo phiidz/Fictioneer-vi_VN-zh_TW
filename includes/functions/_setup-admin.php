@@ -1096,7 +1096,7 @@ function fictioneer_look_for_issues() {
   $cache_dir = Utils::get_cache_dir( 'looking_for_issues' );
   $dynamic_scripts_path = $cache_dir . 'dynamic-scripts.js';
   $bundled_fonts_path = $cache_dir . 'bundled-fonts.css';
-  $customize_css_path = $cache_dir . 'customize.css';
+  $customize_css_path = Utils::get_generated_dir( 'customize', 'looking_for_issues' ) . 'customize.css';
   $issues = [];
 
   // Cache directory set up?
