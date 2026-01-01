@@ -109,7 +109,14 @@ mark {
 
 :where(audio, video) {
   outline: 0;
+}
+
+.wp-block-video {
   min-width: 280px !important;
+}
+
+.wp-block-audio {
+  min-width: 300px !important;
 }
 
 details {
