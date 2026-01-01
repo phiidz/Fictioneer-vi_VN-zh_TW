@@ -780,6 +780,7 @@ figcaption {
 
 :root .wp-block-pullquote {
   --this-spacing: var(--pullquote-spacing, calc(var(--paragraph-spacing) + 1.5rem));
+  --this-float-spacing: .375em;
   --this-align-max-width: min(calc(40cqw - 2 * var(--layout-spacing-horizontal-small)), 40%);
 }
 
@@ -791,9 +792,6 @@ figcaption {
   text-align: center;
   overflow-wrap: break-word;
   padding: 0;
-  margin: 0;
-  margin-inline-start: auto;
-  margin-inline-end: auto;
   max-width: min(100%, max(85cqw, 260px));
 
   blockquote {
