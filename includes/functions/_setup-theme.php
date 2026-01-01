@@ -1506,6 +1506,21 @@ if ( ! is_admin() && ! get_option( 'fictioneer_enable_jquery_migrate' ) ) {
 // =============================================================================
 
 /**
+ * Change placement of Autoptimize CSS head output.
+ *
+ * @since 5.34.0
+ *
+ * @param array $replacetag  Placement instructions.
+ *
+ * @return array Updated placement instructions.
+ */
+
+function fictioneer_ao_css_replacetag( $replacetag ) {
+  return array( '</head>', 'before' );
+}
+add_filter( 'autoptimize_filter_css_replacetag', 'fictioneer_ao_css_replacetag', 10, 1 );
+
+/**
  * Exclude stylesheets from Autoptimize (if installed).
  *
  * @since 4.0.0
