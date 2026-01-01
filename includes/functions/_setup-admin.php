@@ -1049,6 +1049,15 @@ function fictioneer_get_mu_plugin_data() {
       'version' => '1.0.1',
       'update' => false,
       'active' => false
+    ),
+    'fictioneer_admin_guard' => array(
+      'key' => 'fictioneer_admin_guard',
+      'filename' => 'fictioneer_003_admin_guard.php',
+      'name' => _x( 'Fictioneer Admin Guard', 'Theme mu-plugin.', 'fictioneer' ),
+      'description' => _x( 'Enforces an allowlist of administrator user IDs defined via <code>define( "FICTIONEER_ADMIN_ID_ALLOWLIST", [ ... ] )</code> in config.php (and is ignored if it is missing). If an unapproved user gains administrator-like privileges, all capabilities are removed, the user is downgraded to subscriber, logged out, and the request is terminated. This does not protect against other attack vectors such as arbitrary code execution, but it does prevent stealth administrator accounts.', 'Theme mu-plugin.', 'fictioneer' ),
+      'version' => '1.0.0',
+      'update' => false,
+      'active' => false
     )
   );
 
@@ -1069,6 +1078,15 @@ function fictioneer_get_mu_plugin_data() {
       // Check version
       if ( version_compare( $data['fictioneer_elementor_control']['version'], $plugin_data['Version'], '>' ) ) {
         $data['fictioneer_elementor_control']['update'] = true;
+      }
+    }
+
+    if ( $plugin_data['Name'] === 'Fictioneer Admin Guard' ) {
+      $data['fictioneer_admin_guard']['active'] = true;
+
+      // Check version
+      if ( version_compare( $data['fictioneer_admin_guard']['version'], $plugin_data['Version'], '>' ) ) {
+        $data['fictioneer_admin_guard']['update'] = true;
       }
     }
   }
