@@ -119,6 +119,10 @@ mark {
   min-width: 300px !important;
 }
 
+.screen-reader-text {
+  width: 1px !important;
+}
+
 details {
   summary {
     cursor: pointer;
