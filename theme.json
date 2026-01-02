@@ -16,6 +16,11 @@
           "blockGap": "1rem"
         }
       },
+      "core/columns": {
+        "spacing": {
+          "blockGap": "1.5rem"
+        }
+      },
       "core/social-links": {
         "spacing": {
           "blockGap": "0.75rem"
