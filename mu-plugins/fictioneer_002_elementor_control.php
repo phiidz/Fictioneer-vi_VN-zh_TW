@@ -2,13 +2,15 @@
 /**
  * Plugin Name: Fictioneer Elementor Control
  * Description: Disables Elementor on all pages except for the Canvas templates.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Author: Tetrakern
  * Author URI: https://github.com/Tetrakern
  * License: GNU General Public License v3.0 or later
  * License URI: http://www.gnu.org/licenses/gpl.html
  */
 
+
+defined( 'ABSPATH' ) OR exit;
 
 /**
  * Get current post ID based on URL
