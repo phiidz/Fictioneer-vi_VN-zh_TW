@@ -2,13 +2,16 @@
 /**
  * Plugin Name: Fictioneer Fast Requests
  * Description: Skips plugins for faster requests.
- * Version: 1.1.1
+ * Version: 1.1.2
  * Author: Tetrakern
  * Author URI: https://github.com/Tetrakern
  * Donate link: https://ko-fi.com/tetrakern
  * License: GNU General Public License v3.0 or later
  * License URI: http://www.gnu.org/licenses/gpl.html
  */
+
+
+defined( 'ABSPATH' ) OR exit;
 
 // Check if AJAX request
 if ( defined( 'DOING_AJAX' ) && DOING_AJAX && isset( $_REQUEST['fcn_fast_ajax'] ) ) {
