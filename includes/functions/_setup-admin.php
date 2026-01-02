@@ -1037,7 +1037,7 @@ function fictioneer_get_mu_plugin_data() {
       'filename' => 'fictioneer_001_fast_requests.php',
       'name' => _x( 'Fictioneer Fast Requests', 'Theme mu-plugin.', 'fictioneer' ),
       'description' => _x( 'Disables plugins for selected actions to accelerate dynamic requests, such as AJAX comments. If you have many plugins installed, this can significantly reduce loading times.', 'Theme mu-plugin.', 'fictioneer' ),
-      'version' => '1.1.0',
+      'version' => '1.1.2',
       'update' => false,
       'active' => false
     ),
@@ -1046,7 +1046,7 @@ function fictioneer_get_mu_plugin_data() {
       'filename' => 'fictioneer_002_elementor_control.php',
       'name' => _x( 'Fictioneer Elementor Control', 'Theme mu-plugin.', 'fictioneer' ),
       'description' => _x( 'Disables the Elementor plugin on all pages except those with a Canvas page template. Since Elementor consumes a lot of server resources, limiting it to actual use cases is sensible. However, this makes the plugin unavailable anywhere else on the frontend.', 'Theme mu-plugin.', 'fictioneer' ),
-      'version' => '1.0.1',
+      'version' => '1.0.2',
       'update' => false,
       'active' => false
     ),
