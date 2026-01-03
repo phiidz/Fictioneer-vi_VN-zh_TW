@@ -756,27 +756,56 @@ if ( get_option( 'fictioneer_enable_line_break_fix' ) ) {
  */
 
 function fictioneer_add_lightbox_to_post_images( $content ) {
-  // Return early if...
   if ( empty( $content ) || strpos( $content, '<img' ) === false ) {
     return $content;
   }
 
-  // Setup
-  libxml_use_internal_errors( true );
+  $prev_libxml = libxml_use_internal_errors( true );
+
   $doc = new DOMDocument();
-  $doc->loadHTML( '<?xml encoding="UTF-8">' . $content );
+
+  $flags = defined( 'LIBXML_HTML_NOIMPLIED' ) ? LIBXML_HTML_NOIMPLIED : 0;
+  $flags |= defined( 'LIBXML_HTML_NODEFDTD' ) ? LIBXML_HTML_NODEFDTD : 0;
+
+  $doc->loadHTML( '<?xml encoding="UTF-8">' . $content, $flags );
+
   libxml_clear_errors();
+  libxml_use_internal_errors( $prev_libxml );
+
   $images = $doc->getElementsByTagName( 'img' );
 
-  // Iterate over each img tag
+  if ( ! $images || $images->length === 0 ) {
+    return $content;
+  }
+
+  $img_href_regex = '/\.(?:jpe?g|png|gif|webp|svg|avif|apng|tiff|ico)(?:$|[?#])/i';
+
   foreach ( $images as $img ) {
+    if ( $img->hasAttribute( 'data-lightbox' ) ) {
+      continue;
+    }
+
     $classes = $img->getAttribute( 'class' );
+
     $parent = $img->parentNode;
-    $parent_classes = $parent->getAttribute( 'class' );
-    $parent_href = strtolower( $parent->getAttribute( 'href' ) );
+    $parent_classes = '';
+    $parent_href = '';
+
+    if ( $parent instanceof DOMElement && strtolower( $parent->nodeName ) === 'a' ) {
+      if ( $parent->hasAttribute( 'target' ) ) {
+        continue;
+      }
+
+      $parent_classes = $parent->getAttribute( 'class' );
+      $parent_href = $parent->getAttribute( 'href' );
+
+      if ( $parent_href !== '' && ! preg_match( $img_href_regex, $parent_href ) ) {
+        continue;
+      }
+    }
+
     $all_classes = $classes . ' ' . $parent_classes;
 
-    // Abort if...
     if (
       str_contains( $all_classes, 'no-auto-lightbox' ) ||
       str_contains( $all_classes, 'avatar' ) ||
@@ -785,34 +814,24 @@ function fictioneer_add_lightbox_to_post_images( $content ) {
       continue;
     }
 
-    if (
-      $parent->hasAttribute( 'href' ) &&
-      ! preg_match( '/(?<=\.jpg|jpeg|png|gif|webp|svg|avif|apng|tiff|ico)(?:$|[#?])/', $parent_href )
-    ) {
-      continue;
-    }
-
-    $id = preg_match( '/wp-image-([0-9]+)/i', $classes, $class_id );
-
-    if ( $class_id ) {
-      $id = absint( $class_id[1] );
-      $img->setAttribute( 'data-attachment-id', $id );
+    if ( preg_match( '/\bwp-image-(\d+)\b/i', $classes, $matches ) ) {
+      $img->setAttribute( 'data-attachment-id', (string) absint( $matches[1] ) );
     }
 
     $img->setAttribute( 'data-lightbox', '' );
     $img->setAttribute( 'tabindex', '0' );
   };
 
-  // Extract and save body content
-  $body = $doc->getElementsByTagName( 'body' )->item( 0 );
-  $content = $body ? $doc->saveHTML( $body ) : '';
-  $content = preg_replace( '/<\/?body>/', '', $content );
+  $out = $doc->saveHTML();
+  $out = preg_replace( '/^\s*<\?xml[^>]+\?>\s*/', '', $out );
 
-  // Release memory
-  unset( $doc );
+  error_log( $out );
 
-  // Continue filter
-  return $content;
+  // $body = $doc->getElementsByTagName( 'body' )->item( 0 );
+  // $content = $body ? $doc->saveHTML( $body ) : '';
+  // $content = preg_replace( '/<\/?body>/', '', $content );
+
+  return $out ?: $content;
 }
 
 if ( get_option( 'fictioneer_enable_lightbox' ) ) {
