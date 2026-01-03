@@ -526,7 +526,7 @@ add_filter( 'is_protected_meta', 'fictioneer_make_theme_meta_protected', 10, 2 )
 // =============================================================================
 
 /**
- * Prevents reserved slugs from being used in permalinks
+ * Prevent reserved slugs from being used in permalinks.
  *
  * @since 5.8.0
  *
@@ -635,7 +635,7 @@ function fictioneer_custom_background() {
 // =============================================================================
 
 /**
- * Update list of allowed tags
+ * Update list of allowed tags.
  *
  * @since 4.7.0
  *
@@ -660,7 +660,7 @@ add_action( 'init', 'fictioneer_modify_allowed_tags', 20 );
 // =============================================================================
 
 /**
- * Injects attributes and classes into the <html> root
+ * Inject attributes and classes into the <html> root.
  *
  * @since 4.7.0
  */
@@ -919,43 +919,6 @@ function fictioneer_add_classes_to_admin_body( $classes ) {
 add_filter( 'admin_body_class', 'fictioneer_add_classes_to_admin_body' );
 
 // =============================================================================
-// CACHE BUSTING
-// =============================================================================
-
-/**
- * Returns saved random cache busting string
- *
- * @since 5.12.5
- *
- * @return string Cache busting string.
- */
-
-function fictioneer_get_cache_bust() {
-  $cache_bust = get_option( 'fictioneer_cache_bust' );
-
-  if ( empty( $cache_bust ) ) {
-    $cache_bust = fictioneer_regenerate_cache_bust();
-  }
-
-  return $cache_bust;
-}
-
-/**
- * Regenerate cache busting string
- *
- * @since 5.12.5
- */
-
-function fictioneer_regenerate_cache_bust() {
-  $cache_bust = time();
-
-  update_option( 'fictioneer_cache_bust', $cache_bust, true );
-
-  return $cache_bust;
-}
-add_action( 'customize_save_after', 'fictioneer_regenerate_cache_bust' );
-
-// =============================================================================
 // ENQUEUE STYLESHEETS
 // =============================================================================
 
@@ -1157,8 +1120,6 @@ function fictioneer_build_dynamic_scripts() {
  */
 
 function fictioneer_add_custom_scripts() {
-  global $post;
-
   // Setup
   $post_type = get_post_type();
   $cache_bust = fictioneer_get_cache_bust();
@@ -1346,7 +1307,7 @@ function fictioneer_add_custom_scripts() {
 add_action( 'wp_enqueue_scripts', 'fictioneer_add_custom_scripts' );
 
 /**
- * Exclude theme scripts from Jetpack Boost
+ * Exclude theme scripts from Jetpack Boost.
  *
  * @since 5.24.1
  * @since 5.24.2 - Remove filter if Jetpack is not running.
@@ -1406,7 +1367,7 @@ function fictioneer_enqueue_block_editor_scripts() {
 add_action( 'enqueue_block_assets', 'fictioneer_enqueue_block_editor_scripts' );
 
 /**
- * Enqueue customizer scripts
+ * Enqueue customizer scripts.
  *
  * @since 5.12.0
  */
@@ -1427,7 +1388,7 @@ function fictioneer_enqueue_customizer_scripts() {
 add_action( 'customize_controls_enqueue_scripts', 'fictioneer_enqueue_customizer_scripts' );
 
 /**
- * Add nonce for Customizer actions
+ * Add nonce for Customizer actions.
  *
  * @since 5.12.0
  *
@@ -1778,7 +1739,7 @@ add_action( 'admin_head', 'fictioneer_output_head_fonts', 5 );
 // =============================================================================
 
 /**
- * Outputs script to prevent flickering of layout on page load
+ * Output script to prevent flickering of layout on page load.
  *
  * @since 5.22.1
  * @since 5.26.1 - Use wp_print_inline_script_tag().
@@ -1814,9 +1775,9 @@ if ( get_option( 'fictioneer_enable_anti_flicker' ) ) {
 // =============================================================================
 
 /**
- * Outputs critical path scripts in the <head>
+ * Output critical path scripts in the <head>.
  *
- * Critical path scripts executed in the <head> before the rest of the DOM
+ * Note: Critical path scripts executed in the <head> before the rest of the DOM
  * is loaded. This is necessary for the light/dark switch and site settings
  * to work without causing color flickering or layout shifts. This is achieved
  * by adding configuration classes directly into the <html> root node, which
@@ -1843,7 +1804,7 @@ function fictioneer_output_head_critical_scripts() {
 add_action( 'wp_head', 'fictioneer_output_head_critical_scripts', 9999 );
 
 /**
- * Outputs critical skin scripts in the <head>
+ * Output critical skin scripts in the <head>.
  *
  * @since 5.26.0
  * @since 5.26.1 - Use wp_print_inline_script_tag().
@@ -1872,7 +1833,7 @@ if ( get_option( 'fictioneer_enable_css_skins' ) ) {
 // =============================================================================
 
 /**
- * Outputs Stimulus in <head>
+ * Output Stimulus main script in <head>.
  *
  * @since 5.27.0
  */
@@ -1898,7 +1859,7 @@ add_post_type_support( 'page', 'excerpt' );
 // =============================================================================
 
 /**
- * Modifies the pagination links output for the theme
+ * Modify pagination links output for the theme.
  *
  * @since 5.4.0
  * @link https://developer.wordpress.org/reference/functions/paginate_links/
@@ -1925,11 +1886,11 @@ function fictioneer_paginate_links( $args = [] ) {
 }
 
 // =============================================================================
-// MODIFY ADMINBAR
+// ADMINBAR
 // =============================================================================
 
 /**
- * Adds 'Add Chapter' link to adminbar with pre-assigned chapter story
+ * Add 'Add Chapter' link to adminbar with pre-assigned chapter story.
  *
  * @since 5.9.3
  * @since 5.27.4 - Added guard clauses and link on chapter edit screen.
@@ -1983,6 +1944,33 @@ function fictioneer_adminbar_add_chapter_link( $wp_admin_bar ) {
 }
 add_action( 'admin_bar_menu', 'fictioneer_adminbar_add_chapter_link', 99 );
 
+/**
+ * Add theme settings link to admin bar.
+ *
+ * @since 5.19.1
+ *
+ * @param WP_Admin_Bar $wp_admin_bar  The WP_Admin_Bar instance, passed by reference.
+ */
+
+function fictioneer_adminbar_add_theme_settings_link( $wp_admin_bar ) {
+  if ( ! current_user_can( 'manage_options' ) || is_admin() ) {
+    return;
+  }
+
+  $args = array(
+    'id' => 'fictioneer_theme_settings',
+    'parent' => 'site-name',
+    'title' => __( 'Fictioneer', 'fictioneer' ),
+    'href' => esc_url( admin_url( 'admin.php?page=fictioneer' ) ),
+    'meta' => array(
+      'title' => __( 'Fictioneer Theme Settings', 'fictioneer' )
+    )
+  );
+
+  $wp_admin_bar->add_node( $args );
+}
+add_action( 'admin_bar_menu', 'fictioneer_adminbar_add_theme_settings_link', 999 );
+
 // =============================================================================
 // CUSTOMIZATION
 // =============================================================================
@@ -2013,7 +2001,7 @@ if ( get_theme_mod( 'card_frame', 'default' ) === 'stacked_random' ) {
 // =============================================================================
 
 /**
- * Returns array with translations to be used as JSON
+ * Return array with translations to be used as JSON.
  *
  * @since 5.12.2
  *
@@ -2043,7 +2031,7 @@ function fictioneer_get_js_translations() {
 }
 
 /**
- * Outputs JSON with translation into the <head>
+ * Output JSON with translation into the <head>.
  *
  * @since 5.12.2
  * @since 5.26.1 - Use wp_print_inline_script_tag().
@@ -2069,7 +2057,7 @@ add_action( 'wp_head', 'fictioneer_output_head_translations' );
 // =============================================================================
 
 /**
- * Directs story if a redirect link is set
+ * Redirect story if a redirect link is set.
  *
  * @since 5.14.0
  */
@@ -2097,7 +2085,7 @@ add_action( 'template_redirect', 'fictioneer_redirect_story' );
 // =============================================================================
 
 /**
- * Remove default styles of wp-signup.php and wp-activate.php
+ * Remove default styles of wp-signup.php and wp-activate.php.
  *
  * @since 5.18.1
  */
@@ -2108,7 +2096,7 @@ function fictioneer_remove_mu_registration_styles() {
 }
 
 /**
- * Output styles for wp-signup.php and wp-activate.php
+ * Output styles for wp-signup.php and wp-activate.php.
  *
  * @since 5.18.1
  */
@@ -2158,37 +2146,6 @@ if ( FICTIONEER_MU_REGISTRATION ) {
   add_action( 'wp_head', 'fictioneer_remove_mu_registration_styles', 1 );
   add_action( 'wp_head', 'fictioneer_output_mu_registration_style' );
 }
-
-// =============================================================================
-// ADD LINK TO THEME SETTINGS IN ADMIN BAR
-// =============================================================================
-
-/**
- * Add theme settings link to admin bar
- *
- * @since 5.19.1
- *
- * @param WP_Admin_Bar $wp_admin_bar  The WP_Admin_Bar instance, passed by reference.
- */
-
-function fictioneer_adminbar_add_theme_settings_link( $wp_admin_bar ) {
-  if ( ! current_user_can( 'manage_options' ) || is_admin() ) {
-    return;
-  }
-
-  $args = array(
-    'id' => 'fictioneer_theme_settings',
-    'parent' => 'site-name',
-    'title' => __( 'Fictioneer', 'fictioneer' ),
-    'href' => esc_url( admin_url( 'admin.php?page=fictioneer' ) ),
-    'meta' => array(
-      'title' => __( 'Fictioneer Theme Settings', 'fictioneer' )
-    )
-  );
-
-  $wp_admin_bar->add_node( $args );
-}
-add_action( 'admin_bar_menu', 'fictioneer_adminbar_add_theme_settings_link', 999 );
 
 // =============================================================================
 // ELEMENTOR (IF YOU ABSOLUTELY HAVE TO)
@@ -2268,7 +2225,7 @@ if ( ! is_admin() && get_theme_mod( 'default_story_cover' ) ) {
 // =============================================================================
 
 /**
- * Disables the incompatible Page Optimize plugin
+ * Disable incompatible Page Optimize plugin.
  *
  * @since 5.24.1
  */
@@ -2282,7 +2239,7 @@ function fictioneer_disable_page_optimize_plugin() {
 add_action( 'admin_init', 'fictioneer_disable_page_optimize_plugin' );
 
 /**
- * Shows notice when the Page Optimize plugin is disabled
+ * Show notice when the Page Optimize plugin is disabled.
  *
  * @since 5.24.1
  */

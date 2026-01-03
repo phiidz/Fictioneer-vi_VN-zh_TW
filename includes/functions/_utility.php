@@ -1,12 +1,132 @@
 <?php
 
 use Fictioneer\Sanitizer;
-use Fictioneer\Utils;
-use Fictioneer\Story;
-use Fictioneer\Utils_Admin;
+
+/**
+ * GENERIC UTILITIES
+ *
+ * This file contains generic, non-class utilities that can be safely used
+ * in child themes and theme-plugins. A few selected ones are pluggable,
+ * meaning you can override them through redefining. But only do that in
+ * child  themes and only if there is no better way.
+ */
 
 // =============================================================================
-// CHECK FOR ACTIVE PLUGINS
+// UNSORTED
+// =============================================================================
+
+/**
+ * Compare installed WordPress version against version string
+ *
+ * @since 5.12.2
+ * @global wpdb $wp_version  Current WordPress version string.
+ *
+ * @param string $version   The version string to test against.
+ * @param string $operator  Optional. How to compare. Default '>='.
+ *
+ * @return boolean True or false.
+ */
+
+function fictioneer_compare_wp_version( $version, $operator = '>=' ) {
+  global $wp_version;
+
+  return version_compare( $wp_version, $version, $operator );
+}
+
+if ( ! function_exists( 'fictioneer_get_async_css_loading_pattern' ) ) {
+  /**
+   * Returns the media attribute and loading strategy for stylesheets
+   *
+   * @since 5.12.2
+   *
+   * @return string Media attribute script for stylesheet links.
+   */
+
+  function fictioneer_get_async_css_loading_pattern() {
+    if ( FICTIONEER_ENABLE_ASYNC_ONLOAD_PATTERN ) {
+      return 'media="print" onload="this.media=\'all\'; this.onload=null;"';
+    }
+
+    return 'media="all"';
+  }
+}
+
+if ( ! function_exists( 'fictioneer_generate_placeholder' ) ) {
+  /**
+   * Dummy implementation (currently uses a CSS background).
+   *
+   * @since 5.14.0
+   *
+   * @param array|null $args  Optional arguments to generate a placeholder.
+   *
+   * @return string The placeholder URL or data URI.
+   */
+
+  function fictioneer_generate_placeholder( $args = [] ) {
+    return '';
+  }
+}
+
+if ( ! function_exists( 'mb_strlen' ) ) {
+  /**
+   * Fallback function for mb_strlen.
+   *
+   * @param string $string    The string to being measured.
+   * @param string $encoding  The character encoding. Default UTF-8.
+   *
+   * @return int The number of characters in the string.
+   */
+
+  function mb_strlen( $string, $encoding = 'UTF-8' ) {
+    if ( $encoding !== 'UTF-8' ) {
+      return strlen( $string );
+    }
+
+    $converted_string = iconv( $encoding, 'UTF-16', $string );
+
+    if ( $converted_string === false ) {
+      return strlen( $string );
+    } else {
+      return strlen( $converted_string ) / 2; // Each character is 2 bytes in UTF-16
+    }
+  }
+}
+
+/**
+ * Returns saved random cache busting string
+ *
+ * @since 5.12.5
+ *
+ * @return string Cache busting string.
+ */
+
+function fictioneer_get_cache_bust() {
+  $cache_bust = get_option( 'fictioneer_cache_bust' );
+
+  if ( empty( $cache_bust ) ) {
+    $cache_bust = fictioneer_regenerate_cache_bust();
+  }
+
+  return $cache_bust;
+}
+
+/**
+ * Regenerate cache busting string
+ *
+ * @since 5.12.5
+ */
+
+function fictioneer_regenerate_cache_bust() {
+  $cache_bust = time();
+
+  update_option( 'fictioneer_cache_bust', $cache_bust, true );
+
+  return $cache_bust;
+}
+add_action( 'customize_save_after', 'fictioneer_regenerate_cache_bust' );
+
+// =============================================================================
+// PLUGINS
 // =============================================================================
 
 /**
@@ -72,7 +192,7 @@ if ( ! function_exists( 'fictioneer_seo_plugin_active' ) ) {
 }
 
 // =============================================================================
-// SHORTEN NUMBER WITH LETTER
+// VALUE MANIPULATION
 // =============================================================================
 
 if ( ! function_exists( 'fictioneer_shorten_number' ) ) {
@@ -113,8 +233,261 @@ if ( ! function_exists( 'fictioneer_shorten_number' ) ) {
   }
 }
 
+if ( ! function_exists( 'fictioneer_replace_key_value' ) ) {
+  /**
+   * Replace key/value pairs in a string.
+   *
+   * @since 5.0.0
+   *
+   * @param string $text     Text that has key/value pairs to be replaced.
+   * @param array  $args     The key/value pairs.
+   * @param string $default  Optional. To be used if the text is empty.
+   *                         Default is an empty string.
+   *
+   * @return string The modified text.
+   */
+
+  function fictioneer_replace_key_value( $text, $args, $default = '' ) {
+    // Check if text exists
+    if ( empty( $text ) ) {
+      $text = $default;
+    }
+
+    // Check args
+    $args = is_array( $args ) ? $args : [];
+
+    // Filter args
+    $args = array_filter( $args, 'is_scalar' );
+
+    // Return modified text
+    return trim( strtr( $text, $args ) );
+  }
+}
+
+if ( ! function_exists( 'fictioneer_bbcodes' ) ) {
+  /**
+   * Interprets BBCodes into HTML
+   *
+   * Note: Spoilers do not work properly if wrapping multiple lines or other codes.
+   *
+   * @since 4.0.0
+   * @link https://stackoverflow.com/a/17508056/17140970
+   *
+   * @param string $content  The content.
+   *
+   * @return string The content with interpreted BBCodes.
+   */
+
+  function fictioneer_bbcodes( $content ) {
+    // Setup
+    $img_search = '\s*https:[^\"\'|;<>\[\]]+?\.(?:png|jpg|jpeg|gif|webp|svg|avif|tiff).*?\s*';
+    $url_search = '\s*(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?\s*';
+
+    // Deal with some multi-line spoiler issues
+    if ( preg_match_all( '/\[spoiler](.+?)\[\/spoiler]/is', $content, $spoilers, PREG_PATTERN_ORDER ) ) {
+      foreach ( $spoilers[0] as $spoiler ) {
+        $replace = str_replace( '<p></p>', ' ', $spoiler );
+        $replace = preg_replace( '/\[quote](.+?)\[\/quote]/is', '<blockquote class="spoiler">$1</blockquote>', $replace );
+
+        $content = str_replace( $spoiler, $replace, $content );
+      }
+    }
+
+    // Possible patterns
+    $patterns = array(
+      '/\[spoiler]\[quote](.+?)\[\/quote]\[\/spoiler]/is',
+      '/\[spoiler](.+?)\[\/spoiler]/i',
+      '/\[spoiler](.+?)\[\/spoiler]/is',
+      '/\[b](.+?)\[\/b]/i',
+      '/\[i](.+?)\[\/i]/i',
+      '/\[s](.+?)\[\/s]/i',
+      '/\[quote](.+?)\[\/quote]/is',
+      '/\[ins](.+?)\[\/ins]/is',
+      '/\[del](.+?)\[\/del]/is',
+      '/\[li](.+?)\[\/li]/i',
+      "/\[link.*]\[img]\s*($img_search)\s*\[\/img]\[\/link]/i",
+      "/\[img]\s*($img_search)\s*\[\/img]/i",
+      "/\[link\]\s*($url_search)\s*\[\/link\]/i",
+      "/\[link=\s*[\"']?\s*($url_search)\s*[\"']?\s*\](.+?)\[\/link\]/i",
+      '/\[anchor]\s*([^\"\'|;<>\[\]]+?)\s*\[\/anchor]/i'
+    );
+
+    // HTML replacements
+    $replacements = array(
+      '<blockquote class="spoiler">$1</blockquote>',
+      '<span class="spoiler">$1</span>',
+      '<div class="spoiler">$1</div>',
+      '<strong>$1</strong>',
+      '<em>$1</em>',
+      '<strike>$1</strike>',
+      '<blockquote>$1</blockquote>',
+      '<ins>$1</ins>',
+      '<del>$1</del>',
+      '<div class="comment-list-item">$1</div>',
+      '<span class="comment-image-consent-wrapper"><button type="button" class="button _secondary consent-button" title="$1">' . _x( '<i class="fa-solid fa-image"></i> Show Image', 'Comment image consent wrapper button.', 'fictioneer' ) . '</button><a href="$1" class="comment-image-link" rel="noreferrer noopener nofollow" target="_blank"><img class="comment-image" data-src="$1"></a></span>',
+      '<span class="comment-image-consent-wrapper"><button type="button" class="button _secondary consent-button" title="$1">' . _x( '<i class="fa-solid fa-image"></i> Show Image', 'Comment image consent wrapper button.', 'fictioneer' ) . '</button><img class="comment-image" data-src="$1"></span>',
+      "<a href=\"$1\" rel=\"noreferrer noopener nofollow\">$1</a>",
+      "<a href=\"$1\" rel=\"noreferrer noopener nofollow\">$5</a>",
+      '<a href="#$1" rel="noreferrer noopener nofollow" data-block="start" class="comment-anchor">:anchor:</a>'
+    );
+
+    // Pattern replace
+    $content = preg_replace( $patterns, $replacements, $content );
+
+    // Icons
+    $content = str_replace( ':anchor:', fcntr( 'comment_anchor' ), $content );
+
+    return $content;
+  }
+}
+
+if ( ! function_exists( 'fictioneer_multiply_word_count' ) ) {
+  /**
+   * Multiply word count with factor from options.
+   *
+   * @since 5.22.3
+   *
+   * @param int $words  Word count.
+   *
+   * @return int The updated word count.
+   */
+
+  function fictioneer_multiply_word_count( $words ) {
+    // Setup
+    $multiplier = floatval( get_option( 'fictioneer_word_count_multiplier', 1.0 ) );
+
+    // Multiply
+    if ( $multiplier !== 1.0 ) {
+      $words = (int) ( $words * $multiplier );
+    }
+
+    // Always return an integer greater or equal 0
+    return max( 0, $words );
+  }
+}
+
+/**
+ * Turn line-break separated list into array of links
+ *
+ * @since 5.7.4
+ *
+ * @param string $list  The list of links
+ *
+ * @return array The array of links.
+ */
+
+function fictioneer_url_list_to_array( $list ) {
+  // Already array?
+  if ( is_array( $list ) ) {
+    return $list;
+  }
+
+  // Catch falsy values
+  if ( empty( $list ) ) {
+    return [];
+  }
+
+  // Prepare URLs
+  $urls = [];
+  $lines = preg_split( '/\r\n|\r|\n/', $list );
+
+  // Extract
+  foreach ( $lines as $line ) {
+    $tuple = explode( '|', $line );
+    $tuple = array_map( 'trim', $tuple );
+
+    $urls[] = array(
+      'name' => wp_strip_all_tags( $tuple[0] ),
+      'url' => Sanitizer::sanitize_url_https( $tuple[1] )
+    );
+  }
+
+  // Return
+  return $urls;
+}
+
+/**
+ * Returns an unformatted replacement string
+ *
+ * @since 5.7.5
+ *
+ * @return string Just a simple '%s'.
+ */
+
+function fictioneer__return_no_format() {
+  return '%s';
+}
+
+/**
+ * Helper to just return 'publish'.
+ *
+ * @since 4.28.0
+ *
+ * @return string Just a simple 'publish'.
+ */
+
+function fictioneer__return_publish_status( $param = null ) {
+  return 'publish';
+}
+
+/**
+ * Returns a truncated string without tags
+ *
+ * @since 5.9.0
+ *
+ * @param string      $string    The string to truncate.
+ * @param int         $length    Maximum length in characters.
+ * @param string|null $ellipsis  Optional. Truncation indicator suffix.
+ *
+ * @return string The truncated string without tags.
+ */
+
+function fictioneer_truncate( $string, $length, $ellipsis = null ) {
+  // Setup
+  $string = wp_strip_all_tags( $string ); // Prevent tags from being cut off
+  $ellipsis = $ellipsis ?? FICTIONEER_TRUNCATION_ELLIPSIS;
+
+  // Return truncated string
+  if ( function_exists( 'mb_strimwidth' ) ) {
+    return mb_strimwidth( $string, 0, $length, $ellipsis );
+  } else {
+    return strlen( $string ) > $length ? substr( $string, 0, $length ) . $ellipsis : $string;
+  }
+}
+
+if ( ! function_exists( 'fictioneer_get_human_readable_list' ) ) {
+  /**
+   * Join string in an array as human readable list.
+   *
+   * @since 5.15.0
+   * @link https://gist.github.com/SleeplessByte/4514697
+   *
+   * @param array $array  Array of strings.
+   *
+   * @return string The human readable list.
+   */
+
+  function fictioneer_get_human_readable_list( $array ) {
+    // Setup
+    $comma = _x( ', ', 'Human readable list joining three or more items except the last two.', 'fictioneer' );
+    $double = _x( ' or ', 'Human readable list joining two items.', 'fictioneer' );
+    $final = _x( ', or ', 'Human readable list joining the last two of three or more items.', 'fictioneer' );
+
+    // One or two items
+    if ( count( $array ) < 3 ) {
+      return implode( $double, $array );
+    }
+
+    // Three or more items
+    array_splice( $array, -2, 2, implode( $final, array_slice( $array, -2, 2 ) ) );
+
+    // Finish
+    return implode( $comma , $array );
+  }
+}
+
 // =============================================================================
-// VALIDATE ID
+// VALIDATORS
 // =============================================================================
 
 if ( ! function_exists( 'fictioneer_validate_id' ) ) {
@@ -146,10 +519,6 @@ if ( ! function_exists( 'fictioneer_validate_id' ) ) {
   }
 }
 
-// =============================================================================
-// VALIDATE NONCE PLAUSIBILITY
-// =============================================================================
-
 if ( ! function_exists( 'fictioneer_nonce_plausibility' ) ) {
   /**
    * Checks nonce to be plausible
@@ -174,42 +543,7 @@ if ( ! function_exists( 'fictioneer_nonce_plausibility' ) ) {
 }
 
 // =============================================================================
-// KEY/VALUE STRING REPLACEMENT
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_replace_key_value' ) ) {
-  /**
-   * Replaces key/value pairs in a string
-   *
-   * @since 5.0.0
-   *
-   * @param string $text     Text that has key/value pairs to be replaced.
-   * @param array  $args     The key/value pairs.
-   * @param string $default  Optional. To be used if the text is empty.
-   *                         Default is an empty string.
-   *
-   * @return string The modified text.
-   */
-
-  function fictioneer_replace_key_value( $text, $args, $default = '' ) {
-    // Check if text exists
-    if ( empty( $text ) ) {
-      $text = $default;
-    }
-
-    // Check args
-    $args = is_array( $args ) ? $args : [];
-
-    // Filter args
-    $args = array_filter( $args, 'is_scalar' );
-
-    // Return modified text
-    return trim( strtr( $text, $args ) );
-  }
-}
-
-// =============================================================================
-// CHECK USER CAPABILITIES
+// USERS
 // =============================================================================
 
 if ( ! function_exists( 'fictioneer_is_admin' ) ) {
@@ -327,8 +661,110 @@ if ( ! function_exists( 'fictioneer_is_editor' ) ) {
   }
 }
 
+if ( ! function_exists( 'fictioneer_get_post_author_ids' ) ) {
+  /**
+   * Returns array of author IDs for a post ID
+   *
+   * @since 5.4.8
+   *
+   * @param int $post_id  The post ID.
+   *
+   * @return array The author IDs.
+   */
+
+  function fictioneer_get_post_author_ids( $post_id ) {
+    $author_ids = get_post_meta( $post_id, 'fictioneer_story_co_authors', true ) ?: [];
+    $author_ids = is_array( $author_ids ) ? $author_ids : [];
+    array_unshift( $author_ids, get_post_field( 'post_author', $post_id ) );
+
+    return array_unique( $author_ids );
+  }
+}
+
+/**
+ * Find (first) user by display name.
+ *
+ * @since 5.14.1
+ *
+ * @param string $display_name  The display name to search for.
+ *
+ * @return WP_User|null The first matching user or null if not found.
+ */
+
+function fictioneer_find_user_by_display_name( $display_name ) {
+  // No choice but to query all because the display name is not unique
+  $users = get_users(
+    array(
+      'search' => sanitize_user( $display_name ),
+      'search_columns' => ['display_name'],
+      'number' => 1
+    )
+  );
+
+  // If found, return first
+  if ( ! empty( $users ) ) {
+    return $users[0];
+  }
+
+  // Not found
+  return null;
+}
+
+/**
+ * Return all authors with published posts.
+ *
+ * Note: Qualified post types are fcn_story, fcn_chapter, fcn_recommendation,
+ * and post. The result is cached for 12 hours as Transient.
+ *
+ * @since 5.24.0
+ * @link https://developer.wordpress.org/reference/functions/get_users/
+ *
+ * @param array $args  Optional. Array of additional query arguments.
+ *
+ * @return array Array of WP_User object, stdClass objects, or IDs.
+ */
+
+function fictioneer_get_publishing_authors( $args = [] ) {
+  static $authors = null;
+
+  $key = 'fictioneer_publishing_authors_' . md5( serialize( $args ) );
+
+  if ( ! $authors && $transient = get_transient( $key ) ) {
+    $authors = $transient;
+  }
+
+  if ( $authors ) {
+    return $authors;
+  }
+
+  $authors = get_users(
+    array_merge(
+      array( 'has_published_posts' => ['fcn_story', 'fcn_chapter', 'fcn_recommendation', 'post'] ),
+      $args
+    )
+  );
+
+  set_transient( $key, $authors, 12 * HOUR_IN_SECONDS );
+
+  return $authors;
+}
+
+/**
+ * Return whether the user can edit any post types.
+ *
+ * @since 5.33.0
+ *
+ * @param int $user_id  ID of the user to check.
+ *
+ * @return bool True if the user can edit any post types, false otherwise.
+ */
+
+function fictioneer_user_can_post_any( $user_id ) {
+  return user_can( $user_id, 'edit_posts' ) || user_can( $user_id, 'edit_pages' ) || user_can( $user_id, 'edit_fcn_stories' ) || user_can( $user_id, 'edit_fcn_chapters' ) || user_can( $user_id, 'edit_fcn_collections' ) || user_can( $user_id, 'edit_fcn_recommendations' );
+}
+
 // =============================================================================
-// GET META FIELDS
+// META FIELDS
 // =============================================================================
 
 if ( ! function_exists( 'fictioneer_get_story_chapter_ids' ) ) {
@@ -409,31 +845,6 @@ if ( ! function_exists( 'fictioneer_get_story_word_count' ) ) {
   }
 }
 
-if ( ! function_exists( 'fictioneer_multiply_word_count' ) ) {
-  /**
-   * Multiply word count with factor from options.
-   *
-   * @since 5.22.3
-   *
-   * @param int $words  Word count.
-   *
-   * @return int The updated word count.
-   */
-
-  function fictioneer_multiply_word_count( $words ) {
-    // Setup
-    $multiplier = floatval( get_option( 'fictioneer_word_count_multiplier', 1.0 ) );
-
-    // Multiply
-    if ( $multiplier !== 1.0 ) {
-      $words = (int) ( $words * $multiplier );
-    }
-
-    // Always return an integer greater or equal 0
-    return max( 0, $words );
-  }
-}
-
 if ( ! function_exists( 'fictioneer_get_content_field' ) ) {
   /**
    * Wrapper for get_post_meta() with content filters applied.
@@ -511,7 +922,7 @@ if ( ! function_exists( 'fictioneer_get_icon_field' ) ) {
 }
 
 // =============================================================================
-// GET COOKIE CONSENT
+// COOKIES
 // =============================================================================
 
 if ( ! function_exists( 'fictioneer_get_consent' ) && get_option( 'fictioneer_cookie_banner' ) ) {
@@ -536,7 +947,7 @@ if ( ! function_exists( 'fictioneer_get_consent' ) && get_option( 'fictioneer_co
 }
 
 // =============================================================================
-// SHOW LOGIN
+// CONDITIONALS
 // =============================================================================
 
 /**
@@ -552,10 +963,6 @@ function fictioneer_show_login() {
 
   return ( $enabled && ! is_user_logged_in() ) || get_option( 'fictioneer_enable_public_cache_compatibility' );
 }
-
-// =============================================================================
-// SHOW NON-PUBLIC CONTENT
-// =============================================================================
 
 /**
  * Wrapper for is_user_logged_in() with global public cache consideration
@@ -576,8 +983,47 @@ function fictioneer_show_auth_content() {
     get_option( 'fictioneer_enable_ajax_authentication' );
 }
 
+if ( ! function_exists( 'fictioneer_is_commenting_disabled' ) ) {
+  /**
+   * Check whether commenting is disabled
+   *
+   * Differs from comments_open() in the regard that it does not hide the whole
+   * comment section but does not allow new comments to be posted.
+   *
+   * @since 5.0.0
+   *
+   * @param int|null $post_id  Post ID the comments are for. Defaults to current post ID.
+   *
+   * @return boolean True or false.
+   */
+
+  function fictioneer_is_commenting_disabled( $post_id = null ) {
+    // Setup
+    $post_id = $post_id ?? get_the_ID();
+
+    // Return immediately if...
+    if (
+      get_option( 'fictioneer_disable_commenting' ) ||
+      get_post_meta( $post_id, 'fictioneer_disable_commenting', true )
+    ) {
+      return true;
+    }
+
+    // Check parent story if chapter...
+    if ( get_post_type( $post_id ) === 'fcn_chapter' ) {
+      $story_id = fictioneer_get_chapter_story_id( $post_id );
+
+      if ( $story_id ) {
+        return get_post_meta( $story_id, 'fictioneer_disable_commenting', true ) == true;
+      }
+    }
+
+    return false;
+  }
+}
+
 // =============================================================================
-// FICTIONEER TRANSLATIONS
+// TRANSLATIONS
 // =============================================================================
 
 /**
@@ -702,134 +1148,6 @@ function fcntr( $key, $escape = false ) {
   return '';
 }
 
-// =============================================================================
-// CHECK WHETHER COMMENTING IS DISABLED
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_is_commenting_disabled' ) ) {
-  /**
-   * Check whether commenting is disabled
-   *
-   * Differs from comments_open() in the regard that it does not hide the whole
-   * comment section but does not allow new comments to be posted.
-   *
-   * @since 5.0.0
-   *
-   * @param int|null $post_id  Post ID the comments are for. Defaults to current post ID.
-   *
-   * @return boolean True or false.
-   */
-
-  function fictioneer_is_commenting_disabled( $post_id = null ) {
-    // Setup
-    $post_id = $post_id ?? get_the_ID();
-
-    // Return immediately if...
-    if (
-      get_option( 'fictioneer_disable_commenting' ) ||
-      get_post_meta( $post_id, 'fictioneer_disable_commenting', true )
-    ) {
-      return true;
-    }
-
-    // Check parent story if chapter...
-    if ( get_post_type( $post_id ) === 'fcn_chapter' ) {
-      $story_id = fictioneer_get_chapter_story_id( $post_id );
-
-      if ( $story_id ) {
-        return get_post_meta( $story_id, 'fictioneer_disable_commenting', true ) == true;
-      }
-    }
-
-    return false;
-  }
-}
-
-// =============================================================================
-// BBCODES
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_bbcodes' ) ) {
-  /**
-   * Interprets BBCodes into HTML
-   *
-   * Note: Spoilers do not work properly if wrapping multiple lines or other codes.
-   *
-   * @since 4.0.0
-   * @link https://stackoverflow.com/a/17508056/17140970
-   *
-   * @param string $content  The content.
-   *
-   * @return string The content with interpreted BBCodes.
-   */
-
-  function fictioneer_bbcodes( $content ) {
-    // Setup
-    $img_search = '\s*https:[^\"\'|;<>\[\]]+?\.(?:png|jpg|jpeg|gif|webp|svg|avif|tiff).*?\s*';
-    $url_search = '\s*(http|ftp|https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?\s*';
-
-    // Deal with some multi-line spoiler issues
-    if ( preg_match_all( '/\[spoiler](.+?)\[\/spoiler]/is', $content, $spoilers, PREG_PATTERN_ORDER ) ) {
-      foreach ( $spoilers[0] as $spoiler ) {
-        $replace = str_replace( '<p></p>', ' ', $spoiler );
-        $replace = preg_replace( '/\[quote](.+?)\[\/quote]/is', '<blockquote class="spoiler">$1</blockquote>', $replace );
-
-        $content = str_replace( $spoiler, $replace, $content );
-      }
-    }
-
-    // Possible patterns
-    $patterns = array(
-      '/\[spoiler]\[quote](.+?)\[\/quote]\[\/spoiler]/is',
-      '/\[spoiler](.+?)\[\/spoiler]/i',
-      '/\[spoiler](.+?)\[\/spoiler]/is',
-      '/\[b](.+?)\[\/b]/i',
-      '/\[i](.+?)\[\/i]/i',
-      '/\[s](.+?)\[\/s]/i',
-      '/\[quote](.+?)\[\/quote]/is',
-      '/\[ins](.+?)\[\/ins]/is',
-      '/\[del](.+?)\[\/del]/is',
-      '/\[li](.+?)\[\/li]/i',
-      "/\[link.*]\[img]\s*($img_search)\s*\[\/img]\[\/link]/i",
-      "/\[img]\s*($img_search)\s*\[\/img]/i",
-      "/\[link\]\s*($url_search)\s*\[\/link\]/i",
-      "/\[link=\s*[\"']?\s*($url_search)\s*[\"']?\s*\](.+?)\[\/link\]/i",
-      '/\[anchor]\s*([^\"\'|;<>\[\]]+?)\s*\[\/anchor]/i'
-    );
-
-    // HTML replacements
-    $replacements = array(
-      '<blockquote class="spoiler">$1</blockquote>',
-      '<span class="spoiler">$1</span>',
-      '<div class="spoiler">$1</div>',
-      '<strong>$1</strong>',
-      '<em>$1</em>',
-      '<strike>$1</strike>',
-      '<blockquote>$1</blockquote>',
-      '<ins>$1</ins>',
-      '<del>$1</del>',
-      '<div class="comment-list-item">$1</div>',
-      '<span class="comment-image-consent-wrapper"><button type="button" class="button _secondary consent-button" title="$1">' . _x( '<i class="fa-solid fa-image"></i> Show Image', 'Comment image consent wrapper button.', 'fictioneer' ) . '</button><a href="$1" class="comment-image-link" rel="noreferrer noopener nofollow" target="_blank"><img class="comment-image" data-src="$1"></a></span>',
-      '<span class="comment-image-consent-wrapper"><button type="button" class="button _secondary consent-button" title="$1">' . _x( '<i class="fa-solid fa-image"></i> Show Image', 'Comment image consent wrapper button.', 'fictioneer' ) . '</button><img class="comment-image" data-src="$1"></span>',
-      "<a href=\"$1\" rel=\"noreferrer noopener nofollow\">$1</a>",
-      "<a href=\"$1\" rel=\"noreferrer noopener nofollow\">$5</a>",
-      '<a href="#$1" rel="noreferrer noopener nofollow" data-block="start" class="comment-anchor">:anchor:</a>'
-    );
-
-    // Pattern replace
-    $content = preg_replace( $patterns, $replacements, $content );
-
-    // Icons
-    $content = str_replace( ':anchor:', fcntr( 'comment_anchor' ), $content );
-
-    return $content;
-  }
-}
-
-// =============================================================================
-// GET TAXONOMY NAMES
-// =============================================================================
-
 if ( ! function_exists( 'fictioneer_get_taxonomy_names' ) ) {
   /**
    * Get all taxonomies of a post
@@ -871,8 +1189,31 @@ if ( ! function_exists( 'fictioneer_get_taxonomy_names' ) ) {
   }
 }
 
+/**
+ * Return the translated label of the story or override string.
+ *
+ * @since 5.30.1
+ *
+ * @param int         $story_id  Post ID.
+ * @param string|null $status    Optional. The internal story status string.
+ *
+ * @return string Translated label of the story status or override string.
+ */
+
+function fictioneer_get_story_status_label( $story_id, $status = null ) {
+  $override = get_post_meta( $story_id, 'fictioneer_story_status_override', true );
+
+  if ( $override ) {
+    return $override;
+  }
+
+  $status = $status ?: get_post_meta( $story_id, 'fictioneer_story_status', true );
+
+  return fcntr( $status );
+}
+
 // =============================================================================
-// GET FONT COLORS
+// OPTIONS & TRANSIENTS
 // =============================================================================
 
 if ( ! function_exists( 'fictioneer_get_font_colors' ) ) {
@@ -904,90 +1245,6 @@ if ( ! function_exists( 'fictioneer_get_font_colors' ) ) {
     return apply_filters( 'fictioneer_filter_font_colors', $colors );
   }
 }
-
-// =============================================================================
-// BUILD FRONTEND NOTICE
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_notice' ) ) {
-  /**
-   * Render or return a frontend notice element
-   *
-   * @since 5.2.5
-   *
-   * @param string $message   The notice to show.
-   * @param string $type      Optional. The notice type. Default 'warning'.
-   * @param bool   $display   Optional. Whether to render or return. Default true.
-   *
-   * @return void|string The build HTML or nothing if rendered.
-   */
-
-  function fictioneer_notice( $message, $type = 'warning', $display = true ) {
-    $output = '<div class="notice _' . esc_attr( $type ) . '">';
-
-    if ( $type === 'warning' ) {
-      $output .= '<i class="fa-solid fa-triangle-exclamation"></i>';
-    }
-
-    $output .= "<div>{$message}</div></div>";
-
-    if ( $display ) {
-      echo $output;
-    } else {
-      return $output;
-    }
-  }
-}
-
-// =============================================================================
-// MINIFY HTML
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_minify_html' ) ) {
-  /**
-   * Minifies a HTML string
-   *
-   * This is not safe for `<pre>` or `<code>` tags!
-   *
-   * @since 5.4.0
-   *
-   * @param string $html  The HTML string to be minified.
-   *
-   * @return string The minified HTML string.
-   */
-
-  function fictioneer_minify_html( $html ) {
-    return preg_replace( '/\s+/', ' ', trim( $html ) );
-  }
-}
-
-// =============================================================================
-// GET AUTHOR IDS OF POST
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_get_post_author_ids' ) ) {
-  /**
-   * Returns array of author IDs for a post ID
-   *
-   * @since 5.4.8
-   *
-   * @param int $post_id  The post ID.
-   *
-   * @return array The author IDs.
-   */
-
-  function fictioneer_get_post_author_ids( $post_id ) {
-    $author_ids = get_post_meta( $post_id, 'fictioneer_story_co_authors', true ) ?: [];
-    $author_ids = is_array( $author_ids ) ? $author_ids : [];
-    array_unshift( $author_ids, get_post_field( 'post_author', $post_id ) );
-
-    return array_unique( $author_ids );
-  }
-}
-
-// =============================================================================
-// DELETE TRANSIENTS THAT INCLUDE A STRING
-// =============================================================================
 
 if ( ! function_exists( 'fictioneer_delete_transients_like' ) ) {
   /**
@@ -1047,10 +1304,6 @@ if ( ! function_exists( 'fictioneer_delete_transients_like' ) ) {
   }
 }
 
-// =============================================================================
-// GET OPTION PAGE LINK
-// =============================================================================
-
 if ( ! function_exists( 'fictioneer_get_assigned_page_link' ) ) {
   /**
    * Returns permalink for an assigned page or null
@@ -1085,7 +1338,59 @@ if ( ! function_exists( 'fictioneer_get_assigned_page_link' ) ) {
 }
 
 // =============================================================================
-// SAVE GUARD
+// HTML
+// =============================================================================
+
+if ( ! function_exists( 'fictioneer_notice' ) ) {
+  /**
+   * Render or return a frontend notice element
+   *
+   * @since 5.2.5
+   *
+   * @param string $message   The notice to show.
+   * @param string $type      Optional. The notice type. Default 'warning'.
+   * @param bool   $display   Optional. Whether to render or return. Default true.
+   *
+   * @return void|string The build HTML or nothing if rendered.
+   */
+
+  function fictioneer_notice( $message, $type = 'warning', $display = true ) {
+    $output = '<div class="notice _' . esc_attr( $type ) . '">';
+
+    if ( $type === 'warning' ) {
+      $output .= '<i class="fa-solid fa-triangle-exclamation"></i>';
+    }
+
+    $output .= "<div>{$message}</div></div>";
+
+    if ( $display ) {
+      echo $output;
+    } else {
+      return $output;
+    }
+  }
+}
+
+if ( ! function_exists( 'fictioneer_minify_html' ) ) {
+  /**
+   * Minifies a HTML string
+   *
+   * This is not safe for `<pre>` or `<code>` tags!
+   *
+   * @since 5.4.0
+   *
+   * @param string $html  The HTML string to be minified.
+   *
+   * @return string The minified HTML string.
+   */
+
+  function fictioneer_minify_html( $html ) {
+    return preg_replace( '/\s+/', ' ', trim( $html ) );
+  }
+}
+
+// =============================================================================
+// POST UPDATES
 // =============================================================================
 
 if ( ! function_exists( 'fictioneer_multi_save_guard' ) ) {
@@ -1144,13 +1449,98 @@ if ( ! function_exists( 'fictioneer_save_guard' ) ) {
   }
 }
 
+/**
+ * Toggle callback to save, trash, untrash, and delete hooks (1 argument).
+ *
+ * This helper saves some time/space adding or removing a callback action to
+ * all four default post operations. But only with the first argument: post_id.
+ *
+ * @since 5.6.3
+ *
+ * @param callable $function  The callback function to be added.
+ * @param bool     $add       Optional. Whether to add or remove. Default add.
+ * @param int      $priority  Optional. Used to specify the order in which the
+ *                            functions associated with a particular action are
+ *                            executed. Default 10. Lower numbers correspond with
+ *                            earlier execution, and functions with the same
+ *                            priority are executed in the order in which they
+ *                            were added to the action.
+ */
+
+function fictioneer_toggle_stud_actions( $function, $add = true, $priority = 10 ) {
+  $hooks = ['save_post', 'trashed_post', 'delete_post', 'untrash_post'];
+
+  foreach ( $hooks as $hook ) {
+    $add ? add_action( $hook, $function, $priority ) : remove_action( $hook, $function, $priority );
+  }
+}
+
+/**
+ * Check for magic quotes indicator field.
+ *
+ * Looks in `$_POST['fictioneer_magic_quotes_test']` (or a different key) for
+ * an indicator string that may have magic quotes applied. This requires to have
+ * a hidden input with a telling string in the submission, such as `O'Reilly`,
+ * which would become `O\'Reilly`.
+ *
+ * @since 5.28.0
+ *
+ * @param string $key  Key for the super global. Default 'fictioneer_magic_quotes_test'.
+ *
+ * @return null|bool Null if the indicator field is missing, otherwise true if
+ *                   magic quotes were found and false if not.
+ */
+
+function fictioneer_has_magic_quotes( $key = 'fictioneer_magic_quotes_test' ) {
+  static $result = null;
+
+  if ( $result !== null ) {
+    return $result;
+  }
+
+  if ( ! isset( $_POST[ $key ] ) ) {
+    return null; // Unknown
+  }
+
+  if ( preg_match( '/\\\\[\'"\\\\]/', $_POST[ $key ] ?? '' ) === 1 ) {
+    $result = true;
+
+    return true;
+  }
+
+  $result = false;
+
+  return false;
+}
+
+/**
+ * Unslash data if there are magic quotes
+ *
+ * Note: Relies on the presence of an indicator string in `$_POST`,
+ * otherwise wp_unslash() will not be applied.
+ *
+ * @since 5.28.0
+ *
+ * @param string|array $data  The data to maybe unslash.
+ *
+ * @return string|array Unslashed or unchanged data.
+ */
+
+function fictioneer_maybe_unslash( $data ) {
+  if ( fictioneer_has_magic_quotes() ) {
+    return wp_unslash( $data );
+  }
+
+  return $data;
+}
+
 // =============================================================================
-// REDIRECT TO 404
+// ACCESS & REDIRECTS
 // =============================================================================
 
 if ( ! function_exists( 'fictioneer_redirect_to_404' ) ) {
   /**
-   * Redirects the current request to the WordPress 404 page
+   * Redirect the current request to the WordPress 404 page.
    *
    * @since 5.6.0
    *
@@ -1179,13 +1569,9 @@ if ( ! function_exists( 'fictioneer_redirect_to_404' ) ) {
   }
 }
 
-// =============================================================================
-// PREVIEW ACCESS VERIFICATION
-// =============================================================================
-
 if ( ! function_exists( 'fictioneer_verify_unpublish_access' ) ) {
   /**
-   * Verifies access to unpublished posts (not drafts)
+   * Verify access to unpublished posts (not drafts).
    *
    * @since 5.6.0
    *
@@ -1248,274 +1634,7 @@ if ( ! function_exists( 'fictioneer_verify_unpublish_access' ) ) {
 }
 
 // =============================================================================
-// TOGGLE ACTION TO SAVE/TRASH/UNTRASH/DELETE HOOKS WITH POST ID
-// =============================================================================
-
-/**
- * Toggle callback to save, trash, untrash, and delete hooks (1 argument).
- *
- * This helper saves some time/space adding or removing a callback action to
- * all four default post operations. But only with the first argument: post_id.
- *
- * @since 5.6.3
- *
- * @param callable $function  The callback function to be added.
- * @param bool     $add       Optional. Whether to add or remove. Default add.
- * @param int      $priority  Optional. Used to specify the order in which the
- *                            functions associated with a particular action are
- *                            executed. Default 10. Lower numbers correspond with
- *                            earlier execution, and functions with the same
- *                            priority are executed in the order in which they
- *                            were added to the action.
- */
-
-function fictioneer_toggle_stud_actions( $function, $add = true, $priority = 10 ) {
-  $hooks = ['save_post', 'trashed_post', 'delete_post', 'untrash_post'];
-
-  foreach ( $hooks as $hook ) {
-    $add ? add_action( $hook, $function, $priority ) : remove_action( $hook, $function, $priority );
-  }
-}
-
-// =============================================================================
-// CONVERT URL LIST TO ARRAY
-// =============================================================================
-
-/**
- * Turn line-break separated list into array of links
- *
- * @since 5.7.4
- *
- * @param string $list  The list of links
- *
- * @return array The array of links.
- */
-
-function fictioneer_url_list_to_array( $list ) {
-  // Already array?
-  if ( is_array( $list ) ) {
-    return $list;
-  }
-
-  // Catch falsy values
-  if ( empty( $list ) ) {
-    return [];
-  }
-
-  // Prepare URLs
-  $urls = [];
-  $lines = preg_split( '/\r\n|\r|\n/', $list );
-
-  // Extract
-  foreach ( $lines as $line ) {
-    $tuple = explode( '|', $line );
-    $tuple = array_map( 'trim', $tuple );
-
-    $urls[] = array(
-      'name' => wp_strip_all_tags( $tuple[0] ),
-      'url' => Sanitizer::sanitize_url_https( $tuple[1] )
-    );
-  }
-
-  // Return
-  return $urls;
-}
-
-// =============================================================================
-// RETURN NO FORMAT STRING
-// =============================================================================
-
-/**
- * Returns an unformatted replacement string
- *
- * @since 5.7.5
- *
- * @return string Just a simple '%s'.
- */
-
-function fictioneer__return_no_format() {
-  return '%s';
-}
-
-// =============================================================================
-// RETURN PUBLISH STRING
-// =============================================================================
-
-/**
- * Helper to just return 'publish'.
- *
- * @since 4.28.0
- *
- * @return string Just a simple 'publish'.
- */
-
-function fictioneer__return_publish_status( $param = null ) {
-  return 'publish';
-}
-
-// =============================================================================
-// TRUNCATE STRING
-// =============================================================================
-
-/**
- * Returns a truncated string without tags
- *
- * @since 5.9.0
- *
- * @param string      $string    The string to truncate.
- * @param int         $length    Maximum length in characters.
- * @param string|null $ellipsis  Optional. Truncation indicator suffix.
- *
- * @return string The truncated string without tags.
- */
-
-function fictioneer_truncate( $string, $length, $ellipsis = null ) {
-  // Setup
-  $string = wp_strip_all_tags( $string ); // Prevent tags from being cut off
-  $ellipsis = $ellipsis ?? FICTIONEER_TRUNCATION_ELLIPSIS;
-
-  // Return truncated string
-  if ( function_exists( 'mb_strimwidth' ) ) {
-    return mb_strimwidth( $string, 0, $length, $ellipsis );
-  } else {
-    return strlen( $string ) > $length ? substr( $string, 0, $length ) . $ellipsis : $string;
-  }
-}
-
-// =============================================================================
-// COMPARE WORDPRESS VERSION
-// =============================================================================
-
-/**
- * Compare installed WordPress version against version string
- *
- * @since 5.12.2
- * @global wpdb $wp_version  Current WordPress version string.
- *
- * @param string $version   The version string to test against.
- * @param string $operator  Optional. How to compare. Default '>='.
- *
- * @return boolean True or false.
- */
-
-function fictioneer_compare_wp_version( $version, $operator = '>=' ) {
-  global $wp_version;
-
-  return version_compare( $wp_version, $version, $operator );
-}
-
-// =============================================================================
-// CSS LOADING PATTERN
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_get_async_css_loading_pattern' ) ) {
-  /**
-   * Returns the media attribute and loading strategy for stylesheets
-   *
-   * @since 5.12.2
-   *
-   * @return string Media attribute script for stylesheet links.
-   */
-
-  function fictioneer_get_async_css_loading_pattern() {
-    if ( FICTIONEER_ENABLE_ASYNC_ONLOAD_PATTERN ) {
-      return 'media="print" onload="this.media=\'all\'; this.onload=null;"';
-    }
-
-    return 'media="all"';
-  }
-}
-
-// =============================================================================
-// GENERATE PLACEHOLDER
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_generate_placeholder' ) ) {
-  /**
-   * Dummy implementation (currently uses a CSS background).
-   *
-   * @since 5.14.0
-   *
-   * @param array|null $args  Optional arguments to generate a placeholder.
-   *
-   * @return string The placeholder URL or data URI.
-   */
-
-  function fictioneer_generate_placeholder( $args = [] ) {
-    return '';
-  }
-}
-
-// =============================================================================
-// FIND USER(S)
-// =============================================================================
-
-/**
- * Find (first) user by display name.
- *
- * @since 5.14.1
- *
- * @param string $display_name  The display name to search for.
- *
- * @return WP_User|null The first matching user or null if not found.
- */
-
-function fictioneer_find_user_by_display_name( $display_name ) {
-  // No choice but to query all because the display name is not unique
-  $users = get_users(
-    array(
-      'search' => sanitize_user( $display_name ),
-      'search_columns' => ['display_name'],
-      'number' => 1
-    )
-  );
-
-  // If found, return first
-  if ( ! empty( $users ) ) {
-    return $users[0];
-  }
-
-  // Not found
-  return null;
-}
-
-// =============================================================================
-// JOIN ARRAYS IN SPECIAL WAYS
-// =============================================================================
-
-if ( ! function_exists( 'fictioneer_get_human_readable_list' ) ) {
-  /**
-   * Join string in an array as human readable list.
-   *
-   * @since 5.15.0
-   * @link https://gist.github.com/SleeplessByte/4514697
-   *
-   * @param array $array  Array of strings.
-   *
-   * @return string The human readable list.
-   */
-
-  function fictioneer_get_human_readable_list( $array ) {
-    // Setup
-    $comma = _x( ', ', 'Human readable list joining three or more items except the last two.', 'fictioneer' );
-    $double = _x( ' or ', 'Human readable list joining two items.', 'fictioneer' );
-    $final = _x( ', or ', 'Human readable list joining the last two of three or more items.', 'fictioneer' );
-
-    // One or two items
-    if ( count( $array ) < 3 ) {
-      return implode( $double, $array );
-    }
-
-    // Three or more items
-    array_splice( $array, -2, 2, implode( $final, array_slice( $array, -2, 2 ) ) );
-
-    // Finish
-    return implode( $comma , $array );
-  }
-}
-
-// =============================================================================
-// PATREON UTILITIES
+// PATREON
 // =============================================================================
 
 /**
@@ -1593,184 +1712,4 @@ function fictioneer_get_post_patreon_data( $post = null ) {
 
   // Return
   return $data;
-}
-
-// =============================================================================
-// STRING LENGTH
-// =============================================================================
-
-if ( ! function_exists( 'mb_strlen' ) ) {
-  /**
-   * Fallback function for mb_strlen
-   *
-   * @param string $string    The string to being measured.
-   * @param string $encoding  The character encoding. Default UTF-8.
-   *
-   * @return int The number of characters in the string.
-   */
-
-  function mb_strlen( $string, $encoding = 'UTF-8' ) {
-    if ( $encoding !== 'UTF-8' ) {
-      return strlen( $string );
-    }
-
-    $converted_string = iconv( $encoding, 'UTF-16', $string );
-
-    if ( $converted_string === false ) {
-      return strlen( $string );
-    } else {
-      return strlen( $converted_string ) / 2; // Each character is 2 bytes in UTF-16
-    }
-  }
-}
-
-// =============================================================================
-// GET ALL PUBLISHING AUTHORS
-// =============================================================================
-
-/**
- * Returns all authors with published posts
- *
- * Note: Qualified post types are fcn_story, fcn_chapter, fcn_recommendation,
- * and post. The result is cached for 12 hours as Transient.
- *
- * @since 5.24.0
- * @link https://developer.wordpress.org/reference/functions/get_users/
- *
- * @param array $args  Optional. Array of additional query arguments.
- *
- * @return array Array of WP_User object, stdClass objects, or IDs.
- */
-
-function fictioneer_get_publishing_authors( $args = [] ) {
-  static $authors = null;
-
-  $key = 'fictioneer_publishing_authors_' . md5( serialize( $args ) );
-
-  if ( ! $authors && $transient = get_transient( $key ) ) {
-    $authors = $transient;
-  }
-
-  if ( $authors ) {
-    return $authors;
-  }
-
-  $authors = get_users(
-    array_merge(
-      array( 'has_published_posts' => ['fcn_story', 'fcn_chapter', 'fcn_recommendation', 'post'] ),
-      $args
-    )
-  );
-
-  set_transient( $key, $authors, 12 * HOUR_IN_SECONDS );
-
-  return $authors;
-}
-
-// =============================================================================
-// GET STORY STATUS LABEL
-// =============================================================================
-
-/**
- * Return the translated label of the story or override string.
- *
- * @since 5.30.1
- *
- * @param int         $story_id  Post ID.
- * @param string|null $status    Optional. The internal story status string.
- *
- * @return string Translated label of the story status or override string.
- */
-
-function fictioneer_get_story_status_label( $story_id, $status = null ) {
-  $override = get_post_meta( $story_id, 'fictioneer_story_status_override', true );
-
-  if ( $override ) {
-    return $override;
-  }
-
-  $status = $status ?: get_post_meta( $story_id, 'fictioneer_story_status', true );
-
-  return fcntr( $status );
-}
-
-// =============================================================================
-// MAGIC QUOTES & UNSLASH
-// =============================================================================
-
-/**
- * Check for magic quotes indicator field.
- *
- * Looks in `$_POST['fictioneer_magic_quotes_test']` (or a different key) for
- * an indicator string that may have magic quotes applied. This requires to have
- * a hidden input with a telling string in the submission, such as `O'Reilly`,
- * which would become `O\'Reilly`.
- *
- * @since 5.28.0
- *
- * @param string $key  Key for the super global. Default 'fictioneer_magic_quotes_test'.
- *
- * @return null|bool Null if the indicator field is missing, otherwise true if
- *                   magic quotes were found and false if not.
- */
-
-function fictioneer_has_magic_quotes( $key = 'fictioneer_magic_quotes_test' ) {
-  static $result = null;
-
-  if ( $result !== null ) {
-    return $result;
-  }
-
-  if ( ! isset( $_POST[ $key ] ) ) {
-    return null; // Unknown
-  }
-
-  if ( preg_match( '/\\\\[\'"\\\\]/', $_POST[ $key ] ?? '' ) === 1 ) {
-    $result = true;
-
-    return true;
-  }
-
-  $result = false;
-
-  return false;
-}
-
-/**
- * Unslash data if there are magic quotes
- *
- * Note: Relies on the presence of an indicator string in `$_POST`,
- * otherwise wp_unslash() will not be applied.
- *
- * @since 5.28.0
- *
- * @param string|array $data  The data to maybe unslash.
- *
- * @return string|array Unslashed or unchanged data.
- */
-
-function fictioneer_maybe_unslash( $data ) {
-  if ( fictioneer_has_magic_quotes() ) {
-    return wp_unslash( $data );
-  }
-
-  return $data;
-}
-
-// =============================================================================
-// CHECK WHETHER USER CAN EDIT ANY POST TYPES
-// =============================================================================
-
-/**
- * Return whether the user can edit any post types.
- *
- * @since 5.33.0
- *
- * @param int $user_id  ID of the user to check.
- *
- * @return bool True if the user can edit any post types, false otherwise.
- */
-
-function fictioneer_user_can_post_any( $user_id ) {
-  return user_can( $user_id, 'edit_posts' ) || user_can( $user_id, 'edit_pages' ) || user_can( $user_id, 'edit_fcn_stories' ) || user_can( $user_id, 'edit_fcn_chapters' ) || user_can( $user_id, 'edit_fcn_collections' ) || user_can( $user_id, 'edit_fcn_recommendations' );
 }

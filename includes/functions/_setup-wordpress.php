@@ -86,7 +86,7 @@ function fictioneer_excerpt_ellipsis() {
 add_filter( 'excerpt_more', 'fictioneer_excerpt_ellipsis' );
 
 // =============================================================================
-// ADMIN BAR
+// ADMINBAR
 // =============================================================================
 
 /**
@@ -743,7 +743,7 @@ if ( get_option( 'fictioneer_enable_line_break_fix' ) ) {
 // =============================================================================
 
 /**
- * Adds lightbox data attributes to post images
+ * Add lightbox data attributes to post images.
  *
  * @since 3.0
  * @license CC BY-SA 3.0
