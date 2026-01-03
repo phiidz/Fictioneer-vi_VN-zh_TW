@@ -1271,7 +1271,7 @@ final class Utils_Admin {
   /**
    * Wrapper to update comment meta.
    *
-   * If the meta value is truthy, the meta field is updated as normal.
+   * Note: If the meta value is truthy, the meta field is updated as normal.
    * If not, the meta field is deleted instead to keep the database tidy.
    *
    * @since 5.7.3
@@ -1299,7 +1299,7 @@ final class Utils_Admin {
   /**
    * Wrapper to update user meta.
    *
-   * If the meta value is truthy, the meta field is updated as normal.
+   * Note: If the meta value is truthy, the meta field is updated as normal.
    * If not, the meta field is deleted instead to keep the database tidy.
    *
    * @since 5.7.3
@@ -1327,7 +1327,7 @@ final class Utils_Admin {
   /**
    * Wrapper to update post meta.
    *
-   * If the meta value is truthy, the meta field is updated as normal.
+   * Note: If the meta value is truthy, the meta field is updated as normal.
    * If not, the meta field is deleted instead to keep the database tidy.
    *
    * @since 5.7.4
