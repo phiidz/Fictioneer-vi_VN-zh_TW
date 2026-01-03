@@ -1388,7 +1388,7 @@ function fictioneer_sql_update_comment_count( $post_id, $count ) {
 
 if ( ! function_exists( 'fictioneer_get_user_fingerprint' ) ) {
   /**
-   * [Deprecated] Return an unique-enough MD5 hash for the user.
+   * [Deprecated] Return an unique-enough hash for the user.
    *
    * In order to differentiate users on the frontend even if they have the same
    * display name (which is possible) but without exposing any sensitive data,

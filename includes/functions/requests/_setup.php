@@ -35,7 +35,9 @@ function ffcnr_load_options( $option_names = [], $blog_id_override = null ) {
 
   $default_options = ['siteurl', 'home', 'blogname', 'blogdescription', 'users_can_register', 'admin_email', 'timezone_string', 'date_format', 'time_format', 'posts_per_page', 'permalink_structure', 'upload_path', 'template', 'blog_charset', 'active_plugins', 'gmt_offset', 'stylesheet', 'default_role', 'avatar_rating', 'show_avatars', 'avatar_default', 'page_for_posts', 'page_on_front', 'site_icon', 'wp_user_roles', 'cron', 'nonce_key', 'nonce_salt', 'current_theme', 'show_on_front', 'blog_public', 'theme_switched', "{$site_prefix}user_roles", 'fictioneer_ffcnr_salt', 'fictioneer_enable_extended_alert_queries'];
 
-  $default_options = apply_filters( 'ffcnr_load_options_defaults', $default_options );
+  if ( defined( 'FFCNR_ENABLE_FILTERS' ) && constant( 'FFCNR_ENABLE_FILTERS' ) ) {
+    $default_options = apply_filters( 'ffcnr_load_options_defaults', $default_options );
+  }
 
   $query_options = array_unique( array_merge( $option_names, $default_options ) );
   $missing_options = array_diff( $query_options, array_keys( $ffcnr_options ) );
@@ -99,7 +101,12 @@ function ffcnr_get_option( $option, $default = '', $load = [] ) {
 function ffcnr_update_option( $name, $value, $autoload = false ) {
   global $wpdb;
 
-  $name = trim( $name );
+  $name = $name = trim( (string) $name );
+
+  if ( $name !== 'fictioneer_ffcnr_salt' ) {
+    return false;
+  }
+
   $autoload = $autoload ? 'yes' : 'no';
 
   $existing_option = $wpdb->get_var(
@@ -153,7 +160,7 @@ function ffcnr_hash( $data, $scheme = 'auth' ){
 
   $key = $salts[ $scheme ] ?? $salts['auth'];
 
-  return hash_hmac( 'md5', $data, $key );
+  return hash_hmac( 'sha256', (string) $data, (string) $key );
 }
 
 /**
@@ -193,7 +200,11 @@ function ffcnr_get_auth_cookie() {
 
   $ffcnr_options = ffcnr_load_options( ['siteurl'] );
   $site_url = rtrim( mb_strtolower( $ffcnr_options['siteurl'], 'UTF-8' ), '/' );
-  $cookie_hash = apply_filters( 'ffcnr_auth_cookie_hash', md5( $site_url ), $site_url, $ffcnr_options );
+  $cookie_hash = md5( $site_url );
+
+  if ( defined( 'FFCNR_ENABLE_FILTERS' ) && constant( 'FFCNR_ENABLE_FILTERS' ) ) {
+    $cookie_hash = apply_filters( 'ffcnr_auth_cookie_hash', $cookie_hash, $site_url, $ffcnr_options );
+  }
 
   if ( ! isset( $_COOKIE[ "wordpress_logged_in_{$cookie_hash}" ] ) ) {
     return false;
@@ -237,7 +248,11 @@ function ffcnr_get_session_token() {
  */
 
 function ffcnr_nonce_tick( $action = -1 ) {
-  $nonce_life = apply_filters( 'ffcnr_nonce_life', DAY_IN_SECONDS, $action );
+  $nonce_life = DAY_IN_SECONDS;
+
+  if ( defined( 'FFCNR_ENABLE_FILTERS' ) && constant( 'FFCNR_ENABLE_FILTERS' ) ) {
+    $nonce_life = apply_filters( 'ffcnr_nonce_life', $nonce_life, $action );
+  }
 
   return ceil( time() / ( $nonce_life / 2 ) );
 }
@@ -260,7 +275,7 @@ function ffcnr_create_nonce( $action, $uid ) {
   $token = ffcnr_get_session_token();
   $i = ffcnr_nonce_tick( $action );
 
-  if ( ! $uid ) {
+  if ( ! $uid && defined( 'FFCNR_ENABLE_FILTERS' ) && constant( 'FFCNR_ENABLE_FILTERS' ) ) {
     $uid = apply_filters( 'ffcnr_nonce_user_logged_out', $uid, $action );
   }
 
@@ -384,7 +399,11 @@ function ffcnr_get_current_user( $options = null, $blog_id_override = null ) {
   $user->caps = $all_caps;
   $user->roles = $roles;
 
-  return apply_filters( 'ffcnr_get_current_user', $user, $cookie, $role_caps, $user_caps, $_blog_id );
+  if ( defined( 'FFCNR_ENABLE_FILTERS' ) && constant( 'FFCNR_ENABLE_FILTERS' ) ) {
+    $user = apply_filters( 'ffcnr_get_current_user', $user, $cookie, $role_caps, $user_caps, $_blog_id );
+  }
+
+  return $user;
 }
 
 /**
@@ -458,7 +477,11 @@ function ffcnr_load_user_meta( $user_id, $filter = '', $reload = false, $meta_ke
 function ffcnr_get_user_meta( $user_id, $meta_key, $filter = '' ) {
   $meta = ffcnr_load_user_meta( $user_id, $filter, false, $meta_key );
 
-  return apply_filters( 'ffcnr_get_user_meta', $meta[ $meta_key ] ?? '', $user_id, $meta_key, $filter );
+  if ( defined( 'FFCNR_ENABLE_FILTERS' ) && constant( 'FFCNR_ENABLE_FILTERS' ) ) {
+    return apply_filters( 'ffcnr_get_user_meta', $meta[ $meta_key ] ?? '', $user_id, $meta_key, $filter );
+  }
+
+  return $meta[ $meta_key ] ?? '';
 }
 
 /**
@@ -481,7 +504,30 @@ function ffcnr_update_user_meta( $user_id, $meta_key, $meta_value ) {
 
   $user_id = absint( $user_id );
   $meta_key = sanitize_key( $meta_key );
-  $meta_value = apply_filters( 'ffcnr_update_user_meta', $meta_value, $user_id, $meta_key );
+
+  // --- DENYLIST ------------------------------------------------------------
+
+  static $deny_exact = array(
+    'session_tokens' => true
+  );
+
+  if ( isset( $deny_exact[ $meta_key ] ) ) {
+    return false;
+  }
+
+  if ( preg_match( '/(^|_)(capabilities|user_level)$/', $meta_key ) ) {
+    return false;
+  }
+
+  if ( str_starts_with( $meta_key, 'wp_' ) ) {
+     return false;
+  }
+
+  // -------------------------------------------------------------------------
+
+  if ( defined( 'FFCNR_ENABLE_FILTERS' ) && constant( 'FFCNR_ENABLE_FILTERS' ) ) {
+    $meta_value = apply_filters( 'ffcnr_update_user_meta', $meta_value, $user_id, $meta_key );
+  }
 
   $umeta_id = $wpdb->get_var(
     $wpdb->prepare(
@@ -622,7 +668,9 @@ function ffcnr_load_child_theme_functions() {
   return false;
 }
 
-ffcnr_load_child_theme_functions();
+if ( defined( 'FFCNR_LOAD_CHILD_FUNCTIONS' ) && constant( 'FFCNR_LOAD_CHILD_FUNCTIONS' ) ) {
+  ffcnr_load_child_theme_functions();
+}
 
 // =============================================================================
 // DELEGATE REQUEST
@@ -637,7 +685,9 @@ if ( defined( 'FFCNR_ACTION' ) ) {
   define( 'FFCNR_ACTION', $action );
 }
 
-$action = apply_filters( 'ffcnr_request_action', FFCNR_ACTION );
+if ( defined( 'FFCNR_ENABLE_FILTERS' ) && constant( 'FFCNR_ENABLE_FILTERS' ) ) {
+  $action = apply_filters( 'ffcnr_request_action', FFCNR_ACTION );
+}
 
 if ( $action === 'auth' ) {
   require_once __DIR__ . '/_auth.php';

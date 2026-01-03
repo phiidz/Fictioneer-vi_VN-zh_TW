@@ -22,7 +22,9 @@ header( 'X-Frame-Options: DENY' );
 header( 'Referrer-Policy: no-referrer' );
 header( "Content-Security-Policy: default-src 'none'; script-src 'none'; style-src 'none'; img-src 'none'; object-src 'none'; frame-ancestors 'none'; base-uri 'none'; form-action 'none';" ); // Just because
 
-header( 'Cache-Control: no-store, no-cache, must-revalidate, max-age=0' );
+header( 'Vary: Cookie', false );
+
+header( 'Cache-Control: no-store, no-cache, must-revalidate, max-age=0, private' );
 header( 'Pragma: no-cache' );
 
 // Methods

@@ -863,7 +863,7 @@ final class Utils {
   }
 
   /**
-   * Return an unique-enough MD5 hash for the user.
+   * Return an unique-enough hash for the user.
    *
    * In order to differentiate users on the frontend even if they have the same
    * display name (which is possible) but without exposing any sensitive data,
@@ -894,7 +894,8 @@ final class Utils {
       return $cache[ $user_id ] = '';
     }
 
-    $fingerprint = md5( 'fictioneer|' . $user_id . '|' . $user->user_registered );
+    $data = md5( 'fictioneer|' . $user_id . '|' . $user->user_registered );
+    $fingerprint = substr( hash_hmac( 'sha256', $data, '' ), 0, 32 );
 
     $cache[ $user_id ] = $fingerprint;
 

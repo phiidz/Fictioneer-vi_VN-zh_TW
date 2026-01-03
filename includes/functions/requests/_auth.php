@@ -28,8 +28,11 @@ function ffcnr_get_avatar_url( $user, $size = 96 ) {
   $meta = ffcnr_load_user_meta( $user->ID, 'fictioneer' );
   $email = $user->user_email ?? 'nonexistentemail@example.com';
   $disabled = ( $meta['fictioneer_disable_avatar'] ?? 0 ) || ( $meta['fictioneer_admin_disable_avatar'] ?? 0 );
+  $filtered = '';
 
-  $filtered = apply_filters( 'ffcnr_get_avatar_url', '', $user, $size, $meta, $options );
+  if ( defined( 'FFCNR_ENABLE_FILTERS' ) && constant( 'FFCNR_ENABLE_FILTERS' ) ) {
+    $filtered = apply_filters( 'ffcnr_get_avatar_url', '', $user, $size, $meta, $options );
+  }
 
   if ( ! empty( $filtered ) ) {
     return (string) $filtered;
@@ -229,7 +232,7 @@ function fictioneer_load_checkmarks( $user ) {
 }
 
 /**
- * Return an unique-enough MD5 hash for the user.
+ * Return an unique-enough hash for the user.
  *
  * @since 5.27.0
  * @since 5.34.0 - Refactored.
@@ -245,7 +248,9 @@ function fictioneer_get_user_fingerprint( $user ) {
     return '';
   }
 
-  return md5( 'fictioneer|' . $user->ID . '|' . $user->user_registered );
+  $data = 'fictioneer|' . $user->ID . '|' . $user->user_registered;
+
+  return substr( hash_hmac( 'sha256', $data, '' ), 0, 32 );
 }
 
 /**
@@ -407,7 +412,7 @@ function fictioneer_get_alerts( $args = [] ) {
   }
 
   if ( ffcnr_get_option( 'fictioneer_enable_extended_alert_queries' ) && ! empty( $args['for_user_id'] ) ) {
-    $user_id = sanitize_key( $args['for_user_id'] );
+    $user_id = max( intval( $args['for_user_id'] ), 0 );
 
     if ( (int) $user_id > 0 ) {
       $sql .= " UNION ALL (SELECT {$fields}, date, date_gmt FROM $table WHERE users LIKE %s AND date_gmt <= %s)";
@@ -471,7 +476,22 @@ function fictioneer_get_alerts( $args = [] ) {
 // GET USER DATA
 // =============================================================================
 
+/**
+ * Get user data.
+ *
+ * @since 5.27.0
+ *
+ * @global wpdb $wpdb  WordPress database object.
+ */
+
 function ffcnr_get_user_data() {
+  $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+
+  if ( $method !== 'GET' && $method !== 'HEAD' ) {
+    http_response_code( 405 );
+    exit;
+  }
+
   global $wpdb;
 
   // Load options
@@ -580,7 +600,9 @@ function ffcnr_get_user_data() {
 
   // --- FILTER ----------------------------------------------------------------
 
-  $data = apply_filters( 'ffcnr_get_user_data', $data, $user );
+  if ( defined( 'FFCNR_ENABLE_FILTERS' ) && constant( 'FFCNR_ENABLE_FILTERS' ) ) {
+    $data = apply_filters( 'ffcnr_get_user_data', $data, $user );
+  }
 
   // ---------------------------------------------------------------------------
 
