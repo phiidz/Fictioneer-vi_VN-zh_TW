@@ -2303,7 +2303,7 @@ function show_page_optimize_deactivated_notice() {
 // =============================================================================
 
 /**
- * Sets the fictioneer login check cookie
+ * Set the fictioneer login check cookie.
  *
  * @since 5.26.0
  * @link https://developer.wordpress.org/reference/functions/wp_set_auth_cookie/
@@ -2325,7 +2325,7 @@ function fictioneer_set_logged_in_cookie( $logged_in_cookie, $expire, $expiratio
 add_action( 'set_logged_in_cookie', 'fictioneer_set_logged_in_cookie', 10, 4 );
 
 /**
- * Removes the fictioneer login check cookie
+ * Remove the fictioneer login check cookie.
  *
  * @since 5.26.0
  */
@@ -2338,7 +2338,7 @@ function fictioneer_remove_logged_in_cookie() {
 add_action( 'wp_logout', 'fictioneer_remove_logged_in_cookie' );
 
 /**
- * Cleans up the fictioneer login check cookie
+ * Clean up the fictioneer login check cookie.
  *
  * @since 5.26.0
  */
