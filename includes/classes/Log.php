@@ -126,7 +126,7 @@ class Log {
   }
 
   /**
-   * Return (or creates) secret log hash used to obscure the log file name.
+   * Return (or create) secret log hash used to obscure the log file name.
    *
    * @since 5.24.1
    * @since 5.34.0 - Moved into Log class.
