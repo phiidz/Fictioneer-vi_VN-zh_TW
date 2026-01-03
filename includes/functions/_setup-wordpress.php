@@ -746,6 +746,7 @@ if ( get_option( 'fictioneer_enable_line_break_fix' ) ) {
  * Add lightbox data attributes to post images.
  *
  * @since 3.0
+ * @since 5.34.1 - Refactored.
  * @license CC BY-SA 3.0
  * @link https://wordpress.stackexchange.com/a/84542/223620
  * @link https://jhtechservices.com/changing-your-image-markup-in-wordpress/
@@ -763,11 +764,7 @@ function fictioneer_add_lightbox_to_post_images( $content ) {
   $prev_libxml = libxml_use_internal_errors( true );
 
   $doc = new DOMDocument();
-
-  $flags = defined( 'LIBXML_HTML_NOIMPLIED' ) ? LIBXML_HTML_NOIMPLIED : 0;
-  $flags |= defined( 'LIBXML_HTML_NODEFDTD' ) ? LIBXML_HTML_NODEFDTD : 0;
-
-  $doc->loadHTML( '<?xml encoding="UTF-8">' . $content, $flags );
+  $doc->loadHTML( '<?xml encoding="UTF-8" ?>' . $content );
 
   libxml_clear_errors();
   libxml_use_internal_errors( $prev_libxml );
@@ -822,14 +819,10 @@ function fictioneer_add_lightbox_to_post_images( $content ) {
     $img->setAttribute( 'tabindex', '0' );
   };
 
-  $out = $doc->saveHTML();
-  $out = preg_replace( '/^\s*<\?xml[^>]+\?>\s*/', '', $out );
-
-  error_log( $out );
-
-  // $body = $doc->getElementsByTagName( 'body' )->item( 0 );
-  // $content = $body ? $doc->saveHTML( $body ) : '';
-  // $content = preg_replace( '/<\/?body>/', '', $content );
+  $body = $doc->getElementsByTagName( 'body' )->item( 0 );
+  $out = $body ? $doc->saveHTML( $body ) : '';
+  $out = preg_replace( '/<\/?body>/', '', $out );
+  $out = preg_replace( '/^\s*<\?xml[^>]*\?>\s*/', '', $out );
 
   return $out ?: $content;
 }
