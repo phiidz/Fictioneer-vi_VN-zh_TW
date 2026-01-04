@@ -746,7 +746,9 @@ final class Utils {
    *
    * @since 5.34.0
    *
-   * @param string $status  Status of the story.
+   * @param string $status  Status of the story. Either 'Canceled', 'Completed',
+   *                        'Hiatus', 'Ongoing', or 'Oneshot'. Case-sensitive
+   *                        for legacy reasons.
    *
    * @return string HTML of the status icon.
    */

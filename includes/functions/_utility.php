@@ -1,5 +1,6 @@
 <?php
 
+use Fictioneer\Utils;
 use Fictioneer\Sanitizer;
 
 /**
@@ -501,6 +502,26 @@ function fictioneer_replace_br_with_whitespace( $text ) {
   return str_replace( '<br>', ' ', $text );
 }
 
+/**
+ * Explode comma-separated list into an array.
+ *
+ * Note: Requires the theme's autoloader to be initialized;
+ * call only after the 'after_setup_theme' hook.
+ *
+ * @since 5.1.3
+ * @since 5.34.0 - Deprecated.
+ * @since 5.34.1 - Undeprecated for convenience (delegated).
+ * @see \Fictioneer\Utils::parse_list()
+ *
+ * @param string $string  The string to explode.
+ *
+ * @return array The string content as array.
+ */
+
+function fictioneer_explode_list( $string ) {
+  return Utils::parse_list( $string, null, 'comma' );
+}
+
 // =============================================================================
 // VALIDATORS
 // =============================================================================
@@ -778,8 +799,56 @@ function fictioneer_user_can_post_any( $user_id ) {
   return user_can( $user_id, 'edit_posts' ) || user_can( $user_id, 'edit_pages' ) || user_can( $user_id, 'edit_fcn_stories' ) || user_can( $user_id, 'edit_fcn_chapters' ) || user_can( $user_id, 'edit_fcn_collections' ) || user_can( $user_id, 'edit_fcn_recommendations' );
 }
 
+if ( ! function_exists( 'fictioneer_get_comment_badge' ) ) {
+  /**
+   * Get HTML for comment badge.
+   *
+   * Note: Requires the theme's autoloader to be initialized;
+   * call only after the 'after_setup_theme' hook.
+   *
+   * @since 5.0.0
+   * @since 5.34.0 - Deprecated.
+   * @since 5.34.1 - Undeprecated for convenience (delegated).
+   * @see \Fictioneer\User::get_comment_badge()
+   *
+   * @param WP_User|null    $user            The comment user.
+   * @param WP_Comment|null $comment         Optional. The comment object.
+   * @param int             $post_author_id  Optional. ID of the author of the post
+   *                                         the comment is for.
+   *
+   * @return string Badge HTML or empty string.
+   */
+
+  function fictioneer_get_comment_badge( $user, $comment = null, $post_author_id = 0 ) {
+    return \Fictioneer\User::get_comment_badge( $user, $comment, $post_author_id );
+  }
+}
+
+if ( ! function_exists( 'fictioneer_get_patreon_badge' ) ) {
+  /**
+   * Get a user's Patreon badge (if any).
+   *
+   * Note: Requires the theme's autoloader to be initialized;
+   * call only after the 'after_setup_theme' hook.
+   *
+   * @since 5.0.0
+   * @since 5.34.0 - Deprecated.
+   * @since 5.34.1 - Undeprecated for convenience (delegated).
+   * @see \Fictioneer\User::get_patreon_badge()
+   *
+   * @param WP_User     $user     User object.
+   * @param string|false $default  Default value or false.
+   *
+   * @return string|false The badge label, default, or false.
+   */
+
+  function fictioneer_get_patreon_badge( $user, $default = false ) {
+    return \Fictioneer\User::get_patreon_badge( $user, $default );
+  }
+}
+
 // =============================================================================
-// META FIELDS
+// META FIELDS & DATA
 // =============================================================================
 
 if ( ! function_exists( 'fictioneer_get_story_chapter_ids' ) ) {
@@ -933,6 +1002,149 @@ if ( ! function_exists( 'fictioneer_get_icon_field' ) ) {
     } else {
       return esc_attr( $icon );
     }
+  }
+}
+
+if ( ! function_exists( 'fictioneer_get_story_data' ) ) {
+  /**
+   * Get collection of a story's data.
+   *
+   * Note: Requires the theme's autoloader to be initialized;
+   * call only after the 'after_setup_theme' hook.
+   *
+   * @since 4.3.0
+   * @since 5.25.0 - Refactored with custom SQL query.
+   * @since 5.34.0 - Deprecated.
+   * @since 5.34.1 - Undeprecated for convenience (delegated).
+   * @see \Fictioneer\Story::get_data()
+   *
+   * @param int     $story_id       ID of the story.
+   * @param boolean $show_comments  Optional. Whether the comment count is needed.
+   *                                Default true.
+   * @param array   $args           Optional array of arguments.
+   *
+   * @return array|bool Data of the story or false if invalid.
+   */
+
+  function fictioneer_get_story_data( $story_id, $show_comments = true, $args = [] ) {
+    return \Fictioneer\Story::get_data( $story_id, $show_comments, $args );
+  }
+}
+
+/**
+ * Return array of chapter posts for a story.
+ *
+ * Note: Requires the theme's autoloader to be initialized;
+ * call only after the 'after_setup_theme' hook.
+ *
+ * @since 5.9.2
+ * @since 5.22.3 - Refactored.
+ * @since 5.34.0 - Deprecated.
+ * @since 5.34.1 - Undeprecated for convenience (delegated).
+ * @see \Fictioneer\Story::get_chapter_posts()
+ *
+ * @param int        $story_id  ID of the story.
+ * @param array|null $args      Optional. Additional query arguments.
+ * @param bool|null  $full      Optional. Whether to not reduce the posts. Default false.
+ * @param bool|null  $slow      Optional. Whether to skip the fast query (if enabled). Default false.
+ *
+ * @return array Array of chapter posts or empty.
+ */
+
+function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = false, $slow = false ) {
+  return \Fictioneer\Story::get_chapter_posts( $story_id, $args, $full, $slow );
+}
+
+if ( ! function_exists( 'fictioneer_update_comment_meta' ) ) {
+  /**
+   * Wrapper to update comment meta.
+   *
+   * Note: If the meta value is truthy, the meta field is updated as normal.
+   * If not, the meta field is deleted instead to keep the database tidy.
+   *
+   * Note: Requires the theme's autoloader to be initialized;
+   * call only after the 'after_setup_theme' hook.
+   *
+   * @since 5.7.3
+   * @since 5.34.0 - Deprecated.
+   * @since 5.34.1 - Undeprecated for convenience (delegated).
+   * @see \Fictioneer\Utils_Admin::update_comment_meta()
+   *
+   * @param int    $comment_id  The ID of the comment.
+   * @param string $meta_key    The meta key to update.
+   * @param mixed  $meta_value  The new meta value. If empty, the meta key will be deleted.
+   * @param mixed  $prev_value  Optional. If specified, only updates existing metadata with this value.
+   *                            Otherwise, update all entries. Default empty.
+   *
+   * @return int|bool Meta ID if the key didn't exist on update, true on successful update or delete,
+   *                  false on failure or if the value passed to the function is the same as the one
+   *                  that is already in the database.
+   */
+
+  function fictioneer_update_comment_meta( $comment_id, $meta_key, $meta_value, $prev_value = '' ) {
+    return \Fictioneer\Utils_Admin::update_comment_meta( $comment_id, $meta_key, $meta_value, $prev_value );
+  }
+}
+
+if ( ! function_exists( 'fictioneer_update_user_meta' ) ) {
+  /**
+   * Wrapper to update user meta.
+   *
+   * Note: If the meta value is truthy, the meta field is updated as normal.
+   * If not, the meta field is deleted instead to keep the database tidy.
+   *
+   * Note: Requires the theme's autoloader to be initialized;
+   * call only after the 'after_setup_theme' hook.
+   *
+   * @since 5.7.3
+   * @since 5.34.0 - Deprecated.
+   * @since 5.34.1 - Undeprecated for convenience (delegated).
+   * @see \Fictioneer\Utils_Admin::update_user_meta()
+   *
+   * @param int    $user_id     The ID of the user.
+   * @param string $meta_key    The meta key to update.
+   * @param mixed  $meta_value  The new meta value. If empty, the meta key will be deleted.
+   * @param mixed  $prev_value  Optional. If specified, only updates existing metadata with this value.
+   *                            Otherwise, update all entries. Default empty.
+   *
+   * @return int|bool Meta ID if the key didn't exist on update, true on successful update or delete,
+   *                  false on failure or if the value passed to the function is the same as the one
+   *                  that is already in the database.
+   */
+
+  function fictioneer_update_user_meta( $user_id, $meta_key, $meta_value, $prev_value = '' ) {
+    return \Fictioneer\Utils_Admin::update_user_meta( $user_id, $meta_key, $meta_value, $prev_value );
+  }
+}
+
+if ( ! function_exists( 'fictioneer_update_post_meta' ) ) {
+  /**
+   * Wrapper to update post meta.
+   *
+   * Note: If the meta value is truthy, the meta field is updated as normal.
+   * If not, the meta field is deleted instead to keep the database tidy.
+   *
+   * Note: Requires the theme's autoloader to be initialized;
+   * call only after the 'after_setup_theme' hook.
+   *
+   * @since 5.7.4
+   * @since 5.34.0 - Deprecated.
+   * @since 5.34.1 - Undeprecated for convenience (delegated).
+   * @see \Fictioneer\Utils_Admin::update_post_meta()
+   *
+   * @param int    $post_id     The ID of the post.
+   * @param string $meta_key    The meta key to update.
+   * @param mixed  $meta_value  The new meta value. If empty, the meta key will be deleted.
+   * @param mixed  $prev_value  Optional. If specified, only updates existing metadata with this value.
+   *                            Otherwise, update all entries. Default empty.
+   *
+   * @return int|bool Meta ID if the key didn't exist on update, true on successful update or delete,
+   *                  false on failure or if the value passed to the function is the same as the one
+   *                  that is already in the database.
+   */
+
+  function fictioneer_update_post_meta( $post_id, $meta_key, $meta_value, $prev_value = '' ) {
+    return \Fictioneer\Utils_Admin::update_post_meta( $post_id, $meta_key, $meta_value, $prev_value );
   }
 }
 
@@ -1404,6 +1616,52 @@ if ( ! function_exists( 'fictioneer_minify_html' ) ) {
   }
 }
 
+/**
+ * Return theme icon HTML set in the Customizer.
+ *
+ * Note: Requires the theme's autoloader to be initialized;
+ * call only after the 'after_setup_theme' hook.
+ *
+ * @since 5.32.0
+ * @since 5.34.0 - Deprecated.
+ * @since 5.34.1 - Undeprecated for convenience (delegated).
+ * @see \Fictioneer\Utils::get_theme_icon()
+ *
+ * @param string      $name     Name of the icon.
+ * @param string|null $default  Optional. Fallback icon, defaults to empty string.
+ * @param array|null  $args     Optional. Additional arguments. Supports:
+ *   - 'class' (string) : CSS classes.
+ *   - 'title' (string) : Title attribute.
+ *   - 'data' (array) : Associative array of `data-*` attributes.
+ *   - 'no_cache' (bool) : Skip caching if not needed.
+ *
+ * @return string The icon HTML.
+ */
+
+function fictioneer_get_theme_icon( $name, $default = '', $args = [] ) {
+  return Utils::get_theme_icon( $name, $default, $args );
+}
+
+/**
+ * Return story status icon HTML.
+ *
+ * Note: Requires the theme's autoloader to be initialized;
+ * call only after the 'after_setup_theme' hook.
+ *
+ * @since 5.34.1
+ * @see \Fictioneer\Utils::get_story_status_icon()
+ *
+ * @param string $status  Status of the story. Either 'Canceled', 'Completed',
+ *                        'Hiatus', 'Ongoing', or 'Oneshot'. Case-sensitive
+ *                        for legacy reasons.
+ *
+ * @return string HTML of the status icon.
+ */
+
+function fictioneer_get_story_status_icon( $status ) {
+  return Utils::get_story_status_icon( $status );
+}
+
 // =============================================================================
 // POST UPDATES
 // =============================================================================
@@ -1727,4 +1985,28 @@ function fictioneer_get_post_patreon_data( $post = null ) {
 
   // Return
   return $data;
+}
+
+// =============================================================================
+// SANITIZERS
+// =============================================================================
+
+/**
+ * Sanitize a checkbox value into 1 (true) or 0 (false).
+ *
+ * Note: Requires the theme's autoloader to be initialized;
+ * call only after the 'after_setup_theme' hook.
+ *
+ * @since 4.7.0
+ * @since 5.34.0 - Deprecated.
+ * @since 5.34.1 - Undeprecated for convenience (delegated).
+ * @see \Fictioneer\Sanitizer::sanitize_bool()
+ *
+ * @param string|bool $value  The checkbox value to be sanitized.
+ *
+ * @return int|bool 1 (true) or 0 (false).
+ */
+
+function fictioneer_sanitize_checkbox( $value ) {
+  return Sanitizer::sanitize_bool( $value, true );
 }

@@ -119,40 +119,6 @@ function fictioneer_sanitize_positive_float_def1( $value ) {
 }
 
 /**
- * [Deprecated] Sanitize a checkbox value into true or false.
- *
- * @since 4.7.0
- * @deprecated 5.34.0 - Use \Fictioneer\Sanitizer::sanitize_bool() instead.
- *
- * @param string|boolean $value  The checkbox value to be sanitized.
- *
- * @return boolean True or false.
- */
-
-function fictioneer_sanitize_checkbox( $value ) {
-  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Sanitizer::sanitize_bool' );
-
-  return Sanitizer::sanitize_bool( $value, true );
-}
-
-/**
- * [Deprecated] Explode string into an array.
- *
- * @since 5.1.3
- * @deprecated 5.34.0 - Use \Fictioneer\Utils::parse_list( ..., ..., 'comma' ) instead.
- *
- * @param string $string  The string to explode.
- *
- * @return array The string content as array.
- */
-
-function fictioneer_explode_list( $string ) {
-  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::parse_list( ..., ..., "comma" )' );
-
-  return Utils::parse_list( $string, null, 'comma' );
-}
-
-/**
  * [Deprecated] Sanitize (and transform) a comma-separated list into an array.
  *
  * @since 5.15.0
@@ -906,29 +872,6 @@ function fictioneer_add_class_to_element( $html, $class ) {
 }
 
 /**
- * [Deprecated] Return theme icon HTML set in the Customizer.
- *
- * @since 5.32.0
- * @deprecated 5.34.0 - Use \Fictioneer\Utils::get_theme_icon() instead.
- *
- * @param string      $name     Name of the icon.
- * @param string|null $default  Optional. Fallback icon, defaults to empty string.
- * @param array|null  $args     Optional. Additional arguments. Supports:
- *   - 'class' (string) : CSS classes.
- *   - 'title' (string) : Title attribute.
- *   - 'data' (array) : Associative array of `data-*` attributes.
- *   - 'no_cache' (bool) : Skip caching if not needed.
- *
- * @return string The icon HTML.
- */
-
-function fictioneer_get_theme_icon( $name, $default = '', $args = [] ) {
-  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils::get_theme_icon' );
-
-  return Utils::get_theme_icon( $name, $default, $args );
-}
-
-/**
  * [Deprecated] Return current main pagination page.
  *
  * @since 5.32.4
@@ -1081,50 +1024,6 @@ if ( ! function_exists( 'fictioneer_get_fonts' ) ) {
 
     return Fonts::get_fonts();
   }
-}
-
-if ( ! function_exists( 'fictioneer_get_story_data' ) ) {
-  /**
-   * [Deprecated] Get collection of a story's data.
-   *
-   * @since 4.3.0
-   * @since 5.25.0 - Refactored with custom SQL query.
-   * @deprecated 5.34.0 - Use \Fictioneer\Story::get_data() instead.
-   *
-   * @param int     $story_id       ID of the story.
-   * @param boolean $show_comments  Optional. Whether the comment count is needed.
-   *                                Default true.
-   * @param array   $args           Optional array of arguments.
-   *
-   * @return array|bool Data of the story or false if invalid.
-   */
-
-  function fictioneer_get_story_data( $story_id, $show_comments = true, $args = [] ) {
-    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Story::get_data' );
-
-    return Story::get_data( $story_id, $show_comments, $args );
-  }
-}
-
-/**
- * [Deprecated] Return array of chapter posts for a story.
- *
- * @since 5.9.2
- * @since 5.22.3 - Refactored.
- * @deprecated 5.34.0 - Use \Fictioneer\Story::get_chapter_posts() instead.
- *
- * @param int        $story_id  ID of the story.
- * @param array|null $args      Optional. Additional query arguments.
- * @param bool|null  $full      Optional. Whether to not reduce the posts. Default false.
- * @param bool|null  $slow      Optional. Whether to skip the fast query (if enabled). Default false.
- *
- * @return array Array of chapter posts or empty.
- */
-
-function fictioneer_get_story_chapter_posts( $story_id, $args = [], $full = false, $slow = false ) {
-  Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Story::get_chapter_posts' );
-
-  return Story::get_chapter_posts( $story_id, $args, $full, $slow );
 }
 
 /**
@@ -1579,90 +1478,6 @@ if ( ! function_exists( 'fcn_keyword_search_authors_input' ) ) {
   }
 }
 
-if ( ! function_exists( 'fictioneer_update_comment_meta' ) ) {
-  /**
-   * [Deprecated] Wrapper to update comment meta.
-   *
-   * If the meta value is truthy, the meta field is updated as normal.
-   * If not, the meta field is deleted instead to keep the database tidy.
-   *
-   * @since 5.7.3
-   * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::update_comment_meta() instead.
-   *
-   * @param int    $comment_id  The ID of the comment.
-   * @param string $meta_key    The meta key to update.
-   * @param mixed  $meta_value  The new meta value. If empty, the meta key will be deleted.
-   * @param mixed  $prev_value  Optional. If specified, only updates existing metadata with this value.
-   *                            Otherwise, update all entries. Default empty.
-   *
-   * @return int|bool Meta ID if the key didn't exist on update, true on successful update or delete,
-   *                  false on failure or if the value passed to the function is the same as the one
-   *                  that is already in the database.
-   */
-
-  function fictioneer_update_comment_meta( $comment_id, $meta_key, $meta_value, $prev_value = '' ) {
-    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::update_comment_meta' );
-
-    return Utils_Admin::update_comment_meta( $comment_id, $meta_key, $meta_value, $prev_value );
-  }
-}
-
-if ( ! function_exists( 'fictioneer_update_user_meta' ) ) {
-  /**
-   * [Deprecated] Wrapper to update user meta.
-   *
-   * If the meta value is truthy, the meta field is updated as normal.
-   * If not, the meta field is deleted instead to keep the database tidy.
-   *
-   * @since 5.7.3
-   * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::update_user_meta() instead.
-   *
-   * @param int    $user_id     The ID of the user.
-   * @param string $meta_key    The meta key to update.
-   * @param mixed  $meta_value  The new meta value. If empty, the meta key will be deleted.
-   * @param mixed  $prev_value  Optional. If specified, only updates existing metadata with this value.
-   *                            Otherwise, update all entries. Default empty.
-   *
-   * @return int|bool Meta ID if the key didn't exist on update, true on successful update or delete,
-   *                  false on failure or if the value passed to the function is the same as the one
-   *                  that is already in the database.
-   */
-
-  function fictioneer_update_user_meta( $user_id, $meta_key, $meta_value, $prev_value = '' ) {
-    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::update_user_meta' );
-
-    return Utils_Admin::update_user_meta( $user_id, $meta_key, $meta_value, $prev_value );
-  }
-}
-
-if ( ! function_exists( 'fictioneer_update_post_meta' ) ) {
-  /**
-   * [Deprecated] Wrapper to update post meta
-   *
-   * If the meta value is truthy, the meta field is updated as normal.
-   * If not, the meta field is deleted instead to keep the database tidy.
-   *
-   * @since 5.7.4
-   * @deprecated 5.34.0 - Use \Fictioneer\Utils_Admin::update_post_meta() instead.
-   *
-   * @param int    $post_id     The ID of the post.
-   * @param string $meta_key    The meta key to update.
-   * @param mixed  $meta_value  The new meta value. If empty, the meta key will be deleted.
-   * @param mixed  $prev_value  Optional. If specified, only updates existing metadata with this value.
-   *                            Otherwise, update all entries. Default empty.
-   *
-   * @return int|bool Meta ID if the key didn't exist on update, true on successful update or delete,
-   *                  false on failure or if the value passed to the function is the same as the one
-   *                  that is already in the database.
-   */
-
-  function fictioneer_update_post_meta( $post_id, $meta_key, $meta_value, $prev_value = '' ) {
-    Utils::deprecated( __FUNCTION__, '5.34.0', '\Fictioneer\Utils_Admin::update_post_meta' );
-
-    return Utils_Admin::update_post_meta( $post_id, $meta_key, $meta_value, $prev_value );
-  }
-}
-
 /**
  * [Deprecated] Return allow list for falsy meta fields
  *
@@ -1899,28 +1714,6 @@ if ( ! function_exists( 'fictioneer_get_default_avatar_url' ) ) {
   }
 }
 
-if ( ! function_exists( 'fictioneer_get_comment_badge' ) ) {
-  /**
-   * [Deprecated] Get HTML for comment badge.
-   *
-   * @since 5.0.0
-   * @deprecated 5.34.0 - Use \Fictioneer\User::get_comment_badge() instead.
-   *
-   * @param WP_User|null    $user            The comment user.
-   * @param WP_Comment|null $comment         Optional. The comment object.
-   * @param int             $post_author_id  Optional. ID of the author of the post
-   *                                         the comment is for.
-   *
-   * @return string Badge HTML or empty string.
-   */
-
-  function fictioneer_get_comment_badge( $user, $comment = null, $post_author_id = 0 ) {
-    Utils::deprecated( __FUNCTION__, '5.34.0', 'User::get_comment_badge()' );
-
-    return User::get_comment_badge( $user, $comment, $post_author_id );
-  }
-}
-
 if ( ! function_exists( 'fictioneer_get_override_badge' ) ) {
   /**
    * [Deprecated] Get a user's custom badge (if any).
@@ -1938,26 +1731,6 @@ if ( ! function_exists( 'fictioneer_get_override_badge' ) ) {
     Utils::deprecated( __FUNCTION__, '5.34.0', 'User::get_override_badge()' );
 
     return User::get_override_badge( $user, $default );
-  }
-}
-
-if ( ! function_exists( 'fictioneer_get_patreon_badge' ) ) {
-  /**
-   * [Deprecated] Get a user's Patreon badge (if any).
-   *
-   * @since 5.0.0
-   * @deprecated 5.34.0 - Use \Fictioneer\User::get_patreon_badge() instead.
-   *
-   * @param WP_User        $user     The user.
-   * @param string|boolean $default  Default value or false.
-   *
-   * @return string|boolean The badge label, default, or false.
-   */
-
-  function fictioneer_get_patreon_badge( $user, $default = false ) {
-    Utils::deprecated( __FUNCTION__, '5.34.0', 'User::get_patreon_badge()' );
-
-    return User::get_patreon_badge( $user, $default );
   }
 }
 
