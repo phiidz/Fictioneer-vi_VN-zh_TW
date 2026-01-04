@@ -221,7 +221,7 @@ function fictioneer_invalidate_story_chapter_posts_cache( $post_id ) {
   }
 
   if ( $post_type === 'fcn_chapter' ) {
-    $story_id = get_post_meta( $post_id, 'fictioneer_chapter_story', true );
+    $story_id = fictioneer_get_chapter_story_id( $post_id );
 
     if ( $story_id ) {
       \Fictioneer\Story::bump_story_chapter_cache_version( $story_id );

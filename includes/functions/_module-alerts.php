@@ -232,7 +232,7 @@ function fictioneer_add_chapter_alert( $post_id, $post ) {
     return;
   }
 
-  $story_id = get_post_meta( $post_id, 'fictioneer_chapter_story', true );
+  $story_id = fictioneer_get_chapter_story_id( $post_id );
 
   if ( ! $story_id || ! get_post( $story_id ) ) {
     return;

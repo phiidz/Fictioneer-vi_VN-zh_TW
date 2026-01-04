@@ -1128,7 +1128,7 @@ add_action( 'init', 'fictioneer_register_story_meta_fields' );
 
 function fictioneer_rest_pre_chapter_story_change( $prepared_post ) {
   if ( isset( $prepared_post->ID ) ) {
-    $current_story_id = get_post_meta( $prepared_post->ID, 'fictioneer_chapter_story', true );
+    $current_story_id = fictioneer_get_chapter_story_id( $prepared_post->ID );
 
     if ( $current_story_id ) {
       $GLOBALS['fictioneer_rest_previous_chapter_story'] = (int) $current_story_id;
@@ -1152,7 +1152,7 @@ function fictioneer_rest_after_chapter_story_change( $post, $request ) {
   global $fictioneer_rest_previous_chapter_story;
 
   if ( array_key_exists( 'fictioneer_chapter_story', $request['meta'] ?? [] ) ) {
-    $new_story_id = (int) get_post_meta( $post->ID, 'fictioneer_chapter_story', true );
+    $new_story_id = fictioneer_get_chapter_story_id( $post->ID );
     $old_story_id = (int) ( $fictioneer_rest_previous_chapter_story ?? null );
 
     // Remove chapter from old story
