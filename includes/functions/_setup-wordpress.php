@@ -1129,7 +1129,7 @@ add_filter( 'nav_menu_link_attributes', 'fictioneer_add_menu_link_attributes', 1
 // =============================================================================
 
 /**
- * Extend the list of allowed types for file uploads
+ * Extend list of allowed types for file uploads.
  *
  * @since 5.6.0
  *
@@ -1152,7 +1152,7 @@ add_filter( 'upload_mimes', 'fictioneer_extend_allowed_upload_types' );
 // =============================================================================
 
 /**
- * Monitors post submissions for potentially malicious content
+ * Monitor post submissions for potentially malicious content.
  *
  * Note: This function only identifies attempts and does not block content submission.
  * Posts are sanitized by WordPress before being saved to the database.
@@ -1270,7 +1270,7 @@ if ( get_option( 'fictioneer_see_some_evil' ) ) {
 // =============================================================================
 
 /**
- * Gates access to unpublished posts
+ * Gate access to unpublished posts.
  *
  * @since 5.6.0
  * @global WP_Post $post  The current WordPress post object.
@@ -1319,7 +1319,7 @@ add_action( 'template_redirect', 'fictioneer_gate_unpublished_content' );
 // =============================================================================
 
 /**
- * Prevents trackback/pingback from being updated
+ * Prevent trackback/pingback from being updated.
  *
  * @since 5.7.0
  *
@@ -1329,12 +1329,10 @@ add_action( 'template_redirect', 'fictioneer_gate_unpublished_content' );
  */
 
 function fictioneer_prevent_track_and_ping_updates( $data ) {
-  // Set data to defaults
   $data['to_ping'] = '';
   $data['ping_status'] = 'closed';
   $data['pinged'] = '';
 
-  // Continue filter
   return $data;
 }
 add_filter( 'wp_insert_post_data', 'fictioneer_prevent_track_and_ping_updates', 1 );
@@ -1344,7 +1342,7 @@ add_filter( 'wp_insert_post_data', 'fictioneer_prevent_track_and_ping_updates', 
 // =============================================================================
 
 /**
- * Add wrapper with class to read more link
+ * Add wrapper with class to read more link.
  *
  * @since 5.12.0
  *
@@ -1384,7 +1382,7 @@ add_filter( 'block_editor_settings_all', 'fictioneer_disable_font_library' );
 // =============================================================================
 
 /**
- * Accelerate AJAX requests by exiting early
+ * Accelerate AJAX requests by exiting early.
  *
  * Note: Requests are validated with \Fictioneer\Utils_Admin::get_validated_ajax_user(),
  * making sure that AJAX functions without "_nopriv" are not executed for
@@ -1526,7 +1524,7 @@ remove_filter( 'comment_text', 'capital_P_dangit', 31 );
 // =============================================================================
 
 /**
- * Fix inconsistent line breaks in excerpts
+ * Fix inconsistent line breaks in excerpts.
  *
  * @since 4.0
  * @since 5.22.1 - Re-added since it is still needed.
@@ -1548,27 +1546,12 @@ function fictioneer_fix_excerpt( $excerpt, $post ) {
 remove_filter( 'get_the_excerpt', 'wp_trim_excerpt' );
 add_filter( 'get_the_excerpt', 'fictioneer_fix_excerpt', 10, 2 );
 
-/**
- * Replace line breaks with whitespace
- *
- * @since 4.0
- * @since 5.22.1 - Re-added since it is still needed.
- *
- * @param string $text  String to process.
- *
- * @return string The processed string.
- */
-
-function fictioneer_replace_br_with_whitespace( $text ) {
-  return str_replace( '<br>', ' ', $text );
-}
-
 // =============================================================================
 // TRY PREVENTING INDEXING OF INTERNAL URLS
 // =============================================================================
 
 /**
- * Adds noindex and nofollow headers to certain requests
+ * Add noindex and nofollow headers to certain requests.
  *
  * @since 5.23.1
  */
@@ -1685,7 +1668,7 @@ if ( get_option( 'fictioneer_enable_lastpostmodified_caching' ) ) {
 }
 
 // =============================================================================
-// ROBOTS META TAG
+// ROBOTS
 // =============================================================================
 
 /**
@@ -1761,10 +1744,6 @@ function fictioneer_meta_robots( $robots ) {
 if ( get_option( 'fictioneer_enable_seo' ) && ! fictioneer_seo_plugin_active() ) {
   add_filter( 'wp_robots', 'fictioneer_meta_robots' );
 }
-
-// =============================================================================
-// ROBOTS TXT
-// =============================================================================
 
 /**
  * Replace default robots.txt output.

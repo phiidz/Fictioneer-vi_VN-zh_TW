@@ -486,6 +486,21 @@ if ( ! function_exists( 'fictioneer_get_human_readable_list' ) ) {
   }
 }
 
+/**
+ * Replace line breaks with whitespace.
+ *
+ * @since 4.0
+ * @since 5.22.1 - Re-added since it is still needed.
+ *
+ * @param string $text  String to process.
+ *
+ * @return string The processed string.
+ */
+
+function fictioneer_replace_br_with_whitespace( $text ) {
+  return str_replace( '<br>', ' ', $text );
+}
+
 // =============================================================================
 // VALIDATORS
 // =============================================================================
