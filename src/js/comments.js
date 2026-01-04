@@ -269,9 +269,7 @@ application.register('fictioneer-comment-form', class extends Stimulus.Controlle
    */
 
   addJSTrap() {
-    this.element.appendChild(FcnUtils.html`
-      <input type="hidden" name="fictioneer_comment_validator" value="299792458">
-    `);
+    this.element.appendChild(FcnUtils.html`<input type="hidden" name="fictioneer_comment_validator" value="299792458">`);
   }
 
   /**
