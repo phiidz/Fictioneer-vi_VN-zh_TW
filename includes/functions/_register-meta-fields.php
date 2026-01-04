@@ -1186,6 +1186,7 @@ add_action( 'rest_after_insert_fcn_chapter', 'fictioneer_rest_after_chapter_stor
  * for custom post types in the settings.
  *
  * @since 5.30.0
+ * @since 5.34.1 - Move validation to auth callback.
  */
 
 function fictioneer_register_chapter_meta_fields() {
