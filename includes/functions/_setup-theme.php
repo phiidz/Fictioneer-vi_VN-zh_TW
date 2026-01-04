@@ -1467,6 +1467,17 @@ if ( ! is_admin() && ! get_option( 'fictioneer_enable_jquery_migrate' ) ) {
 // =============================================================================
 
 /**
+ * Add replacetag for Autoptimize.
+ *
+ * @since 5.34.0
+ */
+
+function fictioneer_ao_add_replace_tag() {
+  echo '<style id="fictioneer-ao-insert">/* dummy */</style>';
+}
+add_action( 'wp_head', 'fictioneer_ao_add_replace_tag', 9 );
+
+/**
  * Change placement of Autoptimize CSS head output.
  *
  * @since 5.34.0
@@ -1477,7 +1488,7 @@ if ( ! is_admin() && ! get_option( 'fictioneer_enable_jquery_migrate' ) ) {
  */
 
 function fictioneer_ao_css_replacetag( $replacetag ) {
-  return array( '</head>', 'before' );
+  return array( '<style id="fictioneer-ao-insert', 'before' );
 }
 add_filter( 'autoptimize_filter_css_replacetag', 'fictioneer_ao_css_replacetag', 10, 1 );
 
