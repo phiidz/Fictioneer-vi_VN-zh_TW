@@ -1202,41 +1202,62 @@ function fictioneer_register_chapter_meta_fields() {
         )
       ),
       'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
-        return ! wp_doing_cron() && fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_chapter' );
+        if ( wp_doing_cron() ) {
+          return false;
+        }
+
+        if ( ! fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_chapter' ) ) {
+          return false;
+        }
+
+        $meta_value = null;
+
+        if ( isset( $_REQUEST['meta'][ $meta_key ] ) ) {
+          $meta_value = $_REQUEST['meta'][ $meta_key ];
+        } elseif ( isset( $_POST[ $meta_key ] ) ) {
+          $meta_value = $_POST[ $meta_key ];
+        }
+
+        if ( $meta_value === null ) {
+          return true;
+        }
+
+        $new_story_id = fictioneer_validate_id( $meta_value, 'fcn_story' );
+
+        if ( ! $new_story_id || ! get_option( 'fictioneer_limit_chapter_stories_by_author' ) ) {
+          return true;
+        }
+
+        $current_story_id = (int) fictioneer_get_chapter_story_id( $object_id );
+
+        if ( $current_story_id && $current_story_id === (int) $new_story_id ) {
+          return true;
+        }
+
+        $story_author_id = (int) get_post_field( 'post_author', $new_story_id );
+
+        if ( ! $story_author_id ) {
+          return false;
+        }
+
+        if (
+          $story_author_id === (int) $user_id ||
+          user_can( $user_id, 'manage_options' ) ||
+          user_can( $user_id, 'fcn_crosspost' )
+        ) {
+          return true;
+        }
+
+        $co_authored_ids = \Fictioneer\Utils_Admin::get_co_authored_story_ids( $user_id );
+
+        return
+          in_array( (string) $new_story_id, $co_authored_ids, true ) ||
+          in_array( (int) $new_story_id, $co_authored_ids, true );
       },
       'sanitize_callback' => function( $meta_value ) {
         $meta_value = fictioneer_validate_id( $meta_value, 'fcn_story' );
 
-        if ( ! $meta_value ) {
-          return '0';
-        }
-
-        $story_author_id = get_post_field( 'post_author', $meta_value );
-
-        if ( ! $story_author_id ) {
-          return '0';
-        }
-
-        $user_id = get_current_user_id();
-
-        if ( ! $user_id || wp_doing_cron() ) {
-          return strval( $meta_value );
-        }
-
-        if ( get_option( 'fictioneer_limit_chapter_stories_by_author' ) ) {
-          $co_authored_ids = \Fictioneer\Utils_Admin::get_co_authored_story_ids( $user_id );
-
-          if (
-            $story_author_id != $user_id &&
-            ! user_can( $user_id, 'manage_options' ) &&
-            ! user_can( $user_id, 'fcn_crosspost' ) &&
-            ! in_array( $meta_value, $co_authored_ids )
-          ) {
-            return '0';
-          }
-        }
-
-        return strval( $meta_value );
+        return $meta_value ? (string) $meta_value : '0';
       }
     )
   );
