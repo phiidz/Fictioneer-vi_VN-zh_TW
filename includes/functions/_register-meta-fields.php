@@ -1117,6 +1117,28 @@ add_action( 'init', 'fictioneer_register_story_meta_fields' );
 // =============================================================================
 
 /**
+ * Guard for undue chapter story updated by WP Crons.
+ *
+ * @since 5.34.1
+ *
+ * @param null|bool $check      Whether to allow updating metadata for the given type.
+ * @param int       $object_id  ID of the object metadata is for.
+ * @param null|bool $meta_key   Metadata key.
+ *
+ * @return null|bool Null if nothing has been done, anything else if short-circuited.
+ */
+
+function fictioneer_update_chapter_metadata_stop_cron( $check, $object_id, $meta_key ) {
+  if ( $check === null && $meta_key === 'fictioneer_chapter_story' && wp_doing_cron() ) {
+    return true; // Pretend update succeeded, but do nothing
+  }
+
+  return $check;
+}
+add_filter( 'update_post_metadata', 'fictioneer_update_chapter_metadata_stop_cron', 10, 3 );
+add_filter( 'delete_post_metadata', 'fictioneer_update_chapter_metadata_stop_cron', 10, 3 );
+
+/**
  * Remember current story chapter ID.
  *
  * @since 5.30.0
