@@ -22,6 +22,7 @@ function fictioneer_ajax_get_user_data() {
   $user = wp_get_current_user();
   $nonce = wp_create_nonce( 'fictioneer_nonce' );
   $data = array(
+    'method' => 'wp',
     'user_id' => $user->ID,
     'timestamp' => time() * 1000, // Compatible with Date.now() in JavaScript
     'loggedIn' => $logged_in,

@@ -152,7 +152,7 @@ function ffcnr_update_option( $name, $value, $autoload = false ) {
  * @return string Hash of $data.
  */
 
-function ffcnr_hash( $data, $scheme = 'auth' ){
+function ffcnr_hash( $data, $scheme = 'auth', $algo = 'sha256' ){
   $salts = array(
     'auth' => LOGGED_IN_KEY . LOGGED_IN_SALT,
     'nonce' => NONCE_KEY . NONCE_SALT
@@ -160,7 +160,7 @@ function ffcnr_hash( $data, $scheme = 'auth' ){
 
   $key = $salts[ $scheme ] ?? $salts['auth'];
 
-  return hash_hmac( 'sha256', (string) $data, (string) $key );
+  return hash_hmac( $algo, (string) $data, (string) $key );
 }
 
 /**
@@ -279,7 +279,7 @@ function ffcnr_create_nonce( $action, $uid ) {
     $uid = apply_filters( 'ffcnr_nonce_user_logged_out', $uid, $action );
   }
 
-  return substr( ffcnr_hash( $i . '|' . $action . '|' . $uid . '|' . $token, 'nonce' ), -12, 10 );
+  return substr( ffcnr_hash( $i . '|' . $action . '|' . $uid . '|' . $token, 'nonce', 'md5' ), -12, 10 );
 }
 
 /**

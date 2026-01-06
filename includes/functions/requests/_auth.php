@@ -510,6 +510,7 @@ function ffcnr_get_user_data() {
   $nonce = $logged_in ? ffcnr_create_nonce( 'fictioneer_nonce', $user->ID ) : '';
 
   $data = array(
+    'method' => 'ffcnr',
     'user_id' => $logged_in ? $user->ID : 0,
     'timestamp' => time() * 1000, // Compatible with Date.now() in JavaScript
     'loggedIn' => $logged_in,
