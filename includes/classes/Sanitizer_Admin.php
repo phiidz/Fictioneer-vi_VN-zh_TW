@@ -60,9 +60,15 @@ final class Sanitizer_Admin {
 
     $buffer = $validator->without_imports();
 
+    $at_rules = ['media', 'container', 'keyframes', 'supports'];
+
+    if ( $unfiltered  ) {
+      $at_rules[] = 'font-face';
+    }
+
     $validator->reject_url( $unfiltered, $buffer )
       ->reject_blocked_url_schemes( $buffer, ['javascript:', 'vbscript:', 'file:'] )
-      ->reject_unallowed_at_rules( $buffer, ['media', 'container', 'keyframes', 'supports'] )
+      ->reject_unallowed_at_rules( $buffer, $at_rules )
       ->reject_unbalanced_braces();
 
     return $validator->result();
