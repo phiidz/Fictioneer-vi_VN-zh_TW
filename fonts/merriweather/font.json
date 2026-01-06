@@ -1,0 +1,21 @@
+{
+  "skip": false,
+  "chapter": true,
+  "version": "1.582",
+  "key": "merriweather",
+  "name": "Merriweather",
+  "family": "Merriweather",
+  "type": "serif",
+  "styles": ["normal", "italic"],
+  "weights": ["300-900"],
+  "charsets": ["latin", "latin-ext"],
+  "formats": ["woff2"],
+  "about": "Merriweather offers a Renaissance warmth while using proportions which are space-saving. It is suitable for editorial design, news and other kinds of space sensitive typography. Merriweather is an evolving project and will be updated.",
+  "note": "",
+  "sources": {
+    "GitHub": {
+      "name": "GitHub",
+      "url": "https://github.com/SorkinType/Merriweather/tree/master"
+    }
+  }
+}
