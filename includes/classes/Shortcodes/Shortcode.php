@@ -194,7 +194,7 @@ class Shortcode {
     return Latest_Stories::render( $atts, $content, $tag );
   }
 
-   /**
+  /**
    * Shortcode delegate callback for latest chapters.
    *
    * @since 5.34.0
@@ -210,7 +210,7 @@ class Shortcode {
     return Latest_Chapters::render( $atts, $content, $tag );
   }
 
-   /**
+  /**
    * Shortcode delegate callback for latest updates.
    *
    * @since 5.34.0
@@ -226,7 +226,7 @@ class Shortcode {
     return Latest_Updates::render( $atts, $content, $tag );
   }
 
-   /**
+  /**
    * Shortcode delegate callback for showcases.
    *
    * @since 5.34.0
@@ -242,7 +242,7 @@ class Shortcode {
     return Showcase::render( $atts, $content, $tag );
   }
 
-   /**
+  /**
    * Shortcode delegate callback for latest recommendations.
    *
    * @since 5.34.0
