@@ -157,7 +157,7 @@ class Shortcode {
   public static function transient_key( $shortcode, $args, $attr ) : string {
     unset( $args['content'] ); // Could be large; UID is enough
 
-    $raw = is_array( $attr ) ? $attr : array();
+    $raw = is_array( $attr ) ? $attr : [];
     $base = wp_json_encode( array( 'args' => $args, 'attr' => $raw ) );
     $hash = md5( (string) $base );
 
