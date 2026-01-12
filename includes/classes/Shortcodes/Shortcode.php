@@ -148,8 +148,9 @@ class Shortcode {
    *
    * @since 5.34.0
    *
-   * @param array       $args  Parsed args (sanitized).
-   * @param array|mixed $attr  Raw attributes as passed to shortcode callback.
+   * @param string      $shortcode  Shortcode name.
+   * @param array       $args       Parsed args (sanitized).
+   * @param array|mixed $attr       Raw attributes as passed to shortcode callback.
    *
    * @return string Transient key.
    */
