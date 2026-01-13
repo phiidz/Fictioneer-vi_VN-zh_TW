@@ -433,11 +433,11 @@ button[type=submit]:where(:not(._inline)) {
 .card-list {
   display: grid;
   grid-template-columns: var(--card-list-template-columns, 100%);
-  gap: var(--card-list-row-gap, max(4cqw, 2rem)) var(--card-list-row-col, 0);
+  gap: var(--card-list-row-gap, max(4cqw, 2rem)) var(--card-list-col-gap, 0);
 
   // Fallback
   @supports not (width: 1cqw) {
-    gap: var(--card-list-row-gap, 2rem) var(--card-list-row-col, 0);
+    gap: var(--card-list-row-gap, 2rem) var(--card-list-col-gap, 0);
   }
 
   > .pagination:is(li) {
