@@ -1074,7 +1074,7 @@ You can change the minimum width of cards and gap spacing under **Appearance > C
 }
 
 /* Fallback for older browsers that do not support container queries. */
-@supports (width: 1cqw) {
+@supports not (width: 1cqw) {
   #list-of-stories, #list-of-chapters {
     --card-list-row-gap: 2rem;
     --card-list-col-gap: 2rem;
