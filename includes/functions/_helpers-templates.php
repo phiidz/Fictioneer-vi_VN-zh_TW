@@ -2667,6 +2667,7 @@ function fictioneer_get_splide_loading_style( $json_string, $uid ) {
   }
 
   $base = $breakpoints['base'];
+  $col_gap = 'calc(var(--grid-columns-col-gap, clamp(16px, 4cqw, 24px)) * var(--grid-columns-col-gap-multiplier, 1) * var(--grid-sidebar-col-gap-multiplier, 1))';
   $style = '';
 
   unset( $breakpoints['base'] );
@@ -2692,15 +2693,18 @@ function fictioneer_get_splide_loading_style( $json_string, $uid ) {
       $style .= ".{$uid}._splide-placeholder .splide__slide:first-child {width: 100%;}";
       $style .= ".{$uid}._splide-placeholder .splide__list:not(.post-list) {--this-placeholder-width: 100%;}";
     } else {
+      $max_slide_width = round( 100 / $per_page, 2 );
+
       $style .= ".{$uid}._splide-placeholder .splide__list:not(.post-list) {--this-placeholder-width: calc((100% - var(--grid-columns-col-gap, clamp(16px, 4cqw, 24px)) * ({$per_page} - 1)) / {$per_page});}";
-      $style .= ".{$uid}._splide-placeholder .splide__list:not(.post-list) {display: flex; gap: calc(var(--grid-columns-row-gap, clamp(16px, 4cqw, 24px)) * var(--grid-columns-row-gap-multiplier, 1) * var(--grid-sidebar-row-gap-multiplier, 1)) calc(var(--grid-columns-col-gap, clamp(16px, 4cqw, 24px)) * var(--grid-columns-col-gap-multiplier, 1) * var(--grid-sidebar-col-gap-multiplier, 1));}";
-      $style .= ".{$uid}._splide-placeholder .splide__list:not(.post-list) > .splide__slide {flex: 1 1 auto; width: auto; min-width: var(--this-placeholder-width, auto);}";
+      $style .= ".{$uid}._splide-placeholder .splide__list:not(.post-list) {display: flex; gap: calc(var(--grid-columns-row-gap, clamp(16px, 4cqw, 24px)) * var(--grid-columns-row-gap-multiplier, 1) * var(--grid-sidebar-row-gap-multiplier, 1)) {$col_gap};}";
+      $style .= ".{$uid}._splide-placeholder .splide__list:not(.post-list) > .splide__slide {flex: 1 1 auto; width: auto; min-width: var(--this-placeholder-width, auto); max-width: calc((100% - (({$per_page} - 1) * {$col_gap})) / {$per_page});}";
     }
   }
 
   // Lower breakpoints
   foreach ( $breakpoints as $break => $settings ) {
     $per_page = $settings['per_page'] ?? 1;
+    $max_slide_width = round( 100 / $per_page, 2 );
     $ttb = ( $settings['pagination_direction'] ?? 0 ) === 'ttb';
 
     // Arrows...
@@ -2749,7 +2753,7 @@ function fictioneer_get_splide_loading_style( $json_string, $uid ) {
       $style .= "@media only screen and (max-width: {$break}px) {
         .{$uid}._splide-placeholder .splide__list:not(.post-list) {--this-placeholder-width: calc((100% - var(--grid-columns-col-gap, clamp(16px, 4cqw, 24px)) * ({$per_page} - 1)) / {$per_page});}
         .{$uid}._splide-placeholder .splide__list:not(.post-list) {display: flex; gap: calc(var(--grid-columns-row-gap, clamp(16px, 4cqw, 24px)) * var(--grid-columns-row-gap-multiplier, 1)) calc(var(--grid-columns-col-gap, clamp(16px, 4cqw, 24px)) * var(--grid-columns-col-gap-multiplier, 1));}
-        .{$uid}._splide-placeholder .splide__list:not(.post-list) > .splide__slide {flex: 1 1 auto; width: auto; min-width: var(--this-placeholder-width, auto);}
+        .{$uid}._splide-placeholder .splide__list:not(.post-list) > .splide__slide {flex: 1 1 auto; width: auto; min-width: var(--this-placeholder-width, auto); max-width: calc((100% - (({$per_page} - 1) * {$col_gap})) / {$per_page});}
       }";
     }
   }
