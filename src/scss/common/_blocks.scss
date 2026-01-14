@@ -353,11 +353,11 @@ p.has-background {
 
 :is(.content-section, .editor-styles-wrapper, .fictioneer-sidebar) :is(h1, h2, h3, h4, h5, h6) {
   &:where(:not(.no-theme-spacing, .no-theme-style, :first-child)) {
-    margin-block-start: var(--heading-margin-top, min(2.25rem, max(1.75rem, var(--paragraph-spacing) - 0.125em)));
+    margin-block-start: min(3rem, var(--heading-margin-top, min(2.25rem, max(1.75rem, var(--paragraph-spacing) - 0.125em))));
   }
 
   &:where(:not(.no-theme-spacing, .no-theme-style, :last-child)) {
-    margin-block-end: var(--heading-margin-bottom, min(1rem, var(--paragraph-spacing) - 0.5em));
+    margin-block-end: min(2rem, var(--heading-margin-bottom, min(1rem, var(--paragraph-spacing) - 0.5em)));
   }
 
   strong {
