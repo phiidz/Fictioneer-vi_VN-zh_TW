@@ -351,8 +351,7 @@ function fictioneer_tools_disable_font() {
 
   // Setup
   $font_key = sanitize_key( $_GET['font'] );
-  $disabled_fonts = get_option( 'fictioneer_disabled_fonts', [] );
-  $disabled_fonts = is_array( $disabled_fonts ) ? $disabled_fonts : [];
+  $disabled_fonts = \Fictioneer\Fonts::get_disabled_fonts();
 
   // Abort if...
   if ( empty( $font_key ) ) {
@@ -404,8 +403,7 @@ function fictioneer_tools_enable_font() {
 
   // Setup
   $font_key = sanitize_key( $_GET['font'] );
-  $disabled_fonts = get_option( 'fictioneer_disabled_fonts', [] );
-  $disabled_fonts = is_array( $disabled_fonts ) ? $disabled_fonts : [];
+  $disabled_fonts = \Fictioneer\Fonts::get_disabled_fonts();
 
   // Abort if...
   if ( empty( $font_key ) ) {

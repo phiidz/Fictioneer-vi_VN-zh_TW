@@ -3191,8 +3191,7 @@ function fictioneer_add_fonts_customizer_settings( $manager ) {
   // Setup
   $fonts = Utils::get_font_data();
   $font_options = array( 'system' => __( 'System Font', 'fictioneer' ) );
-  $disabled_fonts = get_option( 'fictioneer_disabled_fonts', [] );
-  $disabled_fonts = is_array( $disabled_fonts ) ? $disabled_fonts : [];
+  $disabled_fonts = \Fictioneer\Fonts::get_disabled_fonts();
 
   foreach ( $fonts as $key => $font ) {
     $name = $font['name'];
