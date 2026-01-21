@@ -41,12 +41,12 @@ function ffcnr_get_avatar_url( $user, $size = 96 ) {
   // Custom avatar
   if (
     ! $disabled &&
-    ! ( $meta['fictioneer_enforce_gravatar'] ?? 0 ) &&
+    empty( $meta['fictioneer_enforce_gravatar'] ) &&
     ! empty( $meta['fictioneer_external_avatar_url'] )
   ) {
-    $url = (string) $meta['fictioneer_external_avatar_url'];
+    $url = filter_var( (string) $meta['fictioneer_external_avatar_url'], FILTER_SANITIZE_URL);
 
-    if ( function_exists( 'wp_http_validate_url' ) && wp_http_validate_url( $url ) ) {
+    if ( $url ) {
       return $url;
     }
   }
