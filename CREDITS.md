@@ -275,6 +275,22 @@ The following list credits all third-party resources used in the Fictioneer them
 
 ## Translations
 
-* **Brazilian Portuguese**<br>
+* **Portuguese (Brazilian)**<br>
   Copyright: [@c-cesar](https://github.com/c-cesar)<br>
+  License: [GPL 3.0](https://github.com/Tetrakern/fictioneer?tab=GPL-3.0-1-ov-file#readme)
+
+* **Spanish (Chile)**<br>
+  Copyright: [@FxxMorgan](https://github.com/FxxMorgan)<br>
+  License: [GPL 3.0](https://github.com/Tetrakern/fictioneer?tab=GPL-3.0-1-ov-file#readme)
+
+* **Simplified Chinese (Mainland China)**<br>
+  Copyright: [@makeitsofun](https://github.com/makeitsofun)<br>
+  License: [GPL 3.0](https://github.com/Tetrakern/fictioneer?tab=GPL-3.0-1-ov-file#readme)
+
+* **Traditional Chinese (Taiwan)**<br>
+  Copyright: [@phiidz](https://github.com/phiidz)<br>
+  License: [GPL 3.0](https://github.com/Tetrakern/fictioneer?tab=GPL-3.0-1-ov-file#readme)
+
+* **Vietnamese (Vietnam)**<br>
+  Copyright: [@phiidz](https://github.com/phiidz)<br>
   License: [GPL 3.0](https://github.com/Tetrakern/fictioneer?tab=GPL-3.0-1-ov-file#readme)
