@@ -196,14 +196,14 @@ function fictioneer_oauth2_process() {
   }
 
   // Setup
-  $cookie = fictioneer_oauth2_get_cookie();
+  $cookie = fictioneer_oauth2_get_cookie() ?: [];
   $action = sanitize_key( $_GET['action'] ?? '' );
   $state = sanitize_key( $_GET['state'] ?? '' );
   $code = sanitize_text_field( $_GET['code'] ?? '' ); // Do not use sanitize_key()
   $channel = sanitize_key( $_GET['channel'] ?? '' );
-  $merge = ( $_GET['merge'] ?? $cookie['merge'] ?? 0 ) ? 1 : 0;
-  $anchor = sanitize_key( $_GET['anchor'] ?? $cookie['anchor'] ?? '' );
-  $return_url = wp_validate_redirect( $_GET['return_url'] ?? $cookie['return_url'] ?? home_url(), home_url() );
+  $merge = ( $_GET['merge'] ?? ( $cookie['merge'] ?? 0 ) ) ? 1 : 0;
+  $anchor = sanitize_key( $_GET['anchor'] ?? ( $cookie['anchor'] ?? '' ) );
+  $return_url = wp_validate_redirect( $_GET['return_url'] ?? home_url(), home_url() );
   $result = '';
 
   // Verify!
@@ -255,10 +255,15 @@ function fictioneer_oauth2_process() {
     );
   }
 
+  $return_url = wp_validate_redirect(
+    ( $cookie['return_url'] ?? '' ) ?: home_url(),
+    home_url()
+  );
+
   // State?
   if ( ! ( $cookie['state'] ?? 0 ) ) {
     fictioneer_oauth2_terminate(
-      $cookie['return_url'],
+      $return_url,
       array( 'failure' => 'oauth_state_missing' ),
       $anchor
     );
@@ -266,7 +271,7 @@ function fictioneer_oauth2_process() {
 
   if ( $cookie['state'] !== $state ) {
     fictioneer_oauth2_terminate(
-      $cookie['return_url'],
+      $return_url,
       array( 'failure' => 'oauth_invalid_state' ),
       $anchor
     );
@@ -275,8 +280,20 @@ function fictioneer_oauth2_process() {
   // Channel?
   if ( ! ( $cookie['channel'] ?? 0 ) ) {
     fictioneer_oauth2_terminate(
-      $cookie['return_url'],
+      $return_url,
       array( 'failure' => 'oauth_channel_missing' ),
+      $anchor
+    );
+  }
+
+  if (
+    empty( $cookie['channel'] ) ||
+    empty( FCN_OAUTH2_API_ENDPOINTS[ $cookie['channel'] ] ) ||
+    empty( FCN_OAUTH2_API_ENDPOINTS[ $cookie['channel'] ]['token'] )
+  ) {
+    fictioneer_oauth2_terminate(
+      $return_url,
+      array( 'failure' => 'oauth_invalid_channel' ),
       $anchor
     );
   }
@@ -284,7 +301,7 @@ function fictioneer_oauth2_process() {
   // Code?
   if ( ! $code ) {
     fictioneer_oauth2_terminate(
-      $cookie['return_url'],
+      $return_url,
       array( 'failure' => 'oauth_invalid_code' ),
       $anchor
     );
@@ -306,7 +323,7 @@ function fictioneer_oauth2_process() {
   // Error?
   if ( is_wp_error( $token_response ) ) {
     fictioneer_oauth2_terminate(
-      $cookie['return_url'],
+      $return_url,
       array( 'failure' => $token_response->get_error_code() ),
       $anchor
     );
@@ -317,7 +334,7 @@ function fictioneer_oauth2_process() {
 
   if ( ! $access_token ) {
     fictioneer_oauth2_terminate(
-      $cookie['return_url'],
+      $return_url,
       array( 'failure' => 'oauth_token_missing' ),
       $anchor
     );
@@ -455,6 +472,17 @@ function fictioneer_oauth2_make_user( $user_data, $cookie ) {
     } else {
       $wp_user = get_user_by( 'id', $wp_user_id );
       $new = true;
+
+      if ( $wp_user instanceof \WP_User ) {
+        $bad_caps = ['manage_options', 'promote_users', 'create_users', 'delete_users', 'edit_users'];
+
+        foreach ( $bad_caps as $cap ) {
+          if ( $wp_user->has_cap( $cap ) ) {
+            $wp_user->set_role( 'subscriber' );
+            break;
+          }
+        }
+      }
     }
   }
 
@@ -499,13 +527,19 @@ function fictioneer_oauth2_make_user( $user_data, $cookie ) {
       wp_clear_auth_cookie();
       wp_set_current_user( $wp_user->ID );
 
-      // Allow login to last x days (default 3)
-      add_filter( 'auth_cookie_expiration', function( $length ) {
+      // Temporary filter
+      $expiration_filter = function() {
         return FICTIONEER_OAUTH_COOKIE_EXPIRATION;
-      });
+      };
+
+      // Allow login to last x days (default 3)
+      add_filter( 'auth_cookie_expiration', $expiration_filter );
 
       // Set authentication cookie
       wp_set_auth_cookie( $wp_user->ID, true );
+
+      // Remove temporary filter
+      remove_filter( 'auth_cookie_expiration', $expiration_filter );
     }
 
     // Action
@@ -644,6 +678,11 @@ function fictioneer_oauth2_delete_cookie() {
  */
 
 function fictioneer_oauth2_get_code( $args ) {
+  // Channel guard
+  if ( empty( $args['channel'] ) || empty( FCN_OAUTH2_API_ENDPOINTS[ $args['channel'] ] ) ) {
+    fictioneer_oauth2_terminate( $args['return_url'] );
+  }
+
   // Setup
   $client_id = get_option( "fictioneer_{$args['channel']}_client_id" );
   $client_secret = get_option( "fictioneer_{$args['channel']}_client_secret" );
@@ -731,8 +770,15 @@ function fictioneer_oauth2_get_token( $url, $body, $headers = [] ) {
     return $response;
   }
 
+  // Decode
+  $decoded = json_decode( wp_remote_retrieve_body( $response ) );
+
+  if ( $decoded === null && json_last_error() !== JSON_ERROR_NONE ) {
+    return new \WP_Error( 'oauth_token_parse_error', 'Token response was not valid JSON.' );
+  }
+
   // Return decoded body
-  return json_decode( wp_remote_retrieve_body( $response ) );
+  return $decoded;
 }
 
 /**
@@ -876,9 +922,15 @@ function fictioneer_oauth2_patreon( $token_response, $cookie ) {
         isset( $node->type ) &&
         $node->type === 'member' &&
         isset( $node->attributes ) &&
-        isset( $node->relationships->currently_entitled_tiers->data ) &&
-        in_array( $node->relationships->currently_entitled_tiers->data[0]->id, $tier_ids )
+        isset( $node->relationships->currently_entitled_tiers->data )
       ) {
+        $entitled = $node->relationships->currently_entitled_tiers->data ?? [];
+        $first_id = $entitled[0]->id ?? null;
+
+        if ( ! $first_id || ! in_array( $first_id, $tier_ids, true ) ) {
+          continue;
+        }
+
         $membership['lifetime_support_cents'] = $node->attributes->lifetime_support_cents ?? $node->attributes->campaign_lifetime_support_cents ?? 0;
         $membership['last_charge_date'] = $node->attributes->last_charge_date ?? null;
         $membership['last_charge_status'] = $node->attributes->last_charge_status ?? null;
