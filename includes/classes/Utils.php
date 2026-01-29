@@ -323,7 +323,13 @@ final class Utils {
       return false;
     }
 
-    return json_decode( $plaintext, true );
+    $data = json_decode( $plaintext, true );
+
+    if ( json_last_error() !== JSON_ERROR_NONE ) {
+      return false;
+    }
+
+    return $data;
   }
 
   /**
