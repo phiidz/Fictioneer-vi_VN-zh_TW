@@ -1089,18 +1089,18 @@ function fictioneer_tools_optimize_database() {
 
   // Delete post meta
   $allowed_meta_keys = Utils_Admin::get_falsy_meta_allow_list();
-  $not_like_sql = '';
-  $not_like_args = [];
+  $not_equal_sql = '';
+  $not_equal_args = [];
 
   if ( ! empty( $allowed_meta_keys ) ) {
     $not_like_statements = [];
 
     foreach ( $allowed_meta_keys as $key ) {
-      $not_like_statements[] = 'meta_key NOT LIKE %s';
-      $not_like_args[] = $wpdb->esc_like( $key );
+      $not_like_statements[] = 'meta_key <> %s';
+      $not_equal_args[] = $key;
     }
 
-    $not_like_sql = " AND " . implode( ' AND ', $not_like_statements );
+    $not_equal_sql = ' AND ' . implode( ' AND ', $not_like_statements );
   }
 
   $post_meta_count = $wpdb->query(
@@ -1111,12 +1111,12 @@ function fictioneer_tools_optimize_database() {
         meta_key LIKE %s
         AND meta_key NOT LIKE %s
         AND (meta_value = '' OR meta_value IS NULL OR meta_value = '0')
-        {$not_like_sql}
+        {$not_equal_sql}
       )
       OR meta_key IN ('_edit_last', '_edit_lock')",
       array_merge(
         ['\\_fictioneer\\_%', 'fictioneer%', '%\\_cache'],
-        $not_like_args
+        $not_equal_args
       )
     )
   );
@@ -1191,18 +1191,18 @@ function fictioneer_tools_optimize_database_preview() {
 
   // Post meta
   $allowed_meta_keys = Utils_Admin::get_falsy_meta_allow_list();
-  $not_like_sql = '';
-  $not_like_args = [];
+  $not_equal_sql = '';
+  $not_equal_args = [];
 
   if ( ! empty( $allowed_meta_keys ) ) {
     $not_like_statements = [];
 
     foreach ( $allowed_meta_keys as $key ) {
-      $not_like_statements[] = 'meta_key NOT LIKE %s';
-      $not_like_args[] = $wpdb->esc_like( $key );
+      $not_like_statements[] = 'meta_key <> %s';
+      $not_equal_args[] = $key;
     }
 
-    $not_like_sql = " AND " . implode( ' AND ', $not_like_statements );
+    $not_equal_sql = ' AND ' . implode( ' AND ', $not_like_statements );
   }
 
   $post_meta_count = $wpdb->get_var(
@@ -1213,12 +1213,12 @@ function fictioneer_tools_optimize_database_preview() {
         meta_key LIKE %s
         AND meta_key NOT LIKE %s
         AND (meta_value = '' OR meta_value IS NULL OR meta_value = '0')
-        {$not_like_sql}
+        {$not_equal_sql}
       )
       OR meta_key IN ('_edit_last', '_edit_lock')",
       array_merge(
         ['\\_fictioneer\\_%', 'fictioneer%', '%\\_cache'],
-        $not_like_args
+        $not_equal_args
       )
     )
   );

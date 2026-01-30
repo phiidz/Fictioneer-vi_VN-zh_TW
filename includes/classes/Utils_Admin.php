@@ -1358,7 +1358,7 @@ final class Utils_Admin {
    * @since 5.7.4
    * @since 5.34.0 - Moved into Utils_Admin class.
    *
-   * @return array Meta fields allowed to be saved falsy and not be deleted.
+   * @return string[] Meta fields allowed to be saved falsy and not be deleted.
    */
 
   public static function get_falsy_meta_allow_list() : array {
