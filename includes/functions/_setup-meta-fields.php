@@ -1619,9 +1619,8 @@ function fictioneer_ajax_get_relationship_collection( $post_id, $meta_key ) {
   $user = wp_get_current_user();
   $page = absint( $_REQUEST['page'] ?? 1 );
   $search = sanitize_text_field( $_REQUEST['search'] ?? '' );
-  $allowed_post_types = ['post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation'];
   $post_type = sanitize_text_field( $_REQUEST['post_type'] ?? '' );
-  $post_type = in_array( $post_type, $allowed_post_types ) ? $post_type : null;
+  $post_type = in_array( $post_type, FICTIONEER_DEFAULT_POST_TYPES ) ? $post_type : null;
 
   $forbidden = array_unique(
     array(
@@ -1657,7 +1656,7 @@ function fictioneer_ajax_get_relationship_collection( $post_id, $meta_key ) {
   // Query
   $query = new WP_Query(
     array(
-      'post_type' => $post_type ?: $allowed_post_types,
+      'post_type' => $post_type ?: FICTIONEER_DEFAULT_POST_TYPES,
       'post_status' => 'publish',
       'orderby' => 'date',
       'order' => 'desc',
@@ -4224,7 +4223,7 @@ function fictioneer_render_collection_data_metabox( $post ) {
   $item_ids = is_array( $item_ids ) ? $item_ids : [];
   $items = empty( $item_ids ) ? [] : get_posts(
     array(
-      'post_type' => ['post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation'],
+      'post_type' => FICTIONEER_DEFAULT_POST_TYPES,
       'post_status' => 'any',
       'post__in' => $item_ids ?: [0], // Must not be empty!
       'orderby' => 'post__in',
@@ -4523,11 +4522,13 @@ add_action( 'save_post', 'fictioneer_save_recommendation_metaboxes' );
 
 function fictioneer_add_seo_metabox( $post_type, $post ) {
   // Setup
-  $for_these_types = ['post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation'];
   $not_these_slugs = ['singular-bookshelf.php', 'singular-bookmarks.php', 'user-profile.php'];
 
   // Add meta box
-  if ( in_array( $post_type, $for_these_types ) && ! in_array( get_page_template_slug( $post ), $not_these_slugs ) ) {
+  if (
+    in_array( $post_type, FICTIONEER_DEFAULT_POST_TYPES ) &&
+    ! in_array( get_page_template_slug( $post ), $not_these_slugs )
+  ) {
     add_meta_box(
       'fictioneer-search-engine-appearance',
       __( 'SEO & Meta Tags', 'fictioneer' ),
@@ -4752,12 +4753,7 @@ if ( get_option( 'fictioneer_enable_seo' ) && ! fictioneer_seo_plugin_active() )
  */
 
 function fictioneer_default_hide_patreon_posts_columns( $hidden, $screen ) {
-  if (
-    in_array(
-      $screen->post_type,
-      ['post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation']
-    )
-  ) {
+  if ( in_array( $screen->post_type, FICTIONEER_DEFAULT_POST_TYPES ) ) {
     $hidden[] = 'fictioneer_patreon_lock_tiers';
     $hidden[] = 'fictioneer_patreon_lock_amount';
   }
@@ -4844,10 +4840,7 @@ function fictioneer_manage_posts_column_patreon( $column_name, $post_id ) {
 
 function fictioneer_add_patreon_bulk_edit_tiers( $column_name, $post_type ) {
   // Check column and post type
-  if (
-    $column_name !== 'fictioneer_patreon_lock_tiers' ||
-    ! in_array( $post_type, ['post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation'] )
-  ) {
+  if ( $column_name !== 'fictioneer_patreon_lock_tiers' || ! in_array( $post_type, FICTIONEER_DEFAULT_POST_TYPES ) ) {
     return;
   }
 
@@ -4920,7 +4913,7 @@ function fictioneer_add_patreon_bulk_edit_amount( $column_name, $post_type ) {
   // Check column and post type
   if (
     $column_name !== 'fictioneer_patreon_lock_amount' ||
-    ! in_array( $post_type, ['post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation'] )
+    ! in_array( $post_type, FICTIONEER_DEFAULT_POST_TYPES )
   ) {
     return;
   }
@@ -4962,7 +4955,7 @@ function fictioneer_save_patreon_bulk_edit( $updated_post_ids, $shared_post_data
     ( $shared_post_data['action2'] ?? 0 ) === 'trash' ||
     ! in_array(
       $shared_post_data['post_type'] ?? 0,
-      ['post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation']
+      FICTIONEER_DEFAULT_POST_TYPES
     ) ||
     ! ( current_user_can( 'manage_options' ) || current_user_can( 'fcn_assign_patreon_tiers' ) ) ||
     empty( $updated_post_ids )
@@ -5039,7 +5032,7 @@ if (
   get_option( 'fictioneer_enable_patreon_locks' ) &&
   ( current_user_can( 'manage_options' ) || current_user_can( 'fcn_assign_patreon_tiers' ) )
 ) {
-  foreach ( ['post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation'] as $type ) {
+  foreach ( FICTIONEER_DEFAULT_POST_TYPES as $type ) {
     add_filter( "manage_{$type}_posts_columns", 'fictioneer_add_posts_columns_patreon' );
     add_action( "manage_{$type}_posts_custom_column", 'fictioneer_manage_posts_column_patreon', 10, 2 );
   }

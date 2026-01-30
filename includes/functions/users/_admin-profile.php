@@ -1800,7 +1800,7 @@ function fictioneer_ajax_search_posts_to_unlock() {
   // Query
   $posts = new WP_Query(
     array(
-      'post_type' => $type ?: ['post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation'],
+      'post_type' => $type ?: FICTIONEER_DEFAULT_POST_TYPES,
       'post_status' => 'any',
       'orderby' => 'date',
       'order' => 'desc',
@@ -1875,7 +1875,7 @@ function fictioneer_update_admin_unlocked_posts( $updated_user_id ) {
 
     $query = new WP_Query(
       array(
-        'post_type'=> ['post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation'],
+        'post_type'=> FICTIONEER_DEFAULT_POST_TYPES,
         'post_status'=> 'any',
         'posts_per_page' => -1,
         'post__in' => $post_ids ?: [0],

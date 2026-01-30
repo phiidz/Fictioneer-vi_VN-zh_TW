@@ -700,10 +700,9 @@ function fictioneer_remove_sub_menus() {
   $current_user = wp_get_current_user();
   $user_caps = array_keys( array_filter( $current_user->allcaps ) );
   $taxonomies = ['category', 'post_tag', 'fcn_genre', 'fcn_fandom', 'fcn_character', 'fcn_content_warning'];
-  $post_types = ['post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation'];
 
   // Filter out undesired menus
-  foreach ( $post_types as $type ) {
+  foreach ( FICTIONEER_DEFAULT_POST_TYPES as $type ) {
     $plural = $type == 'fcn_story' ? 'fcn_stories' : "{$type}s";
 
     if ( ! in_array( "edit_{$plural}", $user_caps ) ) {

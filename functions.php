@@ -459,6 +459,14 @@ if ( ! defined( 'FICTIONEER_ALLOWED_PAGE_TEMPLATES' ) ) {
   define( 'FICTIONEER_ALLOWED_PAGE_TEMPLATES', [] );
 }
 
+// Array: Default post types
+if ( ! defined( 'FICTIONEER_DEFAULT_POST_TYPES' ) ) {
+  define(
+    'FICTIONEER_DEFAULT_POST_TYPES',
+    ['post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation']
+  );
+}
+
 // =======================================================================================
 // AUTOLOADER
 // =======================================================================================

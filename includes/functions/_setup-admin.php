@@ -969,12 +969,10 @@ function fcntr_admin( $key, $escape = false ) {
 function fictioneer_append_meta_fields( $post_type, $meta_key, $meta_value ) {
   global $wpdb;
 
-  static $allowed_post_types = ['post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation'];
-
   // Setup
   $post_type = sanitize_key( $post_type );
 
-  if ( ! in_array( $post_type, $allowed_post_types, true ) ) {
+  if ( ! in_array( $post_type, FICTIONEER_DEFAULT_POST_TYPES, true ) ) {
     return;
   }
 
