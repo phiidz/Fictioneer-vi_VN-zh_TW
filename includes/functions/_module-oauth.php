@@ -583,7 +583,7 @@ function fictioneer_oauth2_make_user( $user_data, $cookie ) {
 // =============================================================================
 
 /**
- * Terminate the OAuth 2.0 script and redirect back
+ * Terminate the OAuth 2.0 script and redirect back.
  *
  * @since 5.19.0
  *
@@ -593,16 +593,14 @@ function fictioneer_oauth2_make_user( $user_data, $cookie ) {
  */
 
 function fictioneer_oauth2_terminate( $return_url = null, $query_args = [], $anchor = null ) {
-  // Delete cookie
   fictioneer_oauth2_delete_cookie();
 
-  // Redirect and terminate
   wp_safe_redirect( add_query_arg( $query_args, $return_url ?? home_url() ) . ( $anchor ? '#' . $anchor : '' ) );
   exit;
 }
 
 /**
- * Outputs a formatted error message and stops the script
+ * Output a formatted error message and stops the script.
  *
  * @since 5.5.2
  * @since 5.7.5 - Refactored.
@@ -613,7 +611,6 @@ function fictioneer_oauth2_terminate( $return_url = null, $query_args = [], $anc
  */
 
 function fictioneer_oauth_die( $message, $title = 'Error' ) {
-  // Delete cookie
   fictioneer_oauth2_delete_cookie();
 
   wp_die(
@@ -625,7 +622,7 @@ function fictioneer_oauth_die( $message, $title = 'Error' ) {
 }
 
 /**
- * Get the OAuth 2.0 cookie contents
+ * Get the OAuth 2.0 cookie contents.
  *
  * @since 5.19.0
  *
@@ -634,14 +631,20 @@ function fictioneer_oauth_die( $message, $title = 'Error' ) {
 
 function fictioneer_oauth2_get_cookie() {
   if ( isset( $_COOKIE['fictioneer_oauth'] ) ) {
-    return Utils::decrypt( $_COOKIE['fictioneer_oauth'] ) ?: null;
+    $aad = hash(
+      'sha256',
+      home_url() . '|' . ( $_SERVER['HTTP_USER_AGENT'] ?? '' ),
+      true
+    );
+
+    return Utils::decrypt( $_COOKIE['fictioneer_oauth'], $aad, 'oauth_cookie_v1' ) ?: null;
   }
 
   return null;
 }
 
 /**
- * Deleted the OAuth 2.0 cookie
+ * Delete the OAuth 2.0 cookie.
  *
  * @since 5.19.0
  */
@@ -705,6 +708,12 @@ function fictioneer_oauth2_get_code( $args ) {
   );
 
   // Set cookie
+  $aad = hash(
+    'sha256',
+    home_url() . '|' . ( $_SERVER['HTTP_USER_AGENT'] ?? '' ),
+    true
+  );
+
   $value = Utils::encrypt(
     array(
       'state' => $params['state'],
@@ -713,7 +722,9 @@ function fictioneer_oauth2_get_code( $args ) {
       'anchor' => $args['anchor'],
       'merge' => $args['merge'],
       'merge_id' => $args['merge_id']
-    )
+    ),
+    $aad,
+    'oauth_cookie_v1'
   );
 
   if ( $value ) {
@@ -721,7 +732,7 @@ function fictioneer_oauth2_get_code( $args ) {
       'fictioneer_oauth',
       $value,
       array(
-        'expires' => time() + 300,
+        'expires' => time() + 60,
         'path' => '/',
         'domain' => '',
         'secure' => is_ssl(),
