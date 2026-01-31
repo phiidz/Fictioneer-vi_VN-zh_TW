@@ -230,17 +230,51 @@ final class Utils {
   }
 
   /**
+   * Derive a binary encryption key for a specific context/purpose.
+   *
+   * @since 5.34.2
+   *
+   * @param string $context  Purpose label.
+   *
+   * @return string|false 32-byte binary key or false.
+   */
+
+  private static function encryption_key( $context ) {
+    $context = (string) $context;
+
+    if ( $context === '' ) {
+      $context = 'default_v1';
+    }
+
+    $ikm = wp_salt( 'auth' );
+    $salt = wp_salt( 'secure_auth' );
+    $info = 'fictioneer|' . $context;
+
+    if ( function_exists( 'hash_hkdf' ) ) {
+      return hash_hkdf( 'sha256', $ikm, 32, $info, $salt );
+    }
+
+    return hash( 'sha256', $info . '|' . $ikm . '|' . $salt, true );
+  }
+
+  /**
    * Encrypt data.
    *
    * @since 5.19.0
    * @since 5.34.0 - Moved into Utils class.
    *
-   * @param mixed $data  Data to encrypt.
+   * @param mixed  $data     Data to encrypt. Must be JSON-serializable.
+   * @param string $aad      Optional. Additional authenticated data. Must be
+   *                         provided again for successful decryption.
+   *                         Defaults to empty.
+   * @param string $context  Optional. Key derivation context (purpose/version).
+   *                         Defaults to 'default_v1'.
    *
-   * @return string|false Encrypted data or false on failure.
+   * @return string|false Base64-encoded encrypted payload on success, or false
+   *                      on failure.
    */
 
-  public static function encrypt( $data ) {
+  public static function encrypt( $data, $aad = '', $context = 'default_v1' ) {
     $plaintext = json_encode( $data );
 
     if ( $plaintext === false ) {
@@ -253,7 +287,12 @@ final class Utils {
       return false;
     }
 
-    $key = hash( 'sha256', wp_salt( 'auth' ), true );
+    $key = self::encryption_key( $context );
+
+    if ( ! $key ) {
+      return false;
+    }
+
     $iv = random_bytes( 12 );
     $tag = '';
 
@@ -264,7 +303,7 @@ final class Utils {
       OPENSSL_RAW_DATA,
       $iv,
       $tag,
-      '',
+      (string) ( $aad ?? '' ),
       16
     );
 
@@ -280,20 +319,22 @@ final class Utils {
    *
    * @since 5.19.0
    * @since 5.34.0 - Moved into Utils class.
+   * @since 5.34.2 - Added AAD support and key separation via context.
    *
-   * @param string $payload  Data to decrypt.
+   * @param string $payload  Base64-encoded payload produced by Utils::encrypt().
+   * @param string $aad      Optional. Additional authenticated data. Must match
+   *                         the value used during encryption. Defaults to empty.
+   * @param string $context  Optional. Key derivation context (purpose/version).
+   *                         Must match the context used during encryption.
+   *                         Defaults to 'default_v1'.
    *
-   * @return mixed Decrypted data.
+   * @return mixed Decrypted data on success, or false on failure.
    */
 
-  public static function decrypt( $payload ) {
+  public static function decrypt( $payload, $aad = '', $context = 'default_v1' ) {
     $raw = base64_decode( $payload, true );
 
-    if ( $raw === false ) {
-      return false;
-    }
-
-    if ( strlen( $raw ) < 28 ) {
+    if ( $raw === false || strlen( $raw ) < 28 ) {
       return false;
     }
 
@@ -307,7 +348,7 @@ final class Utils {
       return false;
     }
 
-    $key = hash( 'sha256', wp_salt( 'auth' ), true );
+    $key = self::encryption_key( $context );
 
     $plaintext = openssl_decrypt(
       $cipher_text,
@@ -316,7 +357,7 @@ final class Utils {
       OPENSSL_RAW_DATA,
       $iv,
       $tag,
-      ''
+      (string) ( $aad ?? '' )
     );
 
     if ( $plaintext === false ) {
