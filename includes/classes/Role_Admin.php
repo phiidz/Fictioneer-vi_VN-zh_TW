@@ -652,49 +652,47 @@ final class Role_Admin {
    */
 
   public static function restrict_classic_metaboxes() : void {
-    $post_types = ['post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation'];
-
     // Trackbacks
-    remove_meta_box( 'trackbacksdiv', $post_types, 'normal' );
+    remove_meta_box( 'trackbacksdiv', FICTIONEER_DEFAULT_POST_TYPES, 'normal' );
 
     // Tags
     if ( ! current_user_can( 'assign_post_tags' ) ) {
-      remove_meta_box( 'tagsdiv-post_tag', $post_types, 'side' );
+      remove_meta_box( 'tagsdiv-post_tag', FICTIONEER_DEFAULT_POST_TYPES, 'side' );
     }
 
     // Categories
     if ( ! current_user_can( 'assign_categories' ) ) {
-      remove_meta_box( 'categorydiv', $post_types, 'side' );
+      remove_meta_box( 'categorydiv', FICTIONEER_DEFAULT_POST_TYPES, 'side' );
     }
 
     // Genres
     if ( ! current_user_can( 'assign_fcn_genres' ) ) {
-      remove_meta_box( 'fcn_genrediv', $post_types, 'side' );
+      remove_meta_box( 'fcn_genrediv', FICTIONEER_DEFAULT_POST_TYPES, 'side' );
     }
 
     // Fandoms
     if ( ! current_user_can( 'assign_fcn_fandoms' ) ) {
-      remove_meta_box( 'fcn_fandomdiv', $post_types, 'side' );
+      remove_meta_box( 'fcn_fandomdiv', FICTIONEER_DEFAULT_POST_TYPES, 'side' );
     }
 
     // Characters
     if ( ! current_user_can( 'assign_fcn_characters' ) ) {
-      remove_meta_box( 'fcn_characterdiv', $post_types, 'side' );
+      remove_meta_box( 'fcn_characterdiv', FICTIONEER_DEFAULT_POST_TYPES, 'side' );
     }
 
     // Content Warnings
     if ( ! current_user_can( 'assign_fcn_content_warnings' ) ) {
-      remove_meta_box( 'fcn_content_warningdiv', $post_types, 'side' );
+      remove_meta_box( 'fcn_content_warningdiv', FICTIONEER_DEFAULT_POST_TYPES, 'side' );
     }
 
     // Permalink
     if ( ! current_user_can( 'fcn_edit_permalink' ) ) {
-      remove_meta_box( 'slugdiv', $post_types, 'normal' );
+      remove_meta_box( 'slugdiv', FICTIONEER_DEFAULT_POST_TYPES, 'normal' );
     }
 
     // Page template
     if ( ! current_user_can( 'fcn_select_page_template' ) ) {
-      remove_meta_box( 'pageparentdiv', $post_types, 'side' );
+      remove_meta_box( 'pageparentdiv', FICTIONEER_DEFAULT_POST_TYPES, 'side' );
     }
   }
 

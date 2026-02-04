@@ -1117,6 +1117,28 @@ add_action( 'init', 'fictioneer_register_story_meta_fields' );
 // =============================================================================
 
 /**
+ * Guard for undue chapter story updated by WP Crons.
+ *
+ * @since 5.34.1
+ *
+ * @param null|bool $check      Whether to allow updating metadata for the given type.
+ * @param int       $object_id  ID of the object metadata is for.
+ * @param null|bool $meta_key   Metadata key.
+ *
+ * @return null|bool Null if nothing has been done, anything else if short-circuited.
+ */
+
+function fictioneer_update_chapter_metadata_stop_cron( $check, $object_id, $meta_key ) {
+  if ( $check === null && $meta_key === 'fictioneer_chapter_story' && wp_doing_cron() ) {
+    return true; // Pretend update succeeded, but do nothing
+  }
+
+  return $check;
+}
+add_filter( 'update_post_metadata', 'fictioneer_update_chapter_metadata_stop_cron', 10, 3 );
+add_filter( 'delete_post_metadata', 'fictioneer_update_chapter_metadata_stop_cron', 10, 3 );
+
+/**
  * Remember current story chapter ID.
  *
  * @since 5.30.0
@@ -1128,7 +1150,7 @@ add_action( 'init', 'fictioneer_register_story_meta_fields' );
 
 function fictioneer_rest_pre_chapter_story_change( $prepared_post ) {
   if ( isset( $prepared_post->ID ) ) {
-    $current_story_id = get_post_meta( $prepared_post->ID, 'fictioneer_chapter_story', true );
+    $current_story_id = fictioneer_get_chapter_story_id( $prepared_post->ID );
 
     if ( $current_story_id ) {
       $GLOBALS['fictioneer_rest_previous_chapter_story'] = (int) $current_story_id;
@@ -1152,7 +1174,7 @@ function fictioneer_rest_after_chapter_story_change( $post, $request ) {
   global $fictioneer_rest_previous_chapter_story;
 
   if ( array_key_exists( 'fictioneer_chapter_story', $request['meta'] ?? [] ) ) {
-    $new_story_id = (int) get_post_meta( $post->ID, 'fictioneer_chapter_story', true );
+    $new_story_id = fictioneer_get_chapter_story_id( $post->ID );
     $old_story_id = (int) ( $fictioneer_rest_previous_chapter_story ?? null );
 
     // Remove chapter from old story
@@ -1186,6 +1208,7 @@ add_action( 'rest_after_insert_fcn_chapter', 'fictioneer_rest_after_chapter_stor
  * for custom post types in the settings.
  *
  * @since 5.30.0
+ * @since 5.34.1 - Move validation to auth callback.
  */
 
 function fictioneer_register_chapter_meta_fields() {
@@ -1202,41 +1225,62 @@ function fictioneer_register_chapter_meta_fields() {
         )
       ),
       'auth_callback' => function( $allowed, $meta_key, $object_id, $user_id ) {
-        return ! wp_doing_cron() && fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_chapter' );
+        if ( wp_doing_cron() ) {
+          return false;
+        }
+
+        if ( ! fictioneer_rest_auth_callback( $object_id, $user_id, 'fcn_chapter' ) ) {
+          return false;
+        }
+
+        $meta_value = null;
+
+        if ( isset( $_REQUEST['meta'][ $meta_key ] ) ) {
+          $meta_value = $_REQUEST['meta'][ $meta_key ];
+        } elseif ( isset( $_POST[ $meta_key ] ) ) {
+          $meta_value = $_POST[ $meta_key ];
+        }
+
+        if ( $meta_value === null ) {
+          return true;
+        }
+
+        $new_story_id = fictioneer_validate_id( $meta_value, 'fcn_story' );
+
+        if ( ! $new_story_id || ! get_option( 'fictioneer_limit_chapter_stories_by_author' ) ) {
+          return true;
+        }
+
+        $current_story_id = (int) fictioneer_get_chapter_story_id( $object_id );
+
+        if ( $current_story_id && $current_story_id === (int) $new_story_id ) {
+          return true;
+        }
+
+        $story_author_id = (int) get_post_field( 'post_author', $new_story_id );
+
+        if ( ! $story_author_id ) {
+          return false;
+        }
+
+        if (
+          $story_author_id === (int) $user_id ||
+          user_can( $user_id, 'manage_options' ) ||
+          user_can( $user_id, 'fcn_crosspost' )
+        ) {
+          return true;
+        }
+
+        $co_authored_ids = \Fictioneer\Utils_Admin::get_co_authored_story_ids( $user_id );
+
+        return
+          in_array( (string) $new_story_id, $co_authored_ids, true ) ||
+          in_array( (int) $new_story_id, $co_authored_ids, true );
       },
       'sanitize_callback' => function( $meta_value ) {
         $meta_value = fictioneer_validate_id( $meta_value, 'fcn_story' );
 
-        if ( ! $meta_value ) {
-          return '0';
-        }
-
-        $story_author_id = get_post_field( 'post_author', $meta_value );
-
-        if ( ! $story_author_id ) {
-          return '0';
-        }
-
-        $user_id = get_current_user_id();
-
-        if ( ! $user_id || wp_doing_cron() ) {
-          return strval( $meta_value );
-        }
-
-        if ( get_option( 'fictioneer_limit_chapter_stories_by_author' ) ) {
-          $co_authored_ids = \Fictioneer\Utils_Admin::get_co_authored_story_ids( $user_id );
-
-          if (
-            $story_author_id != $user_id &&
-            ! user_can( $user_id, 'manage_options' ) &&
-            ! user_can( $user_id, 'fcn_crosspost' ) &&
-            ! in_array( $meta_value, $co_authored_ids )
-          ) {
-            return '0';
-          }
-        }
-
-        return strval( $meta_value );
+        return $meta_value ? (string) $meta_value : '0';
       }
     )
   );

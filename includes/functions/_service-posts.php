@@ -188,7 +188,13 @@ function fictioneer_update_modified_date_on_story_for_chapter( $post_id ) {
   $post_modified_gmt = current_time( 'mysql', true );
 
   // Update database
-  $wpdb->query( "UPDATE $wpdb->posts SET post_modified = '{$post_modified}', post_modified_gmt = '{$post_modified_gmt}' WHERE ID = {$story_id}" );
+  $wpdb->update(
+    $wpdb->posts,
+    array( 'post_modified' => $post_modified, 'post_modified_gmt' => $post_modified_gmt ),
+    array( 'ID' => absint( $story_id ) ),
+    ['%s', '%s'],
+    ['%d']
+  );
 }
 
 fictioneer_toggle_stud_actions( 'fictioneer_update_modified_date_on_story_for_chapter' );

@@ -353,11 +353,11 @@ p.has-background {
 
 :is(.content-section, .editor-styles-wrapper, .fictioneer-sidebar) :is(h1, h2, h3, h4, h5, h6) {
   &:where(:not(.no-theme-spacing, .no-theme-style, :first-child)) {
-    margin-block-start: var(--heading-margin-top, min(2.25rem, max(1.75rem, var(--paragraph-spacing) - 0.125em)));
+    margin-block-start: min(3rem, var(--heading-margin-top, min(2.25rem, max(1.75rem, var(--paragraph-spacing) - 0.125em))));
   }
 
   &:where(:not(.no-theme-spacing, .no-theme-style, :last-child)) {
-    margin-block-end: var(--heading-margin-bottom, min(1rem, var(--paragraph-spacing) - 0.5em));
+    margin-block-end: min(2rem, var(--heading-margin-bottom, min(1rem, var(--paragraph-spacing) - 0.5em)));
   }
 
   strong {
@@ -1367,7 +1367,7 @@ figcaption {
 .wp-block-latest-comments:is(:not(.no-theme-style)) {
   list-style: none;
 
-  &.has-avatars .wp-block-latest-comments__comment-excerpt {
+  &.has-avatars :where(.wp-block-latest-comments__comment-excerpt, .wp-block-latest-comments__comment-meta) {
     margin-left: calc(clamp(24px, 6cqw, 32px) + 0.75em);
   }
 
@@ -1388,7 +1388,7 @@ figcaption {
     font-size: var(--block-latest-comments-font-size, clamp(13.5px, 3.125cqw, 15px));
     font-weight: var(--font-weight-semi-strong);
     line-height: 1.5;
-    margin-left: calc(clamp(24px, 6cqw, 32px) + 0.75em);
+    // margin-left: calc(clamp(24px, 6cqw, 32px) + 0.75em);
   }
 
   .wp-block-latest-comments__comment-date {

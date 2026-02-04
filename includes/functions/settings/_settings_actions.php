@@ -351,8 +351,7 @@ function fictioneer_tools_disable_font() {
 
   // Setup
   $font_key = sanitize_key( $_GET['font'] );
-  $disabled_fonts = get_option( 'fictioneer_disabled_fonts', [] );
-  $disabled_fonts = is_array( $disabled_fonts ) ? $disabled_fonts : [];
+  $disabled_fonts = \Fictioneer\Fonts::get_disabled_fonts();
 
   // Abort if...
   if ( empty( $font_key ) ) {
@@ -404,8 +403,7 @@ function fictioneer_tools_enable_font() {
 
   // Setup
   $font_key = sanitize_key( $_GET['font'] );
-  $disabled_fonts = get_option( 'fictioneer_disabled_fonts', [] );
-  $disabled_fonts = is_array( $disabled_fonts ) ? $disabled_fonts : [];
+  $disabled_fonts = \Fictioneer\Fonts::get_disabled_fonts();
 
   // Abort if...
   if ( empty( $font_key ) ) {
@@ -1003,7 +1001,7 @@ function fictioneer_tools_legacy_cleanup() {
 
       // Query all posts
       $args = array(
-        'post_type' => ['post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation'],
+        'post_type' => FICTIONEER_DEFAULT_POST_TYPES,
         'post_status' => ['publish', 'private', 'future'],
         'posts_per_page' => -1,
         'update_post_meta_cache' => true,
@@ -1074,7 +1072,7 @@ function fictioneer_tools_legacy_cleanup() {
 add_action( 'admin_post_fictioneer_tools_legacy_cleanup', 'fictioneer_tools_legacy_cleanup' );
 
 /**
- * Optimize database
+ * Optimize database.
  *
  * @since 5.7.4
  * @global wpdb $wpdb  WordPress database object.
@@ -1091,55 +1089,66 @@ function fictioneer_tools_optimize_database() {
 
   // Delete post meta
   $allowed_meta_keys = Utils_Admin::get_falsy_meta_allow_list();
-  $not_like_sql = '';
+  $not_equal_sql = '';
+  $not_equal_args = [];
 
   if ( ! empty( $allowed_meta_keys ) ) {
     $not_like_statements = [];
 
     foreach ( $allowed_meta_keys as $key ) {
-      $not_like_statements[] = "meta_key NOT LIKE '{$key}'";
+      $not_like_statements[] = 'meta_key <> %s';
+      $not_equal_args[] = $key;
     }
 
-    $not_like_sql = " AND " . implode( ' AND ', $not_like_statements );
+    $not_equal_sql = ' AND ' . implode( ' AND ', $not_like_statements );
   }
 
-  $post_meta_count = $wpdb->query("
-    DELETE FROM $wpdb->postmeta
-    WHERE meta_key LIKE '_fictioneer_%'
-    OR (
-      meta_key LIKE 'fictioneer%'
-      AND meta_key NOT LIKE '%_cache'
-      AND (meta_value = '' OR meta_value IS NULL OR meta_value = '0')
-      $not_like_sql
+  $post_meta_count = $wpdb->query(
+    $wpdb->prepare(
+      "DELETE FROM {$wpdb->postmeta}
+      WHERE meta_key LIKE %s
+      OR (
+        meta_key LIKE %s
+        AND meta_key NOT LIKE %s
+        AND (meta_value = '' OR meta_value IS NULL OR meta_value = '0')
+        {$not_equal_sql}
+      )
+      OR meta_key IN ('_edit_last', '_edit_lock')",
+      array_merge(
+        ['\\_fictioneer\\_%', 'fictioneer%', '%\\_cache'],
+        $not_equal_args
+      )
     )
-    OR meta_key IN ('_edit_last', '_edit_lock')
-  ");
+  );
 
-  $orphaned_post_meta_count = $wpdb->query("
-    DELETE pm
-    FROM $wpdb->postmeta pm
-    LEFT JOIN $wpdb->posts p ON pm.post_id = p.ID
-    WHERE p.ID IS NULL
-  ");
+  $orphaned_post_meta_count = $wpdb->query(
+    "DELETE pm
+    FROM {$wpdb->postmeta} pm
+    LEFT JOIN {$wpdb->posts} p ON pm.post_id = p.ID
+    WHERE p.ID IS NULL"
+  );
 
   // Delete comment meta (legacy)
-  $comment_meta_count = $wpdb->query("
-    DELETE FROM $wpdb->commentmeta
+  $comment_meta_count = $wpdb->query(
+    "DELETE FROM {$wpdb->commentmeta}
     WHERE
     meta_key = 'fictioneer_visibility_code'
     OR (
       meta_key LIKE 'fictioneer%'
       AND (meta_value = '' OR meta_value IS NULL OR meta_value = '0')
-    )
-  ");
+    )"
+  );
 
   // Delete options
-  $options_meta_count = $wpdb->query("
-    DELETE FROM $wpdb->options
-    WHERE option_name LIKE 'fictioneer_%'
-    AND (option_value IS NULL OR option_value = '')
-    AND autoload = 'no'
-  ");
+  $options_meta_count = $wpdb->query(
+    $wpdb->prepare(
+      "DELETE FROM $wpdb->options
+      WHERE option_name LIKE %s
+      AND (option_value IS NULL OR option_value = '')
+      AND autoload = 'no'",
+      'fictioneer\\_%'
+    )
+  );
 
   // Total rows
   $total = $post_meta_count + $orphaned_post_meta_count + $comment_meta_count + $options_meta_count;
@@ -1182,55 +1191,66 @@ function fictioneer_tools_optimize_database_preview() {
 
   // Post meta
   $allowed_meta_keys = Utils_Admin::get_falsy_meta_allow_list();
-  $not_like_sql = '';
+  $not_equal_sql = '';
+  $not_equal_args = [];
 
   if ( ! empty( $allowed_meta_keys ) ) {
     $not_like_statements = [];
 
     foreach ( $allowed_meta_keys as $key ) {
-      $not_like_statements[] = "meta_key NOT LIKE '{$key}'";
+      $not_like_statements[] = 'meta_key <> %s';
+      $not_equal_args[] = $key;
     }
 
-    $not_like_sql = " AND " . implode( ' AND ', $not_like_statements );
+    $not_equal_sql = ' AND ' . implode( ' AND ', $not_like_statements );
   }
 
-  $post_meta_count = $wpdb->get_var("
-    SELECT COUNT(*) FROM $wpdb->postmeta
-    WHERE meta_key LIKE '_fictioneer_%'
-    OR (
-      meta_key LIKE 'fictioneer%'
-      AND meta_key NOT LIKE '%_cache'
-      AND (meta_value = '' OR meta_value IS NULL OR meta_value = '0')
-      $not_like_sql
+  $post_meta_count = $wpdb->get_var(
+    $wpdb->prepare(
+      "SELECT COUNT(*) FROM {$wpdb->postmeta}
+      WHERE meta_key LIKE %s
+      OR (
+        meta_key LIKE %s
+        AND meta_key NOT LIKE %s
+        AND (meta_value = '' OR meta_value IS NULL OR meta_value = '0')
+        {$not_equal_sql}
+      )
+      OR meta_key IN ('_edit_last', '_edit_lock')",
+      array_merge(
+        ['\\_fictioneer\\_%', 'fictioneer%', '%\\_cache'],
+        $not_equal_args
+      )
     )
-    OR meta_key IN ('_edit_last', '_edit_lock')
-  ");
+  );
 
-  $orphaned_post_meta_count = $wpdb->get_var("
-    SELECT COUNT(*)
-    FROM $wpdb->postmeta pm
-    LEFT JOIN $wpdb->posts p ON pm.post_id = p.ID
-    WHERE p.ID IS NULL
-  ");
+  $orphaned_post_meta_count = $wpdb->get_var(
+    "SELECT COUNT(*)
+    FROM {$wpdb->postmeta} pm
+    LEFT JOIN {$wpdb->posts} p ON pm.post_id = p.ID
+    WHERE p.ID IS NULL"
+  );
 
   // Comment meta (legacy)
-  $comment_meta_count = $wpdb->get_var("
-    SELECT COUNT(*) FROM $wpdb->commentmeta
+  $comment_meta_count = $wpdb->get_var(
+    "SELECT COUNT(*) FROM {$wpdb->commentmeta}
     WHERE
     meta_key = 'fictioneer_visibility_code'
     OR (
       meta_key LIKE 'fictioneer%'
       AND (meta_value = '' OR meta_value IS NULL OR meta_value = '0')
-    )
-  ");
+    )"
+  );
 
   // Options
-  $options_meta_count = $wpdb->get_var("
-    SELECT COUNT(*) FROM $wpdb->options
-    WHERE option_name LIKE 'fictioneer_%'
-    AND (option_value IS NULL OR option_value = '')
-    AND autoload = 'no'
-  ");
+  $options_meta_count = $wpdb->get_var(
+    $wpdb->prepare(
+      "SELECT COUNT(*) FROM $wpdb->options
+      WHERE option_name LIKE %s
+      AND (option_value IS NULL OR option_value = '')
+      AND autoload = 'no'",
+      'fictioneer\\_%'
+    )
+  );
 
   // Redirect
   wp_safe_redirect(

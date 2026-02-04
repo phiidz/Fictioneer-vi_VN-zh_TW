@@ -7,9 +7,9 @@
 define( 'FICTIONEER_THEME_DIR', trailingslashit( __DIR__ ) );
 
 // Version
-define( 'FICTIONEER_VERSION', '5.34.1-beta1' );
+define( 'FICTIONEER_VERSION', '5.34.2' );
 define( 'FICTIONEER_MAJOR_VERSION', '5' );
-define( 'FICTIONEER_RELEASE_TAG', 'v5.34.1-beta1' );
+define( 'FICTIONEER_RELEASE_TAG', 'v5.34.2' );
 
 if ( ! defined( 'CHILD_VERSION' ) ) {
   define( 'CHILD_VERSION', null );
@@ -457,6 +457,14 @@ if ( ! defined( 'FICTIONEER_ENABLE_ALL_AUTHOR_PROFILES' ) ) {
 // Array: Allowed page templates ('name' => 'Display Name') without permission check
 if ( ! defined( 'FICTIONEER_ALLOWED_PAGE_TEMPLATES' ) ) {
   define( 'FICTIONEER_ALLOWED_PAGE_TEMPLATES', [] );
+}
+
+// Array: Default post types
+if ( ! defined( 'FICTIONEER_DEFAULT_POST_TYPES' ) ) {
+  define(
+    'FICTIONEER_DEFAULT_POST_TYPES',
+    ['post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation']
+  );
 }
 
 // =======================================================================================

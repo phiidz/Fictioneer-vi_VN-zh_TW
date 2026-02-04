@@ -956,7 +956,7 @@ function fcntr_admin( $key, $escape = false ) {
 // =============================================================================
 
 /**
- * Append a missing meta field to selected posts
+ * Append a missing meta field to selected posts.
  *
  * @since 5.7.4
  * @global wpdb $wpdb  WordPress database object.
@@ -970,15 +970,27 @@ function fictioneer_append_meta_fields( $post_type, $meta_key, $meta_value ) {
   global $wpdb;
 
   // Setup
+  $post_type = sanitize_key( $post_type );
+
+  if ( ! in_array( $post_type, FICTIONEER_DEFAULT_POST_TYPES, true ) ) {
+    return;
+  }
+
+  $meta_key = sanitize_key( $meta_key );
   $values = [];
 
   // Get posts with missing meta field
-  $posts = $wpdb->get_col("
-    SELECT p.ID
-    FROM {$wpdb->posts} p
-    LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = '{$meta_key}'
-    WHERE p.post_type = '{$post_type}' AND pm.meta_id IS NULL
-  ");
+  $posts = $wpdb->get_col(
+    $wpdb->prepare(
+      "SELECT p.ID
+      FROM {$wpdb->posts} p
+      LEFT JOIN {$wpdb->postmeta} pm
+        ON p.ID = pm.post_id AND pm.meta_key = %s
+      WHERE p.post_type = %s AND pm.meta_id IS NULL",
+      $meta_key,
+      $post_type
+    )
+  );
 
   // Prepare values
   foreach ( $posts as $post_id ) {

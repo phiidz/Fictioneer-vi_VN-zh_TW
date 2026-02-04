@@ -63,7 +63,7 @@ get_header( null, array( 'type' => 'fcn_collection' ) );
         // Query posts
         $query_args = array (
           'fictioneer_query_name' => 'collection_featured',
-          'post_type' => ['post', 'page', 'fcn_story', 'fcn_chapter', 'fcn_collection', 'fcn_recommendation'],
+          'post_type' => FICTIONEER_DEFAULT_POST_TYPES,
           'post_status' => 'publish',
           'post__in' => $featured_list ?: [0], // Must not be empty!
           'ignore_sticky_posts' => 1,

@@ -148,8 +148,9 @@ class Shortcode {
    *
    * @since 5.34.0
    *
-   * @param array       $args  Parsed args (sanitized).
-   * @param array|mixed $attr  Raw attributes as passed to shortcode callback.
+   * @param string      $shortcode  Shortcode name.
+   * @param array       $args       Parsed args (sanitized).
+   * @param array|mixed $attr       Raw attributes as passed to shortcode callback.
    *
    * @return string Transient key.
    */
@@ -157,7 +158,7 @@ class Shortcode {
   public static function transient_key( $shortcode, $args, $attr ) : string {
     unset( $args['content'] ); // Could be large; UID is enough
 
-    $raw = is_array( $attr ) ? $attr : array();
+    $raw = is_array( $attr ) ? $attr : [];
     $base = wp_json_encode( array( 'args' => $args, 'attr' => $raw ) );
     $hash = md5( (string) $base );
 
@@ -194,7 +195,7 @@ class Shortcode {
     return Latest_Stories::render( $atts, $content, $tag );
   }
 
-   /**
+  /**
    * Shortcode delegate callback for latest chapters.
    *
    * @since 5.34.0
@@ -210,7 +211,7 @@ class Shortcode {
     return Latest_Chapters::render( $atts, $content, $tag );
   }
 
-   /**
+  /**
    * Shortcode delegate callback for latest updates.
    *
    * @since 5.34.0
@@ -226,7 +227,7 @@ class Shortcode {
     return Latest_Updates::render( $atts, $content, $tag );
   }
 
-   /**
+  /**
    * Shortcode delegate callback for showcases.
    *
    * @since 5.34.0
@@ -242,7 +243,7 @@ class Shortcode {
     return Showcase::render( $atts, $content, $tag );
   }
 
-   /**
+  /**
    * Shortcode delegate callback for latest recommendations.
    *
    * @since 5.34.0

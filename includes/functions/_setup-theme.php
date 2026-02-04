@@ -355,6 +355,27 @@ function fictioneer_remove_obsolete_user_meta() {
 }
 add_action( 'fictioneer_after_update', 'fictioneer_remove_obsolete_user_meta' );
 
+/**
+ * Disable Inter and Merriweather fonts by default.
+ *
+ * @since 5.34.2
+ *
+ * @param string $version  The version string after the update.
+ */
+
+function fictioneer_disable_default_fonts_5_34_1( $version ) {
+  if ( version_compare( $version, '5.34.2', '<=' ) ) {
+    $disabled_fonts = \Fictioneer\Fonts::get_disabled_fonts();
+
+    $disabled_fonts['inter'] = 'inter';
+    $disabled_fonts['merriweather'] = 'merriweather';
+    $disabled_fonts = array_unique( $disabled_fonts );
+
+    update_option( 'fictioneer_disabled_fonts', $disabled_fonts );
+  }
+}
+add_action( 'fictioneer_after_update', 'fictioneer_disable_default_fonts_5_34_1' );
+
 // =============================================================================
 // SIDEBAR
 // =============================================================================

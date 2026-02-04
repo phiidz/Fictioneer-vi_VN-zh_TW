@@ -12,8 +12,7 @@ use Fictioneer\Utils;
 
 // Setup
 $fonts = Utils::get_font_data();
-$disabled_fonts = get_option( 'fictioneer_disabled_fonts', [] );
-$disabled_fonts = is_array( $disabled_fonts ) ? $disabled_fonts : [];
+$disabled_fonts = \Fictioneer\Fonts::get_disabled_fonts();
 
 ?>
 

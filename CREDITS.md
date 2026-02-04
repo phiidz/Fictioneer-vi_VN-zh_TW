@@ -266,6 +266,16 @@ The following list credits all third-party resources used in the Fictioneer them
   License: [SIL OFL 1.1](http://scripts.sil.org/OFL)<br>
   Source: https://fonts.google.com/specimen/Crimson+Text
 
+* **Inter**<br>
+  Copyright 2020: The Inter Project Authors<br>
+  License: [SIL OFL 1.1](http://scripts.sil.org/OFL)<br>
+  Source: https://github.com/rsms/inter
+
+* **Merriweather**<br>
+  Copyright 2020: The Merriweather Project Authors with Reserved Font Name "Merriweather"<br>
+  License: [SIL OFL 1.1](http://scripts.sil.org/OFL)<br>
+  Source: https://github.com/EbenSorkin/Merriweather4
+
 ## Other
 
 * **Regex: Split text into sentences**<br>
@@ -275,6 +285,22 @@ The following list credits all third-party resources used in the Fictioneer them
 
 ## Translations
 
-* **Brazilian Portuguese**<br>
+* **Portuguese (Brazilian)**<br>
   Copyright: [@c-cesar](https://github.com/c-cesar)<br>
+  License: [GPL 3.0](https://github.com/Tetrakern/fictioneer?tab=GPL-3.0-1-ov-file#readme)
+
+* **Spanish (Chile)**<br>
+  Copyright: [@FxxMorgan](https://github.com/FxxMorgan)<br>
+  License: [GPL 3.0](https://github.com/Tetrakern/fictioneer?tab=GPL-3.0-1-ov-file#readme)
+
+* **Simplified Chinese (Mainland China)**<br>
+  Copyright: [@makeitsofun](https://github.com/makeitsofun)<br>
+  License: [GPL 3.0](https://github.com/Tetrakern/fictioneer?tab=GPL-3.0-1-ov-file#readme)
+
+* **Traditional Chinese (Taiwan)**<br>
+  Copyright: [@phiidz](https://github.com/phiidz)<br>
+  License: [GPL 3.0](https://github.com/Tetrakern/fictioneer?tab=GPL-3.0-1-ov-file#readme)
+
+* **Vietnamese (Vietnam)**<br>
+  Copyright: [@phiidz](https://github.com/phiidz)<br>
   License: [GPL 3.0](https://github.com/Tetrakern/fictioneer?tab=GPL-3.0-1-ov-file#readme)

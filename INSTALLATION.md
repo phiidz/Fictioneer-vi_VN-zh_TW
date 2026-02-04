@@ -617,7 +617,20 @@ Allows for some minor translations and changes, such as the cookie notice banner
 
 ![Phrases Settings Preview](repo/assets/settings_fonts_preview.jpg?raw=true)
 
-An overview of all installed fonts, with the options to enable/disable them. You can also include Google Fonts here, but be aware that this violates the GDPR. If you want to install custom fonts, take a look at the [Custom Fonts](https://github.com/Tetrakern/fictioneer/blob/main/INSTALLATION.md#custom-fonts) section further down.
+An overview of all installed fonts, with the options to enable/disable them. Some pre-installed fonts are disabled by default to avoid bloat. You can also include Google Fonts here, but be aware that this violates the GDPR. If you want to install custom fonts, take a look at the [Custom Fonts](https://github.com/Tetrakern/fictioneer/blob/main/INSTALLATION.md#custom-fonts) section further down.
+
+**Pre-Installed Fonts:**
+* Cormorant Garamond
+* Crimson Text
+* Georgia (OS)
+* Helvetica Neue (OS)
+* Inter (disabled)
+* Lato
+* Merriweather (disabled)
+* Open Dyslexic
+* Open Sans
+* Roboto Mono
+* Roboto Serif
 
 ### ePUBs Tab
 
@@ -1074,7 +1087,7 @@ You can change the minimum width of cards and gap spacing under **Appearance > C
 }
 
 /* Fallback for older browsers that do not support container queries. */
-@supports (width: 1cqw) {
+@supports not (width: 1cqw) {
   #list-of-stories, #list-of-chapters {
     --card-list-row-gap: 2rem;
     --card-list-col-gap: 2rem;
@@ -1410,7 +1423,7 @@ You can add custom fonts, either by uploading a configuration folder to `/themes
 
 Following is an explanation of both methods on the example of [Noto Sans](https://fonts.google.com/noto/specimen/Noto+Sans?noto.query=noto+sans), which has also great variants for logographic writing systems if you require that. Mind that not all fonts you find on the Internet are free to use.
 
-Purge the theme caches under **Fictioneer > Tools** after adding or removing a font. You may have to force-refresh too. Once everything is in order and refreshed, you can see the font listed under **Fictioneer > Fonts**. With that, you can assign the fonts to specific parts of the theme under **Appearance > Customize > Fonts**. More is possible with custom CSS.
+Purge the theme caches under **Fictioneer > Tools** after adding or removing a font. You may have to force-refresh your browser too. Once everything is in order and refreshed, you can see the font listed under **Fictioneer > Fonts**. With that, you can assign the fonts to specific parts of the theme under **Appearance > Customize > Fonts**. More is possible with custom CSS.
 
 #### A) Upload a font configuration folder
 
